@@ -1,0 +1,71 @@
+import { Pause, Play, RotateCcw, SkipForward } from "lucide-react-native";
+import React from "react";
+import { Pressable, View } from "react-native";
+import { BUTTON_COLORS } from "../../constants";
+import { TimerMode, TimerState } from "../../types";
+
+type TimerControlsProps = {
+  state: TimerState;
+  mode: TimerMode;
+  toggleTimer: () => void;
+  resetTimer: () => void;
+  switchMode: (m: TimerMode) => void;
+};
+
+export const TimerControls: React.FC<TimerControlsProps> = ({
+  state,
+  mode,
+  toggleTimer,
+  resetTimer,
+  switchMode,
+}) => {
+  const iconColor = BUTTON_COLORS[mode]; // ideally a hex/rgb string
+
+  return (
+    <View className="flex-row items-center gap-6 mt-4">
+      {/* Main play/pause button */}
+      <Pressable
+        onPress={toggleTimer}
+        className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center active:scale-95"
+        style={{
+          // shadow-lg equivalent
+          shadowColor: "#000",
+          shadowOpacity: 0.2,
+          shadowRadius: 8,
+          shadowOffset: { width: 0, height: 4 },
+          elevation: 6,
+        }}
+        hitSlop={8}
+      >
+        {state === TimerState.RUNNING ? (
+          <Pause size={32} color={iconColor} />
+        ) : (
+          <Play size={32} color={iconColor} />
+        )}
+      </Pressable>
+
+      {/* Side controls */}
+      <View className="flex-col gap-3">
+        <Pressable
+          onPress={resetTimer}
+          className="p-3 bg-white/20 rounded-xl active:opacity-80"
+          hitSlop={6}
+        >
+          <RotateCcw size={20} color="white" />
+        </Pressable>
+
+        <Pressable
+          onPress={() =>
+            switchMode(
+              mode === TimerMode.FOCUS ? TimerMode.SHORT_BREAK : TimerMode.FOCUS
+            )
+          }
+          className="p-3 bg-white/20 rounded-xl active:opacity-80"
+          hitSlop={6}
+        >
+          <SkipForward size={20} color="white" />
+        </Pressable>
+      </View>
+    </View>
+  );
+};
