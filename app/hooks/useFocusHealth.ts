@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { AppState, AppStateStatus } from "react-native";
 import { TimerState } from "../types/types";
 
 export const useFocusHealth = (
@@ -10,14 +11,17 @@ export const useFocusHealth = (
   const healthRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden && state === TimerState.RUNNING) {
+    const subscription = AppState.addEventListener("change", (nextAppState: AppStateStatus) => {
+      if (
+        nextAppState.match(/inactive|background/) &&
+        state === TimerState.RUNNING
+      ) {
         // start damage
         if (healthRef.current) clearInterval(healthRef.current);
-        healthRef.current = window.setInterval(() => {
+        healthRef.current = setInterval(() => {
           setHealth((prev: number) => Math.max(0, prev - 1));
         }, 1000 * 10);
-      } else {
+      } else if (nextAppState === "active") {
         // stop damage
         if (healthRef.current) clearInterval(healthRef.current);
         setHealth((prev: number) => {
@@ -27,11 +31,10 @@ export const useFocusHealth = (
           return prev;
         });
       }
-    };
+    });
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      subscription.remove();
       if (healthRef.current) clearInterval(healthRef.current);
     };
   }, [state, setHealth, fetchQuote, mode]);

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { AppTheme, TimerState } from "../types/types";
+import { AppTheme, PotatoQuote, TimerState } from "../types/types";
 
 import { useFocusHealth } from "@/hooks/useFocusHealth";
 import { useTimer } from "@/hooks/useTimer";
@@ -20,7 +20,7 @@ import { DEFAULT_TIMES } from "@/constants/constants";
 
 export default function App() {
   const [health, setHealth] = useState(80);
-  const [quote, setQuote] = useState<{ text: string; mood: string }>({
+  const [quote, setQuote] = useState<PotatoQuote>({
     text: "Ready to lock in?",
     mood: "happy",
   });

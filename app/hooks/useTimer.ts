@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AppState } from "react-native";
 import { DEFAULT_TIMES } from "../constants/constants";
 import { getPotatoWisdom } from "../services/potatoWisdomLocal";
 import { TimerMode, TimerState } from "../types/types";
@@ -46,7 +47,7 @@ export const useTimer = (
   useEffect(() => {
     if (state !== TimerState.RUNNING) return;
 
-    timerRef.current = window.setInterval(() => {
+    timerRef.current = setInterval(() => {
       // ⏳ countdown
       setTimeLeft((t) => {
         if (t <= 1) {
@@ -62,7 +63,7 @@ export const useTimer = (
       });
 
       // ❤️ Regen health slowly if app is focused
-      if (!document.hidden) {
+      if (AppState.currentState === 'active') {
         setHealth((h: number) => Math.min(100, h + 0.05)); // 20secs + 1% health
       }
     }, 1000);
