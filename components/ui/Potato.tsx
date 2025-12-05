@@ -4,13 +4,13 @@ import Svg, { Circle, G, Line, Path, Rect } from "react-native-svg";
 
 interface PotatoProps {
   mood: "happy" | "angry" | "sleepy" | "chaotic" | "cool";
-  isAnimating: boolean;
+  isAnimating: boolean; // still accepted, but no longer gates animation
   health: number; // 0-100
 }
 
 export const Potato: React.FC<PotatoProps> = ({
   mood,
-  isAnimating,
+  isAnimating, // unused for animation now
   health,
 }) => {
   const [imgError, setImgError] = useState(false);
@@ -28,25 +28,17 @@ export const Potato: React.FC<PotatoProps> = ({
     return Bad;
   }, [health, Loaded, Regular, Rotting, Bad]);
 
-  // Reset error when image changes
   useEffect(() => setImgError(false), [imageSource]);
 
   /**
-   * Animations
+   * Animated values (always running)
    */
   const breathe = useRef(new Animated.Value(0)).current;
   const float = useRef(new Animated.Value(0)).current;
   const shake = useRef(new Animated.Value(0)).current;
 
+  // Start all loops once; never reset; never restart on mood change
   useEffect(() => {
-    // stop any running loops by resetting values
-    breathe.setValue(0);
-    float.setValue(0);
-    shake.setValue(0);
-
-    if (!isAnimating || health < 10) return;
-
-    // default breathe
     const breatheLoop = Animated.loop(
       Animated.sequence([
         Animated.timing(breathe, {
@@ -64,7 +56,6 @@ export const Potato: React.FC<PotatoProps> = ({
       ])
     );
 
-    // float up/down
     const floatLoop = Animated.loop(
       Animated.sequence([
         Animated.timing(float, {
@@ -82,7 +73,6 @@ export const Potato: React.FC<PotatoProps> = ({
       ])
     );
 
-    // shake left/right
     const shakeLoop = Animated.loop(
       Animated.sequence([
         Animated.timing(shake, {
@@ -106,19 +96,16 @@ export const Potato: React.FC<PotatoProps> = ({
       ])
     );
 
-    if (mood === "chaotic" || mood === "angry") {
-      shakeLoop.start();
-      return () => shakeLoop.stop();
-    }
-
-    if (mood === "happy" || mood === "cool") {
-      floatLoop.start();
-      return () => floatLoop.stop();
-    }
-
     breatheLoop.start();
-    return () => breatheLoop.stop();
-  }, [isAnimating, mood, health, breathe, float, shake]);
+    floatLoop.start();
+    shakeLoop.start();
+
+    return () => {
+      breatheLoop.stop();
+      floatLoop.stop();
+      shakeLoop.stop();
+    };
+  }, [breathe, float, shake]);
 
   const breatheScale = breathe.interpolate({
     inputRange: [0, 1],
@@ -135,14 +122,13 @@ export const Potato: React.FC<PotatoProps> = ({
     outputRange: [-4, 4],
   });
 
+  // Just pick which running animation to show
   const animatedStyle =
-    !isAnimating || health < 10
-      ? {}
-      : mood === "chaotic" || mood === "angry"
-        ? { transform: [{ translateX: shakeX }] }
-        : mood === "happy" || mood === "cool"
-          ? { transform: [{ translateY: floatY }] }
-          : { transform: [{ scale: breatheScale }] };
+    mood === "chaotic" || mood === "angry"
+      ? { transform: [{ translateX: shakeX }] }
+      : mood === "happy" || mood === "cool"
+        ? { transform: [{ translateY: floatY }] }
+        : { transform: [{ scale: breatheScale }] };
 
   const renderFallbackPotato = () => {
     const isMad = mood === "angry" || mood === "chaotic" || health < 40;
@@ -229,7 +215,6 @@ export const Potato: React.FC<PotatoProps> = ({
           className="w-full h-full"
           onError={() => setImgError(true)}
           style={{
-            // Approximate "sick" filter
             opacity: health < 40 ? 0.85 : 1,
           }}
         />
