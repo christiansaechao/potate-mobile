@@ -16,5 +16,8 @@ module.exports = defineConfig([
         },
       },
     },
+    rules: {
+      "import/no-default-export": "off",
+    },
   },
 ]);
