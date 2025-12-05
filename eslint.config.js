@@ -1,8 +1,5 @@
-<<<<<<< Updated upstream
 // https://docs.expo.dev/guides/using-eslint/
-=======
 // eslint.config.js
->>>>>>> Stashed changes
 const { defineConfig } = require("eslint/config");
 const expoConfig = require("eslint-config-expo/flat");
 
@@ -10,8 +7,6 @@ module.exports = defineConfig([
   expoConfig,
   {
     ignores: ["dist/*"],
-<<<<<<< Updated upstream
-=======
   },
   {
     // 👇 tell eslint-plugin-import to use TS paths from tsconfig
@@ -22,6 +17,5 @@ module.exports = defineConfig([
         },
       },
     },
->>>>>>> Stashed changes
   },
 ]);

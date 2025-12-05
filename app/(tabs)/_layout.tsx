@@ -33,8 +33,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
-<<<<<<< Updated upstream
-=======
         }}
       />
       <Tabs.Screen
@@ -44,7 +42,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
->>>>>>> Stashed changes
         }}
       />
     </Tabs>
