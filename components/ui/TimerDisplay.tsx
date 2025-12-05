@@ -11,8 +11,6 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({ time, label }) => (
     <Text className="text-white font-black font-mono text-[80px] leading-[90px]">
       {time}
     </Text>
-    <Text className="text-white/80 text-lg uppercase mt-1">
-      {label}
-    </Text>
+    <Text className="text-white/80 text-lg uppercase mt-1">{label}</Text>
   </View>
 );

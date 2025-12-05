@@ -25,7 +25,7 @@ const QUOTES = {
     "I feel warm and buttery inside. Thanks.",
     "That task didn’t even stand a chance.",
     "Wow, productivity can taste THIS good?",
-    "If we finish this, I’ll treat myself to potato skincare."
+    "If we finish this, I’ll treat myself to potato skincare.",
   ],
 
   angry: [
@@ -48,7 +48,7 @@ const QUOTES = {
     "You better redeem this session or else…",
     "I bite. And I WILL.",
     "Don't “just check one thing.” LIES.",
-    "Try me. TRY ME AGAIN. See what happens."
+    "Try me. TRY ME AGAIN. See what happens.",
   ],
 
   sleepy: [
@@ -71,7 +71,7 @@ const QUOTES = {
     "My thoughts are mashed potatoes right now.",
     "Do we *have* to be productive…?",
     "I’ll rally soon. Probably. Maybe. No promises.",
-    "I need rest like fries need ketchup."
+    "I need rest like fries need ketchup.",
   ],
 
   chaotic: [
@@ -94,7 +94,7 @@ const QUOTES = {
     "I’m vibrating with anxiety AND determination.",
     "IS THIS WHAT MELTING FEELS LIKE??",
     "Okay new plan: panic until successful.",
-    "IM ABOUT TO GO CRISPY. LIKE BURNT CRISPY."
+    "IM ABOUT TO GO CRISPY. LIKE BURNT CRISPY.",
   ],
 
   cool: [
@@ -117,7 +117,7 @@ const QUOTES = {
     "Success hits different when you’re chill about it.",
     "Time management? More like time mastery.",
     "Crisp. Clean. No distractions. Nice.",
-    "We did it, champ—now let’s walk away dramatically."
+    "We did it, champ—now let’s walk away dramatically.",
   ],
 };
 
@@ -125,14 +125,17 @@ const QUOTES = {
    SELECT A RANDOM QUOTE
 --------------------------------------------------------*/
 
-const pickRandom = <T,>(arr: T[]): T =>
+const pickRandom = <T>(arr: T[]): T =>
   arr[Math.floor(Math.random() * arr.length)];
 
 /* -------------------------------------------------------
    MOOD OVERRIDES BASED ON STATE + HEALTH
 --------------------------------------------------------*/
 
-const determineMood = (state: TimerState, health: number): PotatoQuote["mood"] => {
+const determineMood = (
+  state: TimerState,
+  health: number
+): PotatoQuote["mood"] => {
   if (state === TimerState.COMPLETED) return "cool";
   if (health < 30) return "chaotic";
   if (health < 60) return "angry";
