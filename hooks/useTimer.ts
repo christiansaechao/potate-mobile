@@ -63,7 +63,7 @@ export const useTimer = (
       });
 
       // ❤️ Regen health slowly if app is focused
-      if (AppState.currentState === 'active') {
+      if (AppState.currentState === "active") {
         setHealth((h: number) => Math.min(100, h + 0.05)); // 20secs + 1% health
       }
     }, 1000);
