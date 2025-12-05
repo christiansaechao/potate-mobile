@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppTheme, PotatoQuote, TimerState } from "../../types/types";
 
@@ -70,7 +70,7 @@ export default function App() {
   }, [timeLeft]);
 
   return (
-    <SafeAreaProvider className="flex-1 bg-neutral-950">
+    <SafeAreaView className="flex-1 bg-neutral-950">
       <View className="flex-1 items-center justify-between py-6 px-4">
         <ThemeSelector
           visible={showThemeSelector}
@@ -110,6 +110,6 @@ export default function App() {
 
         <ProgressBar progress={progress} />
       </View>
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 }
