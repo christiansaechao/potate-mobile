@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DEFAULT_TIMES } from "../constants";
+import { DEFAULT_TIMES } from "../constants/constants";
 import { getPotatoWisdom } from "../services/potatoWisdomLocal";
-import { TimerMode, TimerState } from "../types";
+import { TimerMode, TimerState } from "../types/types";
 
 export const useTimer = (
   health: number,

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { TimerState } from "../types";
+import { TimerState } from "../types/types";
 
 export const useFocusHealth = (
   state: TimerState,

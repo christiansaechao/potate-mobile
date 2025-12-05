@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, Easing, Pressable, Text, View } from "react-native";
-import { THEMES } from "../../constants";
-import { AppTheme } from "../../types";
+import { THEMES } from "../../constants/constants";
+import { AppTheme } from "../../types/types";
 
 interface ThemeSelectorProps {
   visible: boolean;

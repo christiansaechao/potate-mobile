@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import { TimerMode } from "../../types";
+import { TimerMode } from "../../types/types";
 
 type ModeSwitcherProps = {
   mode: TimerMode;
