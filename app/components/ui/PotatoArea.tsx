@@ -1,6 +1,6 @@
+import { TimerMode, TimerState } from "@/types/types";
 import React, { useEffect, useRef } from "react";
 import { Animated, Easing, Pressable, View } from "react-native";
-import { TimerMode, TimerState } from "../types";
 import { ChatBubble } from "./ChatBubble";
 import { Potato } from "./Potato";
 
@@ -67,7 +67,13 @@ export const PotatoArea: React.FC<PotatoAreaProps> = ({
         className="z-10 active:scale-105"
         hitSlop={10}
       >
-        <Animated.View style={state === TimerState.COMPLETED ? { transform: [{ translateY: bounceY }] } : undefined}>
+        <Animated.View
+          style={
+            state === TimerState.COMPLETED
+              ? { transform: [{ translateY: bounceY }] }
+              : undefined
+          }
+        >
           <Potato
             mood={mood}
             isAnimating={state === TimerState.RUNNING}
