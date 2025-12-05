@@ -3,8 +3,8 @@ import { View, Animated, Dimensions } from "react-native";
 
 interface Particle {
   id: number;
-  x: number;      // px
-  y: number;      // px
+  x: number; // px
+  y: number; // px
   color: string;
   rotation: number;
   scale: number;
@@ -30,8 +30,8 @@ export const Confetti: React.FC = () => {
         color: colors[Math.floor(Math.random() * colors.length)],
         rotation: Math.random() * 360,
         scale: Math.random() * 0.5 + 0.5,
-        speedX: (Math.random() - 0.5) * 8,      // horizontal spread
-        speedY: (Math.random() - 1.2) * 10,     // upward burst
+        speedX: (Math.random() - 0.5) * 8, // horizontal spread
+        speedY: (Math.random() - 1.2) * 10, // upward burst
       });
     }
     setParticles(initial);
@@ -43,16 +43,17 @@ export const Confetti: React.FC = () => {
       const dt = Math.min(2, (now - last) / 16); // normalize to ~60fps steps
       last = now;
 
-      setParticles(prev =>
-        prev
-          .map(p => ({
-            ...p,
-            x: p.x + p.speedX * dt,
-            y: p.y + p.speedY * dt,
-            rotation: p.rotation + 10 * dt,
-            speedY: p.speedY + 0.35 * dt, // gravity
-          }))
-          .filter(p => p.y < height + 60) // remove if off bottom
+      setParticles(
+        (prev) =>
+          prev
+            .map((p) => ({
+              ...p,
+              x: p.x + p.speedX * dt,
+              y: p.y + p.speedY * dt,
+              rotation: p.rotation + 10 * dt,
+              speedY: p.speedY + 0.35 * dt, // gravity
+            }))
+            .filter((p) => p.y < height + 60) // remove if off bottom
       );
 
       rafRef.current = requestAnimationFrame(tick);
@@ -67,7 +68,7 @@ export const Confetti: React.FC = () => {
 
   return (
     <View className="absolute inset-0 pointer-events-none overflow-hidden z-50">
-      {particles.map(p => (
+      {particles.map((p) => (
         <Animated.View
           key={p.id}
           style={{
@@ -78,10 +79,7 @@ export const Confetti: React.FC = () => {
             height: 12,
             backgroundColor: p.color,
             borderRadius: 2,
-            transform: [
-              { rotate: `${p.rotation}deg` },
-              { scale: p.scale },
-            ],
+            transform: [{ rotate: `${p.rotation}deg` }, { scale: p.scale }],
           }}
         />
       ))}

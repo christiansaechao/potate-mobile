@@ -139,10 +139,10 @@ export const Potato: React.FC<PotatoProps> = ({
     !isAnimating || health < 10
       ? {}
       : mood === "chaotic" || mood === "angry"
-      ? { transform: [{ translateX: shakeX }] }
-      : mood === "happy" || mood === "cool"
-      ? { transform: [{ translateY: floatY }] }
-      : { transform: [{ scale: breatheScale }] };
+        ? { transform: [{ translateX: shakeX }] }
+        : mood === "happy" || mood === "cool"
+          ? { transform: [{ translateY: floatY }] }
+          : { transform: [{ scale: breatheScale }] };
 
   const renderFallbackPotato = () => {
     const isMad = mood === "angry" || mood === "chaotic" || health < 40;
@@ -166,7 +166,14 @@ export const Potato: React.FC<PotatoProps> = ({
             <>
               <Rect x={55} y={75} width={40} height={20} rx={5} fill="black" />
               <Rect x={105} y={75} width={40} height={20} rx={5} fill="black" />
-              <Line x1={95} y1={85} x2={105} y2={85} stroke="black" strokeWidth={3} />
+              <Line
+                x1={95}
+                y1={85}
+                x2={105}
+                y2={85}
+                stroke="black"
+                strokeWidth={3}
+              />
             </>
           ) : (
             <>
@@ -177,11 +184,26 @@ export const Potato: React.FC<PotatoProps> = ({
 
           {/* Mouth */}
           {health < 30 ? (
-            <Path d="M80,130 Q100,120 120,130" fill="none" stroke="#3E2723" strokeWidth={3} />
+            <Path
+              d="M80,130 Q100,120 120,130"
+              fill="none"
+              stroke="#3E2723"
+              strokeWidth={3}
+            />
           ) : isMad ? (
-            <Path d="M85,135 Q100,125 115,135" fill="none" stroke="#3E2723" strokeWidth={3} />
+            <Path
+              d="M85,135 Q100,125 115,135"
+              fill="none"
+              stroke="#3E2723"
+              strokeWidth={3}
+            />
           ) : (
-            <Path d="M85,125 Q100,140 115,125" fill="none" stroke="#3E2723" strokeWidth={3} />
+            <Path
+              d="M85,125 Q100,140 115,125"
+              fill="none"
+              stroke="#3E2723"
+              strokeWidth={3}
+            />
           )}
 
           {health > 80 && (
@@ -196,10 +218,7 @@ export const Potato: React.FC<PotatoProps> = ({
   };
 
   return (
-    <Animated.View
-      className="w-40 h-40"
-      style={animatedStyle}
-    >
+    <Animated.View className="w-40 h-40" style={animatedStyle}>
       {imgError ? (
         renderFallbackPotato()
       ) : (

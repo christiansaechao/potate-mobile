@@ -7,9 +7,6 @@ type ProgressBarProps = {
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => (
   <View className="absolute bottom-0 left-0 h-1.5 bg-white/20 w-full">
-    <View
-      className="h-full bg-white"
-      style={{ width: `${progress}%` }}
-    />
+    <View className="h-full bg-white" style={{ width: `${progress}%` }} />
   </View>
 );

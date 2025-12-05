@@ -9,31 +9,31 @@ export const DEFAULT_TIMES = {
 // Theme definitions mapping Modes to Colors
 export const THEMES: Record<AppTheme, Record<TimerMode, string>> = {
   default: {
-    [TimerMode.FOCUS]: 'bg-red-400',
-    [TimerMode.SHORT_BREAK]: 'bg-emerald-400',
-    [TimerMode.LONG_BREAK]: 'bg-blue-400',
+    [TimerMode.FOCUS]: "bg-red-400",
+    [TimerMode.SHORT_BREAK]: "bg-emerald-400",
+    [TimerMode.LONG_BREAK]: "bg-blue-400",
   },
   dark: {
-    [TimerMode.FOCUS]: 'bg-gray-900',
-    [TimerMode.SHORT_BREAK]: 'bg-gray-800',
-    [TimerMode.LONG_BREAK]: 'bg-black',
+    [TimerMode.FOCUS]: "bg-gray-900",
+    [TimerMode.SHORT_BREAK]: "bg-gray-800",
+    [TimerMode.LONG_BREAK]: "bg-black",
   },
   vaporwave: {
-    [TimerMode.FOCUS]: 'bg-purple-500',
-    [TimerMode.SHORT_BREAK]: 'bg-pink-400',
-    [TimerMode.LONG_BREAK]: 'bg-cyan-400',
+    [TimerMode.FOCUS]: "bg-purple-500",
+    [TimerMode.SHORT_BREAK]: "bg-pink-400",
+    [TimerMode.LONG_BREAK]: "bg-cyan-400",
   },
   cozy: {
-    [TimerMode.FOCUS]: 'bg-[#8D6E63]', // Brown
-    [TimerMode.SHORT_BREAK]: 'bg-[#A1887F]',
-    [TimerMode.LONG_BREAK]: 'bg-[#D7CCC8]',
-  }
+    [TimerMode.FOCUS]: "bg-[#8D6E63]", // Brown
+    [TimerMode.SHORT_BREAK]: "bg-[#A1887F]",
+    [TimerMode.LONG_BREAK]: "bg-[#D7CCC8]",
+  },
 };
 
 export const BUTTON_COLORS = {
-  [TimerMode.FOCUS]: 'text-red-500',
-  [TimerMode.SHORT_BREAK]: 'text-emerald-500',
-  [TimerMode.LONG_BREAK]: 'text-blue-500',
+  [TimerMode.FOCUS]: "text-red-500",
+  [TimerMode.SHORT_BREAK]: "text-emerald-500",
+  [TimerMode.LONG_BREAK]: "text-blue-500",
 };
 
 export const POTATO_SYSTEM_INSTRUCTION = `
