@@ -2,11 +2,6 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Easing, Image } from "react-native";
 import Svg, { Circle, G, Line, Path, Rect } from "react-native-svg";
 
-import Loaded from "@/app/assets/images/1.png";
-import Regular from "@/app/assets/images/2.png";
-import Rotting from "@/app/assets/images/3.png";
-import Bad from "@/app/assets/images/4.png";
-
 interface PotatoProps {
   mood: "happy" | "angry" | "sleepy" | "chaotic" | "cool";
   isAnimating: boolean;
@@ -20,13 +15,18 @@ export const Potato: React.FC<PotatoProps> = ({
 }) => {
   const [imgError, setImgError] = useState(false);
 
+  const Loaded = require("../../app/assets/images/1.png");
+  const Regular = require("../../app/assets/images/2.png");
+  const Rotting = require("../../app/assets/images/3.png");
+  const Bad = require("../../app/assets/images/4.png");
+
   // Determine image based on health
   const imageSource = useMemo(() => {
     if (health >= 90) return Loaded;
     if (health >= 80) return Regular;
     if (health >= 40) return Rotting;
     return Bad;
-  }, [health]);
+  }, [health, Loaded, Regular, Rotting, Bad]);
 
   // Reset error when image changes
   useEffect(() => setImgError(false), [imageSource]);

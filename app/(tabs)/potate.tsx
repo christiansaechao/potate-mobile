@@ -2,21 +2,21 @@ import React, { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { AppTheme, PotatoQuote, TimerState } from "@/types/types";
+import { AppTheme, PotatoQuote, TimerState } from "../../types/types";
 
-import { useFocusHealth } from "@/hooks/useFocusHealth";
-import { useTimer } from "@/hooks/useTimer";
+import { useFocusHealth } from "../../hooks/useFocusHealth";
+import { useTimer } from "../../hooks/useTimer";
 
-import { Header } from "@/components/ui/Header";
-import { HealthBar } from "@/components/ui/HealthBar";
-import { ModeSwitcher } from "@/components/ui/ModeSwitcher";
-import { PotatoArea } from "@/components/ui/PotatoArea";
-import { ProgressBar } from "@/components/ui/ProgressBar";
-import { ThemeSelector } from "@/components/ui/ThemeSelector";
-import { TimerControls } from "@/components/ui/TimerControls";
-import { TimerDisplay } from "@/components/ui/TimerDisplay";
+import { Header } from "../../components/ui/Header";
+import { HealthBar } from "../../components/ui/HealthBar";
+import { ModeSwitcher } from "../../components/ui/ModeSwitcher";
+import { PotatoArea } from "../../components/ui/PotatoArea";
+import { ProgressBar } from "../../components/ui/ProgressBar";
+import { ThemeSelector } from "../../components/ui/ThemeSelector";
+import { TimerControls } from "../../components/ui/TimerControls";
+import { TimerDisplay } from "../../components/ui/TimerDisplay";
 
-import { DEFAULT_TIMES } from "@/constants/constants";
+import { DEFAULT_TIMES } from "../../constants/constants";
 
 export default function App() {
   const [health, setHealth] = useState(80);
