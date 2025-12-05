@@ -1,4 +1,4 @@
-import { PotatoQuote, TimerMode, TimerState } from "../types";
+import { PotatoQuote, TimerMode, TimerState } from "../types/types";
 
 /* -------------------------------------------------------
    FUNNY POTATO QUOTES

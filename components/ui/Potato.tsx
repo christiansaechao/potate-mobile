@@ -2,10 +2,10 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Easing, Image } from "react-native";
 import Svg, { Circle, G, Line, Path, Rect } from "react-native-svg";
 
-import Loaded from "../assets/1.png";
-import Regular from "../assets/2.png";
-import Rotting from "../assets/3.png";
-import Bad from "../assets/4.png";
+import Loaded from "@/app/assets/images/1.png";
+import Regular from "@/app/assets/images/2.png";
+import Rotting from "@/app/assets/images/3.png";
+import Bad from "@/app/assets/images/4.png";
 
 interface PotatoProps {
   mood: "happy" | "angry" | "sleepy" | "chaotic" | "cool";

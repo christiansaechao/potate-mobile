@@ -1,6 +1,6 @@
+import { TimerMode, TimerState } from "@/types/types";
 import React, { useEffect, useRef } from "react";
 import { Animated, Easing, Pressable, View } from "react-native";
-import { TimerMode, TimerState } from "../types";
 import { ChatBubble } from "./ChatBubble";
 import { Potato } from "./Potato";
 

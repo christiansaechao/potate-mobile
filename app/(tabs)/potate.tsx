@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { AppTheme, PotatoQuote, TimerState } from "../types/types";
+import { AppTheme, PotatoQuote, TimerState } from "@/types/types";
 
 import { useFocusHealth } from "@/hooks/useFocusHealth";
 import { useTimer } from "@/hooks/useTimer";
