@@ -1,22 +1,28 @@
-import { Text, type TextProps } from "react-native";
+import { Pressable, type PressableProps } from "react-native";
 
 import { useThemeColor } from "../hooks/use-theme-color";
 
-export type ThemedTextProps = TextProps & {
+export type PressableTextProps = PressableProps & {
   lightColor?: string;
   darkColor?: string;
   type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
 };
 
-export function ThemedText({
+export function ThemedPressable({
   style,
   lightColor,
   darkColor,
   type = "default",
   className,
   ...rest
-}: ThemedTextProps) {
+}: PressableTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
-  return <Text style={[{ color }]} className={className} {...rest} />;
+  return (
+    <Pressable
+      style={[{ backgroundColor: color }]}
+      className={className}
+      {...rest}
+    />
+  );
 }

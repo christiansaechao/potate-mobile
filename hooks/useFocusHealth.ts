@@ -28,7 +28,6 @@ export const useFocusHealth = (
           if (healthRef.current) clearInterval(healthRef.current);
           setHealth((prev: number) => {
             if (prev < 80 && state === TimerState.RUNNING) {
-              console.log("running");
               fetchQuote(mode, state, prev);
             }
             return prev;

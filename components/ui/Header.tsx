@@ -1,6 +1,8 @@
 import { Image, Volume2, VolumeX } from "lucide-react-native";
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { View } from "react-native";
+import { ThemedPressable } from "../themed-pressable";
+import { ThemedText } from "../themed-text";
 
 type HeaderProps = {
   isSound: boolean;
@@ -14,20 +16,20 @@ export const Header: React.FC<HeaderProps> = ({
   openThemes,
 }) => (
   <View className="w-full max-w-md flex-row justify-between items-center z-20">
-    <Text className="text-2xl font-black text-white tracking-wider">
+    <ThemedText className="text-2xl font-bold tracking-wider">
       POTATODORO
-    </Text>
+    </ThemedText>
 
     <View className="flex-row gap-2">
-      <Pressable
+      <ThemedPressable
         onPress={openThemes}
         className="p-2 bg-white/20 rounded-full active:opacity-70"
         hitSlop={8}
       >
         <Image size={18} color="white" />
-      </Pressable>
+      </ThemedPressable>
 
-      <Pressable
+      <ThemedPressable
         onPress={toggleSound}
         className="p-2 bg-white/20 rounded-full active:opacity-70"
         hitSlop={8}
@@ -37,7 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
         ) : (
           <VolumeX size={18} color="white" />
         )}
-      </Pressable>
+      </ThemedPressable>
     </View>
   </View>
 );
