@@ -46,7 +46,6 @@ export const useTimer = (
   // Timer countdown + health regen
   useEffect(() => {
     if (state !== TimerState.RUNNING) return;
-
     timerRef.current = setInterval(() => {
       // ⏳ countdown
       setTimeLeft((t) => {

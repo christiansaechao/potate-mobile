@@ -39,12 +39,17 @@ export default function App() {
   } = useTimer(health, setHealth);
 
   useFocusHealth(state, setHealth, fetchQuote, mode);
+  const timeToCallQuote = 300;
 
   useEffect(() => {
     let mounted = true;
-    fetchQuote(mode, state, health).then((q) => {
-      if (mounted) setQuote(q);
-    });
+
+    if (timeLeft % timeToCallQuote === 0) {
+      fetchQuote(mode, state, health).then((q) => {
+        if (mounted) setQuote(q);
+      });
+    }
+
     return () => {
       mounted = false;
     };
