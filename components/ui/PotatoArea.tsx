@@ -67,7 +67,13 @@ export const PotatoArea: React.FC<PotatoAreaProps> = ({
         className="z-10 active:scale-105"
         hitSlop={10}
       >
-        <Animated.View style={state === TimerState.COMPLETED ? { transform: [{ translateY: bounceY }] } : undefined}>
+        <Animated.View
+          style={
+            state === TimerState.COMPLETED
+              ? { transform: [{ translateY: bounceY }] }
+              : undefined
+          }
+        >
           <Potato
             mood={mood}
             isAnimating={state === TimerState.RUNNING}
