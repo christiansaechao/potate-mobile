@@ -30,6 +30,12 @@ export const THEMES: Record<AppTheme, Record<TimerMode, string>> = {
   },
 };
 
+export const TAILWIND_TO_HEX = {
+  "text-red-500": "#ef4444",
+  "text-emerald-500": "#10b981",
+  "text-blue-500": "#3b82f6",
+};
+
 export const BUTTON_COLORS = {
   [TimerMode.FOCUS]: "text-red-500",
   [TimerMode.SHORT_BREAK]: "text-emerald-500",

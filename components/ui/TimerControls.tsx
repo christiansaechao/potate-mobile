@@ -1,7 +1,7 @@
 import { Pause, Play, RotateCcw, SkipForward } from "lucide-react-native";
 import React from "react";
 import { Pressable, View } from "react-native";
-import { BUTTON_COLORS } from "../../constants/constants";
+import { BUTTON_COLORS, TAILWIND_TO_HEX } from "../../constants/constants";
 import { TimerMode, TimerState } from "../../types/types";
 
 type TimerControlsProps = {
@@ -19,7 +19,8 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
   resetTimer,
   switchMode,
 }) => {
-  const iconColor = BUTTON_COLORS[mode]; // ideally a hex/rgb string
+  const iconKey = BUTTON_COLORS[mode] as keyof typeof TAILWIND_TO_HEX;
+  const iconColor = TAILWIND_TO_HEX[iconKey]; // ideally a hex/rgb string
 
   return (
     <View className="flex-row items-center gap-6 mt-4">
