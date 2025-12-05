@@ -224,7 +224,7 @@ export const Potato: React.FC<PotatoProps> = ({
       ) : (
         <Image
           key={String(imageSource)}
-          src={imageSource}
+          source={imageSource}
           resizeMode="contain"
           className="w-full h-full"
           onError={() => setImgError(true)}
