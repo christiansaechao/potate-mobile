@@ -1,107 +1,115 @@
-import { Image } from "expo-image";
-import { Platform, StyleSheet, Text } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Link } from "expo-router";
-import { HelloWave } from "../../components/hello-wave";
-import ParallaxScrollView from "../../components/parallax-scroll-view";
-import { ThemedText } from "../../components/themed-text";
+import { AppTheme, PotatoQuote, TimerState } from "../../types/types";
+
+import { useFocusHealth } from "../../hooks/useFocusHealth";
+import { useTimer } from "../../hooks/useTimer";
+
+import { Header } from "../../components/ui/Header";
+import { HealthBar } from "../../components/ui/HealthBar";
+import { ModeSwitcher } from "../../components/ui/ModeSwitcher";
+import { PotatoArea } from "../../components/ui/PotatoArea";
+import { ProgressBar } from "../../components/ui/ProgressBar";
+import { ThemeSelector } from "../../components/ui/ThemeSelector";
+import { TimerControls } from "../../components/ui/TimerControls";
+import { TimerDisplay } from "../../components/ui/TimerDisplay";
+
 import { ThemedView } from "../../components/themed-view";
+import { DEFAULT_TIMES } from "../../constants/constants";
 
-export default function HomeScreen() {
+export default function App() {
+  const [health, setHealth] = useState(80);
+  const [quote, setQuote] = useState<PotatoQuote>({
+    text: "Ready to lock in?",
+    mood: "happy",
+  });
+  const [isSoundEnabled, setIsSoundEnabled] = useState(false);
+  const [theme, setTheme] = useState<AppTheme>("default");
+  const [showThemeSelector, setShowThemeSelector] = useState(false);
+
+  const {
+    mode,
+    state,
+    timeLeft,
+    switchMode,
+    toggleTimer,
+    resetTimer,
+    fetchQuote,
+  } = useTimer(health, setHealth);
+
+  useFocusHealth(state, setHealth, fetchQuote, mode);
+  const timeToCallQuote = 300;
+
+  useEffect(() => {
+    let mounted = true;
+
+    if (timeLeft % timeToCallQuote === 0) {
+      fetchQuote(mode, state, health).then((q) => {
+        if (mounted) setQuote(q);
+      });
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, [mode, state, health, fetchQuote]);
+
+  const progress = useMemo(() => {
+    const total = DEFAULT_TIMES[mode];
+    if (!total) return 0;
+    return ((total - timeLeft) / total) * 100;
+  }, [mode, timeLeft]);
+
+  const timeLabel = useMemo(() => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    const mm = String(minutes).padStart(2, "0");
+    const ss = String(seconds).padStart(2, "0");
+    return `${mm}:${ss}`;
+  }, [timeLeft]);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("../../app/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
+    <SafeAreaView className="flex-1">
+      <ThemedView className="flex-1 items-center justify-between py-6 px-4">
+        <ThemeSelector
+          visible={showThemeSelector}
+          currentTheme={theme}
+          onSelect={setTheme}
+          onClose={() => setShowThemeSelector(false)}
         />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Text className="text-red-500">Step 1: Try it</Text>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
-            })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction
-              title="Action"
-              icon="cube"
-              onPress={() => alert("Action pressed")}
-            />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert("Share pressed")}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert("Delete pressed")}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
+        <Header
+          isSound={isSoundEnabled}
+          toggleSound={() => setIsSoundEnabled((p) => !p)}
+          openThemes={() => setShowThemeSelector(true)}
+        />
+
+        <ModeSwitcher mode={mode} switchMode={switchMode} />
+
+        <HealthBar health={health} />
+
+        <PotatoArea
+          quote={quote}
+          mode={mode}
+          state={state}
+          health={health}
+          fetchWisdom={fetchQuote}
+          mood={quote.mood}
+        />
+
+        <TimerDisplay time={timeLabel} label={TimerState[state]} />
+
+        <TimerControls
+          state={state}
+          mode={mode}
+          toggleTimer={toggleTimer}
+          resetTimer={resetTimer}
+          switchMode={switchMode}
+        />
+
+        <ProgressBar progress={progress} />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">
-            npm run reset-project
-          </ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
-  },
-});

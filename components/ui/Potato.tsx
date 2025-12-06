@@ -10,7 +10,7 @@ interface PotatoProps {
 
 export const Potato: React.FC<PotatoProps> = ({
   mood,
-  isAnimating, // unused for animation now
+  isAnimating,
   health,
 }) => {
   const [imgError, setImgError] = useState(false);
