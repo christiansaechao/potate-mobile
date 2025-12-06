@@ -1,14 +1,14 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemedText, ThemedView } from "../../components";
-
+import { CustomText, CustomView } from "../../components/custom";
 export default function Settings() {
+
   return (
     <SafeAreaView>
-      <ThemedView>
-        <ThemedText className="text-3xl text-center">
+      <CustomView className={"p-4 mb-4 rounded-lg"}>
+        <CustomText className="text-3xl text-center">
           Timer & Session
-        </ThemedText>
+        </CustomText>
         <Row
           name="name"
           icon={<FontAwesome5 name="user" size={24} />}
@@ -44,15 +44,15 @@ export default function Settings() {
           icon={<FontAwesome5 name="user" size={24} />}
           value="Akhilan"
         />
-      </ThemedView>
-      <ThemedView>
-        <ThemedText className="text-3xl text-center">
+      </CustomView>
+      <CustomView>
+        <CustomText className="text-3xl text-center">
           Goals And Productivity
-        </ThemedText>
-      </ThemedView>
-      <ThemedView>
-        <ThemedText className="text-3xl text-center">Notifications</ThemedText>
-      </ThemedView>
+        </CustomText>
+      </CustomView>
+      <CustomView>
+        <CustomText className="text-3xl text-center">Notifications</CustomText>
+      </CustomView>
     </SafeAreaView>
   );
 }
@@ -67,11 +67,11 @@ const Row = ({
   value: any;
 }) => {
   return (
-    <ThemedView className="flex-row justify-between items-center py-4">
-      <ThemedText>
+    <CustomView className="flex-row justify-between items-center py-4">
+      <CustomText className={"flex-row items-center gap-2"}>
         {icon} {name}
-      </ThemedText>
-      <ThemedText className="text-black">{value}</ThemedText>
-    </ThemedView>
+      </CustomText>
+      <CustomText>{value}</CustomText>
+    </CustomView>
   );
 };

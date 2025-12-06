@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { ThemedText, ThemedView } from "../index";
+import { CustomText, CustomView } from "../custom";
 
 type AppBreakdownProps = {
   time: number;
@@ -11,16 +11,16 @@ export const AppBreakdown = ({ time, appName }: AppBreakdownProps) => {
     time > 30 ? "bg-red-500" : time > 70 ? "bg-yellow-400" : "bg-green-400";
 
   return (
-    <ThemedView className="w-full px-8 flex gap-2">
-      <ThemedView className="flex-row justify-between">
-        <ThemedText className=" text-lg font-bold">{appName}</ThemedText>
-        <ThemedText className=" text-xs font-bold">
+    <CustomView className="w-full px-8 flex gap-2">
+      <CustomView className="flex-row justify-between">
+        <CustomText className=" text-lg font-bold">{appName}</CustomText>
+        <CustomText className=" text-xs font-bold">
           {Math.round(time)}%
-        </ThemedText>
-      </ThemedView>
+        </CustomText>
+      </CustomView>
       <View className="h-2 bg-black/20 rounded-full overflow-hidden">
         <View className={`h-full ${barColor}`} style={{ width: `${time}%` }} />
       </View>
-    </ThemedView>
+    </CustomView>
   );
 };
