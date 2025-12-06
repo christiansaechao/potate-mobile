@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AppTheme, PotatoQuote, TimerState } from "../../types/types";
+import { PotatoQuote, TimerState } from "../../types/types";
 
 import { useFocusHealth } from "../../hooks/useFocusHealth";
 import { useTimer } from "../../hooks/useTimer";
@@ -18,6 +18,8 @@ import { TimerDisplay } from "../../components/ui/TimerDisplay";
 import { ThemedView } from "@/components/themed-view";
 import { DEFAULT_TIMES } from "../../constants/constants";
 
+import { useTheme } from "../../hooks/useTheme";
+
 export default function App() {
   const [health, setHealth] = useState(80);
   const [quote, setQuote] = useState<PotatoQuote>({
@@ -25,7 +27,7 @@ export default function App() {
     mood: "happy",
   });
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
-  const [theme, setTheme] = useState<AppTheme>("default");
+  const { theme, setTheme } = useTheme();
   const [showThemeSelector, setShowThemeSelector] = useState(false);
 
   const {

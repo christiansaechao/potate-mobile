@@ -1,8 +1,8 @@
 import { Colors } from "@/constants/theme";
+import { useTheme } from "@/hooks/useTheme";
 import { Pause, Play, RotateCcw, SkipForward } from "lucide-react-native";
 import React from "react";
-import { useColorScheme, View } from "react-native";
-import { BUTTON_COLORS, TAILWIND_TO_HEX } from "../../constants/constants";
+import { View } from "react-native";
 import { TimerMode, TimerState } from "../../types/types";
 import { ThemedPressable } from "../themed-pressable";
 
@@ -21,11 +21,9 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
   resetTimer,
   switchMode,
 }) => {
-  const iconKey = BUTTON_COLORS[mode] as keyof typeof TAILWIND_TO_HEX;
-  const iconColor = TAILWIND_TO_HEX[iconKey]; // ideally a hex/rgb string
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
 
-  const color = Colors[colorScheme ?? "light"].buttonIconColor;
+  const color = Colors[theme];
 
   return (
     <View className="flex-row items-center gap-6 mt-4">
@@ -44,9 +42,10 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
         hitSlop={8}
       >
         {state === TimerState.RUNNING ? (
-          <Pause size={32} color={iconColor} />
+          // TODO: should this be red at all times?
+          <Pause size={32} color="red" />
         ) : (
-          <Play size={32} color={iconColor} />
+          <Play size={32} color={color.buttonIconColor} />
         )}
       </ThemedPressable>
 
@@ -57,7 +56,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
           className="p-3 bg-white/20 rounded-xl active:opacity-80"
           hitSlop={6}
         >
-          <RotateCcw size={20} color={color} />
+          <RotateCcw size={20} color={color.buttonIconColor} />
         </ThemedPressable>
 
         <ThemedPressable
@@ -69,7 +68,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
           className="p-3 bg-white/20 rounded-xl active:opacity-80"
           hitSlop={6}
         >
-          <SkipForward size={20} color={color} />
+          <SkipForward size={20} color={color.buttonIconColor} />
         </ThemedPressable>
       </View>
     </View>

@@ -13,8 +13,8 @@ export const HealthBar: React.FC<HealthBarProps> = ({ health }) => {
   return (
     <View className="w-full px-8 mt-2">
       <View className="flex-row justify-between">
-        <ThemedText className=" text-xs font-bold">Focus Health</ThemedText>
-        <ThemedText className=" text-xs font-bold">
+        <ThemedText className="text-xs font-bold">Focus Health</ThemedText>
+        <ThemedText className="text-xs font-bold">
           {Math.round(health)}%
         </ThemedText>
       </View>
