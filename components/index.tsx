@@ -3,4 +3,3 @@ import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
 
 export { ThemedPressable, ThemedText, ThemedView };
-

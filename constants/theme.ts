@@ -28,7 +28,7 @@ export const Colors = {
     buttonIconColor: "black",
   },
   vaporwave: {
-    text: "#00f0ff",
+    text: "#ffffff",
     background: "#2b003b",
     tint: "#ff00ff",
     icon: "#00f0ff",

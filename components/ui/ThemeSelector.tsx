@@ -46,56 +46,63 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   const themeKeys = Object.keys(THEMES) as AppTheme[];
 
   return (
-    <Animated.View
-      className="absolute top-0 left-0 w-full bg-black/40 p-4 rounded-2xl border border-white/10 z-50"
-      style={{
-        opacity,
-        transform: [{ translateY }],
-      }}
+    <Pressable
+      onPress={onClose}
+      className="absolute top-0 left-0 w-full h-full z-50"
     >
-      <Text className="text-white text-xs font-bold mb-3 text-center uppercase tracking-widest">
-        Theme
-      </Text>
+      <Animated.View
+        className="absolute top-0 left-0 w-full bg-black/40 p-4 rounded-2xl border border-white/10"
+        style={{
+          opacity,
+          transform: [{ translateY }],
+        }}
+      >
+        <Pressable onPress={(e) => e.stopPropagation()}>
+          <Text className="text-white text-xs font-bold mb-3 text-center uppercase tracking-widest">
+            Theme
+          </Text>
 
-      {/* Theme Grid */}
-      <View className="flex-row justify-around flex-wrap gap-2">
-        {themeKeys.map((t) => {
-          const isActive = currentTheme === t;
+          {/* Theme Grid */}
+          <View className="flex-row justify-around flex-wrap gap-2">
+            {themeKeys.map((t) => {
+              const isActive = currentTheme === t;
 
-          return (
+              return (
+                <Pressable
+                  key={t}
+                  onPress={() => {
+                    onSelect(t);
+                    onClose();
+                  }}
+                  className={`px-3 py-2 rounded-xl ${
+                    isActive ? "bg-white scale-110" : "bg-black/20"
+                  } active:opacity-80`}
+                  hitSlop={6}
+                >
+                  <Text
+                    className={`text-xs font-bold uppercase ${
+                      isActive ? "text-black" : "text-white"
+                    }`}
+                  >
+                    {t}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+
+          {/* Close Button */}
+          <View className="items-center mt-4">
             <Pressable
-              key={t}
-              onPress={() => {
-                onSelect(t);
-                onClose();
-              }}
-              className={`px-3 py-2 rounded-xl ${
-                isActive ? "bg-white scale-110" : "bg-black/20"
-              } active:opacity-80`}
+              onPress={onClose}
+              className="px-4 py-1 bg-white/20 border border-white/10 rounded-lg active:opacity-80"
               hitSlop={6}
             >
-              <Text
-                className={`text-xs font-bold uppercase ${
-                  isActive ? "text-black" : "text-white"
-                }`}
-              >
-                {t}
-              </Text>
+              <Text className="text-white text-xs">Close</Text>
             </Pressable>
-          );
-        })}
-      </View>
-
-      {/* Close Button */}
-      <View className="items-center mt-4">
-        <Pressable
-          onPress={onClose}
-          className="px-4 py-1 bg-white/20 border border-white/10 rounded-lg active:opacity-80"
-          hitSlop={6}
-        >
-          <Text className="text-white text-xs">Close</Text>
+          </View>
         </Pressable>
-      </View>
-    </Animated.View>
+      </Animated.View>
+    </Pressable>
   );
 };

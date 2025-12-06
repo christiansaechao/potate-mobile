@@ -9,14 +9,14 @@ export const DEFAULT_TIMES = {
 // Theme definitions mapping Modes to Colors
 export const THEMES: Record<AppTheme, Record<TimerMode, string>> = {
   default: {
-    [TimerMode.FOCUS]: "bg-red-400",
-    [TimerMode.SHORT_BREAK]: "bg-emerald-400",
-    [TimerMode.LONG_BREAK]: "bg-blue-400",
+    [TimerMode.FOCUS]: "bg-orange-200",
+    [TimerMode.SHORT_BREAK]: "bg-green-200",
+    [TimerMode.LONG_BREAK]: "bg-blue-200",
   },
   dark: {
-    [TimerMode.FOCUS]: "bg-gray-900",
+    [TimerMode.FOCUS]: "bg-gray-700",
     [TimerMode.SHORT_BREAK]: "bg-gray-800",
-    [TimerMode.LONG_BREAK]: "bg-black",
+    [TimerMode.LONG_BREAK]: "bg-slate-900",
   },
   vaporwave: {
     [TimerMode.FOCUS]: "bg-purple-500",
@@ -24,9 +24,9 @@ export const THEMES: Record<AppTheme, Record<TimerMode, string>> = {
     [TimerMode.LONG_BREAK]: "bg-cyan-400",
   },
   cozy: {
-    [TimerMode.FOCUS]: "bg-[#8D6E63]", // Brown
-    [TimerMode.SHORT_BREAK]: "bg-[#A1887F]",
-    [TimerMode.LONG_BREAK]: "bg-[#D7CCC8]",
+    [TimerMode.FOCUS]: "bg-[#ccd5ae]",
+    [TimerMode.SHORT_BREAK]: "bg-[#e9edc9]",
+    [TimerMode.LONG_BREAK]: "bg-[#fefae0]",
   },
 };
 

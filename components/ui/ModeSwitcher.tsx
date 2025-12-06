@@ -6,7 +6,7 @@ type ModeSwitcherProps = {
   mode: TimerMode;
   switchMode: (m: TimerMode) => void;
 };
-// TODO: Fix mode switcher theme
+
 export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
   mode,
   switchMode,

@@ -42,7 +42,6 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
         hitSlop={8}
       >
         {state === TimerState.RUNNING ? (
-          // TODO: should this be red at all times?
           <Pause size={32} color="red" />
         ) : (
           <Play size={32} color={color.buttonIconColor} />
