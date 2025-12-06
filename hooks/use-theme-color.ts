@@ -4,18 +4,20 @@
  */
 
 import { Colors } from "../constants/theme";
-import { useColorScheme } from "../hooks/use-color-scheme";
+import { useTheme } from "../hooks/useTheme";
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName: keyof (typeof Colors)["default"] & keyof (typeof Colors)["dark"]
 ) {
-  const theme = useColorScheme() ?? "light";
-  const colorFromProps = props[theme === "light" ? "light" : "dark"];
+  const { theme } = useTheme();
+  // Map 'default' to 'light' for prop lookup, other themes might not have overrides
+  const propKey = theme === "default" ? "light" : theme;
+  const colorFromProps = props[propKey as keyof typeof props];
 
   if (colorFromProps) {
     return colorFromProps;
   } else {
-    return Colors[theme === "dark" ? "dark" : "default"][colorName];
+    return Colors[theme][colorName];
   }
 }

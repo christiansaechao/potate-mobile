@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { PotatoQuote, TimerState } from "../../types/types";
@@ -15,8 +16,7 @@ import { ThemeSelector } from "../../components/ui/ThemeSelector";
 import { TimerControls } from "../../components/ui/TimerControls";
 import { TimerDisplay } from "../../components/ui/TimerDisplay";
 
-import { ThemedView } from "@/components/themed-view";
-import { DEFAULT_TIMES } from "../../constants/constants";
+import { DEFAULT_TIMES, THEMES } from "../../constants/constants";
 
 import { useTheme } from "../../hooks/useTheme";
 
@@ -71,9 +71,11 @@ export default function App() {
     return `${mm}:${ss}`;
   }, [timeLeft]);
 
+  const backgroundColor = THEMES[theme][mode];
+
   return (
-    <SafeAreaView className="flex-1">
-      <ThemedView className="flex-1 items-center justify-between py-6 px-4">
+    <SafeAreaView className={`flex-1 ${backgroundColor}`}>
+      <View className="flex-1 items-center justify-between py-6 px-4">
         <ThemeSelector
           visible={showThemeSelector}
           currentTheme={theme}
@@ -111,7 +113,7 @@ export default function App() {
         />
 
         <ProgressBar progress={progress} />
-      </ThemedView>
+      </View>
     </SafeAreaView>
   );
 }
