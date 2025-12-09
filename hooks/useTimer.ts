@@ -25,16 +25,27 @@ export const useTimer = (
     setMode(newMode);
     setState(TimerState.IDLE);
     setTimeLeft(DEFAULT_TIMES[newMode]);
+    // TODO: end session, set endtime to current interval
     if (timerRef.current) clearInterval(timerRef.current);
   }, []);
 
   const toggleTimer = useCallback(() => {
+    /**
+     * TODO:
+     * if timer is paused, set current interval endtime
+     * else:
+     * create new interval with current time
+     */
     setState((prev) =>
       prev === TimerState.RUNNING ? TimerState.PAUSED : TimerState.RUNNING
     );
   }, []);
 
   const resetTimer = useCallback(() => {
+    /**
+     * TODO:
+     * end current session, set endtime to current interval
+     */
     setState(TimerState.IDLE);
     setTimeLeft(DEFAULT_TIMES[mode]);
     if (timerRef.current) clearInterval(timerRef.current);
