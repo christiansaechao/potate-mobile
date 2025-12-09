@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { Colors } from "../../constants/theme";
 import { useTheme } from "../../hooks/useTheme";
 import { TimerMode, TimerState } from "../../types/types";
-import { ThemedPressable } from "../themed-pressable";
+import { ThemedPressable } from "../ui/themed-pressable";
 
 type TimerControlsProps = {
   state: TimerState;

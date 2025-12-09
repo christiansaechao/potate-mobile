@@ -1,11 +1,11 @@
 import { CustomText, CustomView } from "@/components/custom";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { AppBreakdown } from "../../components/ui/AppBreakdown";
+import { AppBreakdown } from "../../components/potato/AppBreakdown";
 
 export default function Stats() {
   return (
     <SafeAreaView className="flex-1">
-      <CustomView className="py-8">
+      <CustomView className="py-12 h-screen">
         <CustomText className="text-6xl text-center">Stats Page</CustomText>
         <CustomView className="flex gap-2">
           <CustomText className="text-2xl text-center ">

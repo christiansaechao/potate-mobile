@@ -18,9 +18,9 @@ export const AppBreakdown = ({ time, appName }: AppBreakdownProps) => {
           {Math.round(time)}%
         </CustomText>
       </CustomView>
-      <View className="h-2 bg-black/20 rounded-full overflow-hidden">
+      <CustomView className="h-2 bg-black/20 rounded-full overflow-hidden">
         <View className={`h-full ${barColor}`} style={{ width: `${time}%` }} />
-      </View>
+      </CustomView>
     </CustomView>
   );
 };

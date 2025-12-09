@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { ThemedText } from "../themed-text";
+import { CustomText } from "../custom";
 
 type TimerDisplayProps = {
   time: string;
@@ -9,9 +9,9 @@ type TimerDisplayProps = {
 
 export const TimerDisplay: React.FC<TimerDisplayProps> = ({ time, label }) => (
   <View className="relative items-center">
-    <ThemedText className="font-mono text-[80px] leading-[90px]">
+    <CustomText className="font-mono text-[80px] leading-[90px]">
       {time}
-    </ThemedText>
-    <ThemedText className=" text-lg uppercase mt-1">{label}</ThemedText>
+    </CustomText>
+    <CustomText className=" text-lg uppercase mt-1">{label}</CustomText>
   </View>
 );

@@ -2,8 +2,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { Image, Volume2, VolumeX } from "lucide-react-native";
 import React from "react";
 import { View } from "react-native";
-import { ThemedPressable } from "../themed-pressable";
-import { ThemedText } from "../themed-text";
+import { CustomText } from "../custom";
+import { ThemedPressable } from "../ui/themed-pressable";
 
 type HeaderProps = {
   isSound: boolean;
@@ -20,9 +20,9 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <View className="w-full max-w-md flex-row justify-between items-center z-20">
-      <ThemedText className="text-2xl font-bold tracking-wider">
+      <CustomText className="text-2xl font-bold tracking-wider">
         POTATODORO
-      </ThemedText>
+      </CustomText>
 
       <View className="flex-row gap-2">
         <ThemedPressable
