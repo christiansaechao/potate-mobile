@@ -1,7 +1,7 @@
-import { Colors } from "@/constants/theme";
-import { AppTheme } from "@/types/types";
 import React, { createContext, useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
+import { Colors } from "../../constants/theme";
+import { AppTheme } from "../../types/types";
 
 interface ThemeContextType {
   theme: AppTheme;
