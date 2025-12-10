@@ -18,6 +18,8 @@ module.exports = defineConfig([
     },
     rules: {
       "import/no-default-export": "off",
+      "no-unused-vars": "warn",
+      "no-unused-imports": "off",
     },
   },
 ]);

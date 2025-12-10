@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { PotatoQuote, TimerState } from "../../types/types";
 
 import { useNotifications } from "@/hooks/useNotifications";
-import { useFocusHealth } from "../../hooks/useFocusHealth";
+import { useLeaveAppConsequence } from "../../hooks/useLeaveAppConsequence";
 import { useTimer } from "../../hooks/useTimer";
 
 import { Header } from "../../components/ui/Header";
@@ -44,7 +44,7 @@ export default function App() {
         fetchQuote,
     } = useTimer(health, setHealth);
 
-    useFocusHealth(state, setHealth, setState, fetchQuote, mode);
+    useLeaveAppConsequence(state, setHealth, setState, fetchQuote, mode);
     const timeToCallQuote = 300;
 
     useEffect(() => {
