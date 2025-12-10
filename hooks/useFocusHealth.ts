@@ -5,6 +5,7 @@ import { TimerState } from "../types/types";
 export const useFocusHealth = (
   state: TimerState,
   setHealth: any,
+  setState: any,
   fetchQuote: any,
   mode: any
 ) => {
@@ -18,6 +19,7 @@ export const useFocusHealth = (
           nextAppState.match(/inactive|background/) &&
           state === TimerState.RUNNING
         ) {
+          setState(TimerState.PAUSED);
           // start damage
           if (healthRef.current) clearInterval(healthRef.current);
           healthRef.current = setInterval(() => {

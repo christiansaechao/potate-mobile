@@ -73,6 +73,7 @@ export const useTimer = (
   return {
     mode,
     state,
+    setState,
     timeLeft,
     switchMode,
     toggleTimer,
