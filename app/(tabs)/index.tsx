@@ -3,7 +3,8 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { PotatoQuote, TimerState } from "../../types/types";
-
+// hooks
+import { useSessionManager } from "@/hooks/useSessionManager";
 import { useFocusHealth } from "../../hooks/useFocusHealth";
 import { useTimer } from "../../hooks/useTimer";
 
@@ -21,7 +22,7 @@ import { DEFAULT_TIMES, THEMES } from "../../constants/constants";
 import { useTheme } from "../../hooks/useTheme";
 
 export default function App() {
-  const [health, setHealth] = useState(80);
+  const [health, setHealth] = useState(100);
   const [quote, setQuote] = useState<PotatoQuote>({
     text: "Ready to lock in?",
     mood: "happy",
@@ -29,6 +30,9 @@ export default function App() {
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
   const { theme, setTheme } = useTheme();
   const [showThemeSelector, setShowThemeSelector] = useState(false);
+
+  const { StartSession, StopSession, StartInterval, StopInterval } =
+    useSessionManager();
 
   const {
     mode,
@@ -38,9 +42,16 @@ export default function App() {
     toggleTimer,
     resetTimer,
     fetchQuote,
-  } = useTimer(health, setHealth);
-
+  } = useTimer(
+    health,
+    setHealth,
+    StartSession,
+    StopSession,
+    StartInterval,
+    StopInterval
+  );
   useFocusHealth(state, setHealth, fetchQuote, mode);
+
   const timeToCallQuote = 300;
 
   useEffect(() => {
@@ -48,14 +59,14 @@ export default function App() {
 
     if (timeLeft % timeToCallQuote === 0) {
       fetchQuote(mode, state, health).then((q) => {
-        if (mounted) setQuote(q);
+        if (mounted) setQuote(q as PotatoQuote);
       });
     }
 
     return () => {
       mounted = false;
     };
-  }, [mode, state, health, fetchQuote]);
+  }, [mode, timeLeft, state, health, fetchQuote]);
 
   const progress = useMemo(() => {
     const total = DEFAULT_TIMES[mode];

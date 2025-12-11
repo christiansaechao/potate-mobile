@@ -1,2 +1,2 @@
-export * from "./schema/intervals";
-export * from "./schema/sessions";
+export * from "./schemas/intervals";
+export * from "./schemas/sessions";
