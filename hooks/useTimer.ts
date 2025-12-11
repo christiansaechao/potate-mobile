@@ -58,18 +58,21 @@ export const useTimer: IUseTimer = (
     [StopSession, StopInterval, health]
   );
 
-  const toggleTimer = useCallback(() => {
-    setState((prev) => {
-      if (prev === TimerState.IDLE) {
-        StartSession(mode);
+  const toggleTimer = useCallback(async () => {
+    try {
+      if (state == TimerState.IDLE) {
+        await StartSession(mode);
       }
-
+    } catch (err) {
+      console.error(err);
+    } finally {
+      StartInterval();
+      setState(TimerState.RUNNING);
+    }
+    setState((prev) => {
       if (prev === TimerState.RUNNING) {
         StopInterval();
         return TimerState.PAUSED;
-      } else{
-        StartInterval();
-        return TimerState.RUNNING;
       }
     });
   }, [StopInterval, StartInterval, StartSession, mode]);

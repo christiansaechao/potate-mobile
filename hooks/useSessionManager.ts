@@ -4,13 +4,11 @@ import Sessions from "@/lib/sessions";
 import { useCallback, useState } from "react";
 
 export const useSessionManager = () => {
-  const [sessionId, setSessionId] = useState<number>(0);
+  const [sessionId, setSessionId] = useState<number | null>(null);
   const [currentInterval, setCurrentInterval] = useState<Interval | null>(null);
 
   const StartSession = useCallback(
     async (mode: string) => {
-      if (sessionId) return;
-
       try {
         const result = await Sessions.createSession(mode);
         setSessionId(result.id);
@@ -21,16 +19,18 @@ export const useSessionManager = () => {
     [sessionId]
   );
 
-  const StopSession = useCallback(async (health: number, completed?: number) => {
-    if (!sessionId) return;
+  const StopSession = useCallback(
+    async (health: number, completed?: number) => {
+      if (!sessionId) return;
 
-    try {
-      await Sessions.updateSession(sessionId, health, completed);
-      setSessionId(0);
-    } catch (err) {
-      console.error(err);
-    }
-  }, [sessionId]);
+      try {
+        await Sessions.updateSession(sessionId, health, completed);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [sessionId]
+  );
 
   const StartInterval = useCallback(async () => {
     try {

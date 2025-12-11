@@ -1,5 +1,5 @@
-import { intervals } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { intervals, sessions } from "@/db/schema";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "../db/client";
 
 const intervalOps = {
@@ -7,6 +7,25 @@ const intervalOps = {
     const result = await db.select().from(intervals);
 
     return result;
+  },
+
+  async getIntervalsBySessionMode(mode: string) {
+    // query sessions
+    const allSessions = await db
+      .select({ id: sessions.id })
+      .from(sessions)
+      .where(eq(sessions.mode, mode));
+    console.log(mode, allSessions);
+    const allIntervals = await db
+      .select()
+      .from(intervals)
+      .where(
+        inArray(
+          intervals.sessionId,
+          allSessions.map((x) => x.id)
+        )
+      );
+    return allIntervals;
   },
 
   async getIntervalsById(sessionId: number) {

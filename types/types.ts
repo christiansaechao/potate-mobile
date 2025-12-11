@@ -25,3 +25,20 @@ export interface TimerConfig {
   shortBreak: number;
   longBreak: number;
 }
+
+export type IntervalsType = {
+  id: number;
+  sessionId: number;
+  startTime: number;
+  endTime: number;
+}[];
+
+export type SessionType = {
+  id: number;
+  mode: string;
+  createdAt: number;
+  updatedAt: number;
+  endedAt: number;
+  potatoHealth: number;
+  completed: number;
+};
