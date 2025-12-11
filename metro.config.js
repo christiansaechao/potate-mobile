@@ -3,15 +3,15 @@ const { getDefaultConfig } = require("expo/metro-config");
 const { withNativeWind } = require("nativewind/metro");
 const path = require("node:path");
 
-// Load Expo's default config first
-const config = getDefaultConfig(__dirname);
+// Start with Expo's default config
+let config = getDefaultConfig(__dirname);
 
-config.resolver.sourceExts.push("sql");
-module.exports = withNativeWind(config, { input: "./global.css" });
+// Let Metro treat .sql as source files so Babel can transform them
+config.resolver.sourceExts = [...config.resolver.sourceExts, "sql"];
 
-// Add your alias AND preserve Expo Router
-config.resolver.extraNodeModules = {
-  ...config.resolver.extraNodeModules,
+// Add "@" alias pointing to project root
+config.resolver.alias = {
+  ...(config.resolver.alias || {}),
   "@": path.resolve(__dirname),
 };
 
@@ -20,4 +20,5 @@ config = withNativeWind(config, {
   input: "./global.css",
 });
 
+// Export final config
 module.exports = config;
