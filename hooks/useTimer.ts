@@ -4,9 +4,34 @@ import { DEFAULT_TIMES } from "../constants/constants";
 import { getPotatoWisdom } from "../services/potatoWisdomLocal";
 import { TimerMode, TimerState } from "../types/types";
 
-export const useTimer = (
+type IUseTimer = (
   health: number,
-  setHealth: (h: number | ((h: number) => number)) => void
+  setHealth: (h: number | ((h: number) => number)) => void,
+  StartSession: (mode: string) => Promise<void>,
+  StopSession: (h: number, completed?: number) => void,
+  StartInterval: () => void,
+  StopInterval: () => void
+) => {
+  mode: TimerMode;
+  state: TimerState;
+  timeLeft: number;
+  switchMode: (newMode: TimerMode) => void;
+  toggleTimer: () => void;
+  resetTimer: () => void;
+  fetchQuote: (
+    m: TimerMode,
+    s: TimerState,
+    hp: number
+  ) => Promise<{ text: string; mood: string }>;
+};
+
+export const useTimer: IUseTimer = (
+  health,
+  setHealth,
+  StartSession,
+  StopSession,
+  StartInterval,
+  StopInterval
 ) => {
   const [mode, setMode] = useState<TimerMode>(TimerMode.FOCUS);
   const [state, setState] = useState<TimerState>(TimerState.IDLE);
@@ -21,27 +46,42 @@ export const useTimer = (
     []
   );
 
-  const switchMode = useCallback((newMode: TimerMode) => {
-    setMode(newMode);
-    setState(TimerState.IDLE);
-    setTimeLeft(DEFAULT_TIMES[newMode]);
-    if (timerRef.current) clearInterval(timerRef.current);
-  }, []);
+  const switchMode = useCallback(
+    (newMode: TimerMode) => {
+      setMode(newMode);
+      setState(TimerState.IDLE);
+      setTimeLeft(DEFAULT_TIMES[newMode]);
+      StopSession(health);
+      StopInterval();
+      if (timerRef.current) clearInterval(timerRef.current);
+    },
+    [StopSession, StopInterval, health]
+  );
 
   const toggleTimer = useCallback(() => {
-    setState((prev) =>
-      prev === TimerState.RUNNING ? TimerState.PAUSED : TimerState.RUNNING
-    );
-  }, []);
+    setState((prev) => {
+      if (prev === TimerState.IDLE) {
+        StartSession(mode);
+      }
+
+      if (prev === TimerState.RUNNING) {
+        StopInterval();
+        return TimerState.PAUSED;
+      } else{
+        StartInterval();
+        return TimerState.RUNNING;
+      }
+    });
+  }, [StopInterval, StartInterval, StartSession, mode]);
 
   const resetTimer = useCallback(() => {
+    StopInterval();
+    StopSession(health);
     setState(TimerState.IDLE);
     setTimeLeft(DEFAULT_TIMES[mode]);
     if (timerRef.current) clearInterval(timerRef.current);
-
-    // Reset health when resetting the timer
     setHealth(100);
-  }, [mode, setHealth]);
+  }, [mode, setHealth, StopInterval, StopSession, health]);
 
   // Timer countdown + health regen
   useEffect(() => {
@@ -52,7 +92,7 @@ export const useTimer = (
         if (t <= 1) {
           clearInterval(timerRef.current!);
           setState(TimerState.COMPLETED);
-
+          StopSession(health, 1);
           // Fetch wisdom with final health
           fetchQuote(mode, TimerState.COMPLETED, health);
 
@@ -68,7 +108,7 @@ export const useTimer = (
     }, 1000);
 
     return () => clearInterval(timerRef.current!);
-  }, [state, mode, fetchQuote, health, setHealth]);
+  }, [state, mode, fetchQuote, health, setHealth, StopSession]);
 
   return {
     mode,

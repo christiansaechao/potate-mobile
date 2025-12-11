@@ -13,6 +13,7 @@ module.exports = function (api) {
           extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
         },
       ],
+      ["babel-plugin-inline-import", { extensions: [".sql"] }],
 
       // keep this LAST
       "react-native-reanimated/plugin",

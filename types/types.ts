@@ -11,6 +11,8 @@ export enum TimerState {
   COMPLETED = "COMPLETED",
 }
 
+export type timerState = "IDLE" | "RUNNING" | "PAUSED" | "COMPLETED";
+
 export type AppTheme = "default" | "dark" | "vaporwave" | "cozy";
 
 export interface PotatoQuote {
