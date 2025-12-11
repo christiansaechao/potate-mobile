@@ -1,9 +1,15 @@
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Sections } from "@/components/settings/Sections";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemedText, ThemedView } from "../../components";
+import { CustomView } from "../../components/custom";
+import {
+  goalsProductivityFields,
+  timerSessionFields,
+  userSettingsFields,
+} from "../../constants/settings";
 
 export default function Settings() {
   return (
+<<<<<<< HEAD
     <SafeAreaView className="flex-1 pb-24">
       <ThemedView>
         <ThemedText className="text-3xl text-center">
@@ -13,65 +19,17 @@ export default function Settings() {
           name="name"
           icon={<FontAwesome5 name="user" size={24} />}
           value="Akhilan"
+=======
+    <SafeAreaView>
+      <CustomView className={"h-screen py-12 px-4 mb-4 rounded-lg flex gap-8"}>
+        <Sections SectionTitle="User Settings" fields={userSettingsFields} />
+        <Sections SectionTitle="Timer & Session" fields={timerSessionFields} />
+        <Sections
+          SectionTitle="Goals & Productivity"
+          fields={goalsProductivityFields}
+>>>>>>> main
         />
-        <Row
-          name="email"
-          icon={<FontAwesome5 name="user" size={24} />}
-          value="Akhilan"
-        />
-        <Row
-          name="pomodoro duration"
-          icon={<FontAwesome5 name="user" size={24} />}
-          value="Akhilan"
-        />
-        <Row
-          name="short break duration"
-          icon={<FontAwesome5 name="user" size={24} />}
-          value="Akhilan"
-        />
-        <Row
-          name="long break duration"
-          icon={<FontAwesome5 name="user" size={24} />}
-          value="Akhilan"
-        />
-        <Row
-          name="vibration"
-          icon={<FontAwesome5 name="user" size={24} />}
-          value="Akhilan"
-        />
-        <Row
-          name="weekly goal"
-          icon={<FontAwesome5 name="user" size={24} />}
-          value="Akhilan"
-        />
-      </ThemedView>
-      <ThemedView>
-        <ThemedText className="text-3xl text-center">
-          Goals And Productivity
-        </ThemedText>
-      </ThemedView>
-      <ThemedView>
-        <ThemedText className="text-3xl text-center">Notifications</ThemedText>
-      </ThemedView>
+      </CustomView>
     </SafeAreaView>
   );
 }
-
-const Row = ({
-  name,
-  icon,
-  value,
-}: {
-  name: string;
-  icon: any;
-  value: any;
-}) => {
-  return (
-    <ThemedView className="flex-row justify-between items-center py-4">
-      <ThemedText>
-        {icon} {name}
-      </ThemedText>
-      <ThemedText className="text-black">{value}</ThemedText>
-    </ThemedView>
-  );
-};

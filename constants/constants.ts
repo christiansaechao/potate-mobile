@@ -30,6 +30,35 @@ export const THEMES: Record<AppTheme, Record<TimerMode, string>> = {
   },
 };
 
+/**
+ * If we change these colors we have to change the ones up above. This is being used for custom-view and custom-text.
+ * Instead of having to import { useTheme } and THEMES we just import those components 
+ * And then they already have our themed colors on them
+ */
+export const HEX_THEMES: Record<AppTheme, Record<TimerMode, string>> = {
+  default: {
+    [TimerMode.FOCUS]: "#fed7aa",       // orange-200
+    [TimerMode.SHORT_BREAK]: "#bbf7d0", // green-200
+    [TimerMode.LONG_BREAK]: "#bfdbfe",  // blue-200
+  },
+  dark: {
+    [TimerMode.FOCUS]: "#374151",       // gray-700
+    [TimerMode.SHORT_BREAK]: "#1f2937", // gray-800
+    [TimerMode.LONG_BREAK]: "#0f172a",  // slate-900
+  },
+  vaporwave: {
+    [TimerMode.FOCUS]: "#a855f7",       // purple-500
+    [TimerMode.SHORT_BREAK]: "#f472b6", // pink-400
+    [TimerMode.LONG_BREAK]: "#22d3ee",  // cyan-400
+  },
+  cozy: {
+    [TimerMode.FOCUS]: "#ccd5ae",
+    [TimerMode.SHORT_BREAK]: "#e9edc9",
+    [TimerMode.LONG_BREAK]: "#fefae0",
+  },
+};
+
+
 export const TAILWIND_TO_HEX = {
   "text-red-500": "#ef4444",
   "text-emerald-500": "#10b981",

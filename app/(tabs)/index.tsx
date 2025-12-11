@@ -8,14 +8,14 @@ import { useNotifications } from "@/hooks/useNotifications";
 import { useLeaveAppConsequence } from "../../hooks/useLeaveAppConsequence";
 import { useTimer } from "../../hooks/useTimer";
 
-import { Header } from "../../components/ui/Header";
-import { HealthBar } from "../../components/ui/HealthBar";
-import { ModeSwitcher } from "../../components/ui/ModeSwitcher";
-import { PotatoArea } from "../../components/ui/PotatoArea";
-import { ProgressBar } from "../../components/ui/ProgressBar";
-import { ThemeSelector } from "../../components/ui/ThemeSelector";
-import { TimerControls } from "../../components/ui/TimerControls";
-import { TimerDisplay } from "../../components/ui/TimerDisplay";
+import { Header } from "../../components/potato/Header";
+import { HealthBar } from "../../components/potato/HealthBar";
+import { ModeSwitcher } from "../../components/potato/ModeSwitcher";
+import { PotatoArea } from "../../components/potato/PotatoArea";
+import { ProgressBar } from "../../components/potato/ProgressBar";
+import { ThemeSelector } from "../../components/potato/ThemeSelector";
+import { TimerControls } from "../../components/potato/TimerControls";
+import { TimerDisplay } from "../../components/potato/TimerDisplay";
 
 import { DEFAULT_TIMES, THEMES } from "../../constants/constants";
 
