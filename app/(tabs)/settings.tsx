@@ -4,7 +4,7 @@ import { ThemedText, ThemedView } from "../../components";
 
 export default function Settings() {
   return (
-    <SafeAreaView>
+    <SafeAreaView className="flex-1 pb-24">
       <ThemedView>
         <ThemedText className="text-3xl text-center">
           Timer & Session

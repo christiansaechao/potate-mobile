@@ -1,29 +1,24 @@
 import { Tabs } from "expo-router";
 import React from "react";
 
-import { HapticTab } from "../../components/haptic-tab";
+import { FloatingTabBar } from "../../components/floating-tab-bar";
 import { IconSymbol } from "../../components/ui/icon-symbol";
-import { Colors } from "../../constants/theme";
-import { useColorScheme } from "../../hooks/use-color-scheme";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor:
-          Colors[colorScheme === "dark" ? "dark" : "default"].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarShowLabel: false,
       }}
+      tabBar={(props) => <FloatingTabBar {...props} />}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Potato",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+            <IconSymbol size={24} name="house.fill" color={color} />
           ),
         }}
       />
@@ -32,7 +27,7 @@ export default function TabLayout() {
         options={{
           title: "Stats",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={24} name="calendar" color={color} />
           ),
         }}
       />
@@ -41,7 +36,7 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={24} name="gearshape.fill" color={color} />
           ),
         }}
       />

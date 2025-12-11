@@ -81,7 +81,7 @@ export default function App() {
         <SafeAreaView
             className={`flex-1 transition-colors duration-300 ${backgroundColor}`}
         >
-            <View className="flex-1 items-center justify-between py-6 px-4">
+            <View className="flex-1 items-center justify-between py-6 px-4 pb-24">
                 <ThemeSelector
                     visible={showThemeSelector}
                     currentTheme={theme}

@@ -4,7 +4,7 @@ import { AppBreakdown } from "../../components/ui/AppBreakdown";
 
 export default function Stats() {
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 pb-24">
       <ThemedView className="py-8">
         <ThemedText type="title" className="text-6xl text-center">
           Stats Page
