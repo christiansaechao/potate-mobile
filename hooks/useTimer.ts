@@ -5,6 +5,8 @@ import { getPotatoWisdom } from "../services/potatoWisdomLocal";
 import { SessionType, TimerMode, TimerState } from "../types/types";
 
 type IUseTimer = (
+  mode: TimerMode,
+  setMode: (mode: TimerMode) => void,
   health: number,
   setHealth: (h: number | ((h: number) => number)) => void,
   StartSession: (mode: string) => Promise<SessionType>,
@@ -27,6 +29,8 @@ type IUseTimer = (
 };
 
 export const useTimer: IUseTimer = (
+  mode,
+  setMode,
   health,
   setHealth,
   StartSession,
@@ -34,7 +38,6 @@ export const useTimer: IUseTimer = (
   StartInterval,
   StopInterval
 ) => {
-  const [mode, setMode] = useState<TimerMode>(TimerMode.FOCUS);
   const [state, setState] = useState<TimerState>(TimerState.IDLE);
   const [timeLeft, setTimeLeft] = useState(DEFAULT_TIMES[TimerMode.FOCUS]);
   const [session, setSession] = useState<SessionType | null>(null);

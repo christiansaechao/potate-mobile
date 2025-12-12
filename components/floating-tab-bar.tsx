@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: "row",
-    backgroundColor: "#1a1a1a",
+    backgroundColor: "transparent",
     borderRadius: 60,
     paddingHorizontal: 25,
     paddingVertical: 10,

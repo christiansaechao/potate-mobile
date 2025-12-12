@@ -1,14 +1,18 @@
-import { CustomText, CustomView } from "@/components/custom";
+import { CustomText } from "@/components/custom";
+import { THEMES } from "@/constants/constants";
+import { useTheme } from "@/hooks/useTheme";
 import sessionOps from "@/lib/sessions";
 
 import { IntervalsType, SessionType, TimerMode } from "@/types/types";
 import { useEffect, useState } from "react";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppBreakdown } from "../../components/potato/AppBreakdown";
 import IntervalOps from "../../lib/intervals";
 import { getTimeInMins } from "./helper";
 
 export default function Stats() {
+  const { theme, mode } = useTheme();
   const [focusedIntervals, setFocusedIntervals] = useState<IntervalsType>([]);
   const [shortBreaks, setShortBreaks] = useState<SessionType>();
   const [longBreaks, setLongBreaks] = useState<SessionType>();
@@ -22,7 +26,7 @@ export default function Stats() {
       const focusedIntervals = await IntervalOps.getIntervalsBySessionMode(
         TimerMode.FOCUS
       );
-      console.log(focusedIntervals);
+
       setFocusedIntervals(focusedIntervals);
 
       const longBreak = await sessionOps.getSessionsByMode(
@@ -46,11 +50,16 @@ export default function Stats() {
     getStats();
   }, []);
 
+  const backgroundColor = THEMES[theme][mode];
+
   return (
-    <SafeAreaView className="flex-1">
-      <CustomView className="py-12 h-screen">
+    <SafeAreaView
+      className={`flex-1 transition-colors duration-300 ${backgroundColor}`}
+      edges={["top"]}
+    >
+      <View className="py-12 h-screen">
         <CustomText className="text-6xl text-center">Stats Page</CustomText>
-        <CustomView className="flex gap-2">
+        <View className="flex gap-2">
           <CustomText className="text-2xl text-center ">
             Number of Rotted Potatoes🍟: 42
           </CustomText>
@@ -74,12 +83,12 @@ export default function Stats() {
           <CustomText className="text-2xl text-center">
             Time Spent On Other Apps:
           </CustomText>
-        </CustomView>
-        <CustomView className="flex gap-4 py-2">
+        </View>
+        <View className="flex gap-4 py-2">
           <AppBreakdown time={80} appName={"Facebook"} />
           <AppBreakdown time={30} appName={"Instagram"} />
-        </CustomView>
-      </CustomView>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
