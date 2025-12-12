@@ -8,13 +8,21 @@ const sessionOps = {
     return result;
   },
 
+  async getSessionsByMode(mode: string) {
+    const result = await db
+      .select()
+      .from(sessions)
+      .where(eq(sessions.mode, mode));
+    return result;
+  },
+
   async createSession(mode: string) {
     const result = await db
       .insert(sessions)
       .values({
         mode: mode,
-        created_at: Date.now(),
-        updated_at: Date.now(),
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
       })
       .returning()
       .then((res) => res[0]);
@@ -26,8 +34,8 @@ const sessionOps = {
     await db
       .update(sessions)
       .set({
-        ended_at: Date.now(),
-        potato_health: health,
+        endedAt: Date.now(),
+        potatoHealth: health,
         completed: completed,
       })
       .where(eq(sessions.id, id));

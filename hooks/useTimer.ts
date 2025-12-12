@@ -2,14 +2,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 import { DEFAULT_TIMES } from "../constants/constants";
 import { getPotatoWisdom } from "../services/potatoWisdomLocal";
-import { TimerMode, TimerState } from "../types/types";
+import { SessionType, TimerMode, TimerState } from "../types/types";
 
 type IUseTimer = (
   health: number,
   setHealth: (h: number | ((h: number) => number)) => void,
-  StartSession: (mode: string) => Promise<void>,
+  StartSession: (mode: string) => Promise<SessionType>,
   StopSession: (h: number, completed?: number) => void,
-  StartInterval: () => void,
+  StartInterval: (id: number) => void,
   StopInterval: () => void
 ) => {
   mode: TimerMode;
@@ -36,8 +36,9 @@ export const useTimer: IUseTimer = (
   const [mode, setMode] = useState<TimerMode>(TimerMode.FOCUS);
   const [state, setState] = useState<TimerState>(TimerState.IDLE);
   const [timeLeft, setTimeLeft] = useState(DEFAULT_TIMES[TimerMode.FOCUS]);
+  const [session, setSession] = useState<SessionType | null>(null);
 
-  const timerRef = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fetchQuote = useCallback(
     async (m: TimerMode, s: TimerState, hp: number) => {
@@ -48,54 +49,78 @@ export const useTimer: IUseTimer = (
 
   const switchMode = useCallback(
     (newMode: TimerMode) => {
+      // stop everything about the current session
+      StopInterval();
+      StopSession(health);
+
+      if (timerRef.current) clearInterval(timerRef.current);
+
       setMode(newMode);
       setState(TimerState.IDLE);
       setTimeLeft(DEFAULT_TIMES[newMode]);
-      StopSession(health);
-      StopInterval();
-      if (timerRef.current) clearInterval(timerRef.current);
+      setSession(null);
     },
     [StopSession, StopInterval, health]
   );
 
-  const toggleTimer = useCallback(() => {
-    setState((prev) => {
-      if (prev === TimerState.IDLE) {
-        StartSession(mode);
+  const toggleTimer = useCallback(async () => {
+    // 🔹 Case 1: IDLE → start a new session
+    if (state === TimerState.IDLE) {
+      try {
+        const sessionRes = await StartSession(mode);
+        setSession(sessionRes);
+        StartInterval(sessionRes.id);
+        setState(TimerState.RUNNING);
+      } catch (err) {
+        console.error("Failed to start session", err);
       }
+      return;
+    }
 
-      if (prev === TimerState.RUNNING) {
-        StopInterval();
-        return TimerState.PAUSED;
-      } else{
-        StartInterval();
-        return TimerState.RUNNING;
+    // 🔹 Case 2: RUNNING → pause (stop interval, keep session)
+    if (state === TimerState.RUNNING) {
+      StopInterval();
+      setState(TimerState.PAUSED);
+      return;
+    }
+
+    // 🔹 Case 3: PAUSED → resume (reuse existing session.id)
+    if (state === TimerState.PAUSED) {
+      if (!session?.id) {
+        console.warn("No active session to resume");
+        return;
       }
-    });
-  }, [StopInterval, StartInterval, StartSession, mode]);
+      StartInterval(session.id);
+      setState(TimerState.RUNNING);
+      return;
+    }
+  }, [state, mode, StartSession, StartInterval, StopInterval, session]);
 
   const resetTimer = useCallback(() => {
     StopInterval();
     StopSession(health);
+
+    if (timerRef.current) clearInterval(timerRef.current);
+
     setState(TimerState.IDLE);
     setTimeLeft(DEFAULT_TIMES[mode]);
-    if (timerRef.current) clearInterval(timerRef.current);
     setHealth(100);
+    setSession(null);
   }, [mode, setHealth, StopInterval, StopSession, health]);
 
   // Timer countdown + health regen
   useEffect(() => {
     if (state !== TimerState.RUNNING) return;
+
     timerRef.current = setInterval(() => {
       // ⏳ countdown
       setTimeLeft((t) => {
         if (t <= 1) {
-          clearInterval(timerRef.current!);
+          if (timerRef.current) clearInterval(timerRef.current);
           setState(TimerState.COMPLETED);
           StopSession(health, 1);
-          // Fetch wisdom with final health
+          // fire and forget wisdom
           fetchQuote(mode, TimerState.COMPLETED, health);
-
           return 0;
         }
         return t - 1;
@@ -107,7 +132,9 @@ export const useTimer: IUseTimer = (
       }
     }, 1000);
 
-    return () => clearInterval(timerRef.current!);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [state, mode, fetchQuote, health, setHealth, StopSession]);
 
   return {
