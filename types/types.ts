@@ -11,6 +11,8 @@ export enum TimerState {
   COMPLETED = "COMPLETED",
 }
 
+export type timerState = "IDLE" | "RUNNING" | "PAUSED" | "COMPLETED";
+
 export type AppTheme = "default" | "dark" | "vaporwave" | "cozy";
 
 export interface PotatoQuote {
@@ -23,3 +25,20 @@ export interface TimerConfig {
   shortBreak: number;
   longBreak: number;
 }
+
+export type IntervalsType = {
+  id: number;
+  sessionId: number;
+  startTime: number;
+  endTime: number;
+}[];
+
+export type SessionType = {
+  id: number;
+  mode: string;
+  createdAt: number;
+  updatedAt: number;
+  endedAt: number | null;
+  potatoHealth: number | null;
+  completed: number | null;
+};
