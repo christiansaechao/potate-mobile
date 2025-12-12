@@ -1,6 +1,7 @@
 import { Interval } from "@/db/schema";
 import Intervals from "@/lib/intervals";
 import Sessions from "@/lib/sessions";
+import { SessionType } from "@/types/types";
 import { useCallback, useState } from "react";
 
 export const useSessionManager = () => {
@@ -8,15 +9,26 @@ export const useSessionManager = () => {
   const [currentInterval, setCurrentInterval] = useState<Interval | null>(null);
 
   const StartSession = useCallback(
-    async (mode: string) => {
+    async (mode: string): Promise<SessionType> => {
       try {
         const result = await Sessions.createSession(mode);
+
+        if (!result) {
+          // if createSession can return undefined/null, handle it explicitly
+          throw new Error("Failed to create session");
+        }
+
         setSessionId(result.id);
+        return result;
       } catch (err) {
-        console.error(err);
+        console.error("Error starting session:", err);
+        // rethrow so the caller still gets a rejected promise, not `undefined`
+        throw err instanceof Error
+          ? err
+          : new Error("Unknown error starting session");
       }
     },
-    [sessionId]
+    []
   );
 
   const StopSession = useCallback(
@@ -32,14 +44,18 @@ export const useSessionManager = () => {
     [sessionId]
   );
 
-  const StartInterval = useCallback(async () => {
-    try {
-      const result = await Intervals.createInterval(sessionId);
-      setCurrentInterval(result);
-    } catch (err) {
-      console.error(err);
+  const StartInterval = useCallback(async (id: number) => {
+    console.log("start interval", id);
+
+    if (id) {
+      try {
+        const result = await Intervals.createInterval(id);
+        setCurrentInterval(result);
+      } catch (err) {
+        console.error(err);
+      }
     }
-  }, [sessionId]);
+  }, []);
 
   const StopInterval = useCallback(async () => {
     if (!currentInterval) return;

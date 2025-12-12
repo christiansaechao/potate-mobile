@@ -38,7 +38,7 @@ export type SessionType = {
   mode: string;
   createdAt: number;
   updatedAt: number;
-  endedAt: number;
-  potatoHealth: number;
-  completed: number;
+  endedAt: number | null;
+  potatoHealth: number | null;
+  completed: number | null;
 };
