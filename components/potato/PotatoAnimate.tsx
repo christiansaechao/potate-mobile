@@ -8,38 +8,38 @@ const frame3 = require("../../app/assets/images/idle-3.png");
 const frames = [frame1, frame2, frame3];
 
 export default function PotatoSprite() {
-    const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(0);
 
-    useEffect(() => {
-        let forward = true;
+  useEffect(() => {
+    let forward = true;
 
-        const interval = setInterval(() => {
-            setIndex((prev) => {
-                if (forward && prev === frames.length - 1) {
-                    forward = false;
-                    return prev - 1;
-                }
-                if (!forward && prev === 0) {
-                    forward = true;
-                    return prev + 1;
-                }
-                return forward ? prev + 1 : prev - 1;
-            });
-        }, 500);
+    const interval = setInterval(() => {
+      setIndex((prev) => {
+        if (forward && prev === frames.length - 1) {
+          forward = false;
+          return prev - 1;
+        }
+        if (!forward && prev === 0) {
+          forward = true;
+          return prev + 1;
+        }
+        return forward ? prev + 1 : prev - 1;
+      });
+    }, 500);
 
-        return () => clearInterval(interval);
-    }, []);
+    return () => clearInterval(interval);
+  }, []);
 
-    return (
-        <View>
-            <Image
-                source={frames[index]}
-                style={{
-                    width: 150,
-                    height: 150,
-                    resizeMode: "contain",
-                }}
-            />
-        </View>
-    );
+  return (
+    <View>
+      <Image
+        source={frames[index]}
+        style={{
+          width: 150,
+          height: 150,
+          resizeMode: "contain",
+        }}
+      />
+    </View>
+  );
 }
