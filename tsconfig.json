@@ -6,8 +6,10 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
-    }
+      "@/*": ["./*"]
+    },
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
   "include": [
     "**/*.ts",

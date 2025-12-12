@@ -33,7 +33,9 @@ interface SectionsProps {
 export const Sections = ({ SectionTitle, fields }: SectionsProps) => {
   return (
     <CustomView className="flex gap-2">
-      <CustomText className="text-3xl text-center underline">{SectionTitle}</CustomText>
+      <CustomText className="text-3xl text-center underline">
+        {SectionTitle}
+      </CustomText>
       <CustomView>
         {fields.map((field, index) => (
           <Fields

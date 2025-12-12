@@ -140,6 +140,7 @@ export const useTimer: IUseTimer = (
   return {
     mode,
     state,
+    setState,
     timeLeft,
     switchMode,
     toggleTimer,

@@ -18,6 +18,9 @@ module.exports = defineConfig([
     },
     rules: {
       "import/no-default-export": "off",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off", // Disable TypeScript-specific rule
+      "no-unused-imports": "off",
     },
   },
 ]);

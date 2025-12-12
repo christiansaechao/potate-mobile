@@ -3,6 +3,9 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { PotatoQuote, TimerState } from "../../types/types";
+
+import { useNotifications } from "@/hooks/useNotifications";
+import { useLeaveAppConsequence } from "../../hooks/useLeaveAppConsequence";
 // hooks
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { useFocusHealth } from "../../hooks/useFocusHealth";
@@ -31,27 +34,22 @@ export default function App() {
   const { theme, setTheme } = useTheme();
   const [showThemeSelector, setShowThemeSelector] = useState(false);
 
+  useNotifications();
   const { StartSession, StopSession, StartInterval, StopInterval } =
     useSessionManager();
 
   const {
     mode,
     state,
+    setState,
     timeLeft,
     switchMode,
     toggleTimer,
     resetTimer,
     fetchQuote,
-  } = useTimer(
-    health,
-    setHealth,
-    StartSession,
-    StopSession,
-    StartInterval,
-    StopInterval
-  );
-  useFocusHealth(state, setHealth, fetchQuote, mode);
+  } = useTimer(health, setHealth);
 
+  useLeaveAppConsequence(state, setHealth, setState, fetchQuote, mode);
   const timeToCallQuote = 300;
 
   useEffect(() => {
@@ -88,7 +86,7 @@ export default function App() {
     <SafeAreaView
       className={`flex-1 transition-colors duration-300 ${backgroundColor}`}
     >
-      <View className="flex-1 items-center justify-between py-6 px-4">
+      <View className="flex-1 items-center justify-between py-6 px-4 pb-24">
         <ThemeSelector
           visible={showThemeSelector}
           currentTheme={theme}

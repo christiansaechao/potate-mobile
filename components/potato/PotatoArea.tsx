@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Animated, Easing, Pressable, View } from "react-native";
 import { TimerMode, TimerState } from "../../types/types";
 import { ChatBubble } from "./ChatBubble";
-import { Potato } from "./Potato";
+import PotatoSprite from "./PotatoAnimate";
 
 type PotatoAreaProps = {
   quote: { text: string };
@@ -67,7 +67,8 @@ export const PotatoArea: React.FC<PotatoAreaProps> = ({
         className="z-10 active:scale-105"
         hitSlop={10}
       >
-        <Animated.View
+        <PotatoSprite />
+        {/* <Animated.View
           style={
             state === TimerState.COMPLETED
               ? { transform: [{ translateY: bounceY }] }
@@ -79,7 +80,7 @@ export const PotatoArea: React.FC<PotatoAreaProps> = ({
             isAnimating={state === TimerState.RUNNING}
             health={health}
           />
-        </Animated.View>
+        </Animated.View> */}
       </Pressable>
     </View>
   );
