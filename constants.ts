@@ -1,4 +1,4 @@
-import { AppTheme, TimerMode } from "./types";
+import { AppTheme, TimerMode } from "./types/types";
 
 export const DEFAULT_TIMES = {
   [TimerMode.FOCUS]: 25 * 60,

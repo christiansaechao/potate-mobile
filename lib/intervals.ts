@@ -15,7 +15,7 @@ const intervalOps = {
       .select({ id: sessions.id })
       .from(sessions)
       .where(eq(sessions.mode, mode));
-    console.log(mode, allSessions);
+
     const allIntervals = await db
       .select()
       .from(intervals)

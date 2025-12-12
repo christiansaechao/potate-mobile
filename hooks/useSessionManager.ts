@@ -45,8 +45,6 @@ export const useSessionManager = () => {
   );
 
   const StartInterval = useCallback(async (id: number) => {
-    console.log("start interval", id);
-
     if (id) {
       try {
         const result = await Intervals.createInterval(id);

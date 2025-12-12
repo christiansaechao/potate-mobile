@@ -1,16 +1,16 @@
 import { Link } from "expo-router";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { CustomText, CustomView } from "@/components/custom";
+import { CustomText } from "@/components/custom";
 
 export default function ModalScreen() {
   return (
-    <CustomView style={styles.container}>
+    <View style={styles.container}>
       <CustomText>This is a modal</CustomText>
       <Link href="/" dismissTo style={styles.link}>
         <CustomText>Go to home screen</CustomText>
       </Link>
-    </CustomView>
+    </View>
   );
 }
 

@@ -19,8 +19,6 @@ export const useLeaveAppConsequence = (
       "change",
       async (nextAppState: AppStateStatus) => {
         if (nextAppState === "background" && state === TimerState.RUNNING) {
-          console.log("left app - starting timers");
-
           //   setState(TimerState.PAUSED);
           // 30 second timer here
           deathRef.current = setTimeout(() => {
@@ -48,7 +46,6 @@ export const useLeaveAppConsequence = (
             setHealth((prev: number) => Math.max(0, prev - 1));
           }, 1000 * 10);
         } else if (nextAppState === "active") {
-          console.log("user came back. deathref: ", deathRef.current);
           // stop damage
           if (healthRef.current) clearInterval(healthRef.current);
           // stop death timer

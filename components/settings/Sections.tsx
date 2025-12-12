@@ -1,5 +1,5 @@
-import React from "react";
-import { CustomText, CustomView } from "../custom";
+import { View } from "react-native";
+import { CustomText } from "../custom";
 
 const Fields = ({
   name,
@@ -11,13 +11,13 @@ const Fields = ({
   value: any;
 }) => {
   return (
-    <CustomView className="flex-row justify-between items-center py-4">
-      <CustomView className={"flex-row justify-center items-center gap-2"}>
-        <CustomText className="min-w-12">{icon}</CustomText>
-        <CustomText className="text-xl">{name}</CustomText>
-      </CustomView>
+    <View className="flex-row justify-between items-center py-4">
+      <View className={"flex-row justify-center items-center gap-2"}>
+        <CustomText className="text-center min-w-12">{icon}</CustomText>
+        <CustomText className="text-center text-xl">{name}</CustomText>
+      </View>
       <CustomText>{value}</CustomText>
-    </CustomView>
+    </View>
   );
 };
 
@@ -32,11 +32,11 @@ interface SectionsProps {
 
 export const Sections = ({ SectionTitle, fields }: SectionsProps) => {
   return (
-    <CustomView className="flex gap-2">
+    <View className="flex gap-2">
       <CustomText className="text-3xl text-center underline">
         {SectionTitle}
       </CustomText>
-      <CustomView>
+      <View>
         {fields.map((field, index) => (
           <Fields
             key={index}
@@ -45,7 +45,7 @@ export const Sections = ({ SectionTitle, fields }: SectionsProps) => {
             value={field.value}
           />
         ))}
-      </CustomView>
-    </CustomView>
+      </View>
+    </View>
   );
 };
