@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 import { DEFAULT_TIMES } from "../constants/constants";
 import { getPotatoWisdom } from "../services/potatoWisdomLocal";
@@ -14,6 +14,7 @@ type IUseTimer = (
 ) => {
   mode: TimerMode;
   state: TimerState;
+  setState: React.Dispatch<React.SetStateAction<TimerState>>;
   timeLeft: number;
   switchMode: (newMode: TimerMode) => void;
   toggleTimer: () => void;
