@@ -20,7 +20,7 @@ export default function Settings() {
       className={`flex-1 transition-colors duration-300 ${backgroundColor}`}
       edges={["top"]}
     >
-      <View className="py-12 h-screen">
+      <View className="py-12 h-screen px-4">
         <Sections SectionTitle="User Settings" fields={userSettingsFields} />
         <Sections SectionTitle="Timer & Session" fields={timerSessionFields} />
         <Sections

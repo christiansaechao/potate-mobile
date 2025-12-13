@@ -98,11 +98,9 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: "row",
-    backgroundColor: "transparent",
     borderRadius: 60,
-    paddingHorizontal: 25,
-    paddingVertical: 10,
-    justifyContent: "space-between",
+    paddingVertical: 6,
+    justifyContent: "space-around",
     width: "100%",
     shadowColor: "#000",
     shadowOffset: {

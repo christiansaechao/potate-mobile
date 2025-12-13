@@ -64,7 +64,7 @@ export const useTimer: IUseTimer = (
       setTimeLeft(DEFAULT_TIMES[newMode]);
       setSession(null);
     },
-    [StopSession, StopInterval, health]
+    [StopSession, StopInterval, health, setMode]
   );
 
   const toggleTimer = useCallback(async () => {
