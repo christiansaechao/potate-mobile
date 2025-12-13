@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 
-import { FloatingTabBar } from "../../components/floating-tab-bar";
+import { FloatingTabBar } from "../../components/ui/floating-tab-bar";
 import { IconSymbol } from "../../components/ui/icon-symbol";
 
 export default function TabLayout() {
@@ -13,20 +13,20 @@ export default function TabLayout() {
       tabBar={(props) => <FloatingTabBar {...props} />}
     >
       <Tabs.Screen
-        name="index"
-        options={{
-          title: "Potato",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={24} name="house.fill" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="stats"
         options={{
           title: "Stats",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={24} name="calendar" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Potato",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={24} name="house.fill" color={color} />
           ),
         }}
       />
