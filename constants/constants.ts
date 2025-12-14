@@ -6,6 +6,24 @@ export const DEFAULT_TIMES = {
   [TimerMode.LONG_BREAK]: 15 * 60,
 };
 
+export const SETTINGS_OPTIONS = {
+  POMODORO: [
+    { label: "30 min", value: 30 },
+    { label: "45 min", value: 45 },
+    { label: "60 min", value: 60 },
+  ],
+
+  SHORT_BREAK: [
+    { label: "5 min", value: 5 },
+    { label: "10 min", value: 10 },
+  ],
+
+  LONG_BREAK: [
+    { label: "15 min", value: 15 },
+    { label: "20 min", value: 20 },
+  ],
+}
+
 // Theme definitions mapping Modes to Colors
 export const THEMES: Record<AppTheme, Record<TimerMode, string>> = {
   default: {
