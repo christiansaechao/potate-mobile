@@ -22,7 +22,7 @@ export const SETTINGS_OPTIONS = {
     { label: "15 min", value: 15 },
     { label: "20 min", value: 20 },
   ],
-}
+};
 
 // Theme definitions mapping Modes to Colors
 export const THEMES: Record<AppTheme, Record<TimerMode, string>> = {
@@ -88,19 +88,70 @@ export const BUTTON_COLORS = {
   [TimerMode.LONG_BREAK]: "text-blue-500",
 };
 
-export const POTATO_SYSTEM_INSTRUCTION = `
-You are a cute, sentient potato character in a Pomodoro timer app called "Potatodoro". 
-Your personality is a volatile mix of Gen-Z "brainrot" humor (slang like "cooked", "lock in", "bet", "no cap", "skibidi", "fanum tax", "sigma", "mewing" - use these ironically but cute), 
-and a supportive but slightly aggressive life coach.
+const tintColorLight = "#0a7ea4";
+const tintColorDark = "#fff";
 
-INSTRUCTIONS FOR RESPONSES:
-- **FOCUS Mode**: Demand the user stops doomscrolling. Use phrases like "academic weapon", "grindset", "lock in".
-- **SHORT BREAK**: Tell them to touch grass, hydrate, or fix their posture. "Posture check!", "Hydrate or diedrate".
-- **LONG BREAK**: Tell them they earned a treat. "W", "Big W", "Treat yourself".
-- **PAUSED**: Guilt trip them playfully. "Why did we stop? Are we cooked?", "L pause".
-- **COMPLETED (Timer Finished)**: CELEBRATE! "LETS GOOOO", "ABSOLUTE CINEMA", "W RIZZ", "YOU COOKED".
-- **LOW HEALTH (User using other apps)**: SCREAM. "GET OFF TIKTOK", "IM DYING", "TOUCH GRASS NOT SCREEN".
+export const COLORS = {
+  default: {
+    text: "#11181C",
+    background: "#fff",
+    tint: tintColorLight,
+    icon: "#687076",
+    tabIconDefault: "#687076",
+    tabIconSelected: tintColorLight,
+    buttonIconColor: "white",
+  },
+  dark: {
+    text: "#ECEDEE",
+    background: "#151718",
+    tint: tintColorDark,
+    icon: "#9BA1A6",
+    tabIconDefault: "#9BA1A6",
+    tabIconSelected: tintColorDark,
+    buttonIconColor: "black",
+  },
+  vaporwave: {
+    text: "#ffffff",
+    background: "#2b003b",
+    tint: "#ff00ff",
+    icon: "#00f0ff",
+    tabIconDefault: "#bd00ff",
+    tabIconSelected: "#ff00ff",
+    buttonIconColor: "#2b003b",
+  },
+  cozy: {
+    text: "#5D4037",
+    background: "#F5F5DC", // Beige
+    tint: "#8D6E63",
+    icon: "#8D6E63",
+    tabIconDefault: "#A1887F",
+    tabIconSelected: "#5D4037",
+    buttonIconColor: "#F5F5DC",
+  },
+};
 
-Keep responses short (max 15 words). 
-Return JSON format with "text" and "mood" (happy, angry, sleepy, chaotic, cool).
-`;
+// export const Fonts = Platform.select({
+//   ios: {
+//     /** iOS `UIFontDescriptorSystemDesignDefault` */
+//     sans: "system-ui",
+//     /** iOS `UIFontDescriptorSystemDesignSerif` */
+//     serif: "ui-serif",
+//     /** iOS `UIFontDescriptorSystemDesignRounded` */
+//     rounded: "ui-rounded",
+//     /** iOS `UIFontDescriptorSystemDesignMonospaced` */
+//     mono: "ui-monospace",
+//   },
+//   default: {
+//     sans: "normal",
+//     serif: "serif",
+//     rounded: "normal",
+//     mono: "monospace",
+//   },
+//   web: {
+//     sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+//     serif: "Georgia, 'Times New Roman', serif",
+//     rounded:
+//       "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
+//     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+//   },
+// });

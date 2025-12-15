@@ -59,7 +59,7 @@ export default function RootLayout() {
         value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       >
         <ThemeProvider>
-          <Stack>
+          <Stack screenOptions={{ headerBlurEffect: "dark" }}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen
               name="modal"

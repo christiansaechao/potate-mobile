@@ -1,7 +1,10 @@
 import React from "react";
 import { FlatList, Modal, Platform, Pressable, Text, View } from "react-native";
+import { useTheme } from "@/hooks/useTheme";
+import { THEMES } from "@/constants/constants";
 
 import { C, styles } from "@/components/settings/Styles";
+import { CustomText } from "../custom/custom-text.tsx";
 
 type Option<T> = { label: string; value: T };
 
@@ -24,24 +27,25 @@ export const GenericDropdown = <T,>({
 
   const selected = React.useMemo(
     () => options.find((o) => Object.is(o.value, state)),
-    [options, state]
+    [options, state],
   );
+  const { theme, mode } = useTheme();
+  const backgroundColor = THEMES[theme][mode];
 
   return (
     <>
       {/* Trigger */}
-      <Pressable style={styles.dropdownTrigger} onPress={() => setOpen(true)}>
-        <Text
-          style={
-            selected
-              ? styles.dropdownTriggerText
-              : styles.dropdownTriggerPlaceholder
-          }
+      <Pressable
+        style={styles.dropdownTrigger}
+        onPress={() => setOpen(true)}
+        className={`${backgroundColor}`}
+      >
+        <CustomText
           numberOfLines={1}
         >
           {selected?.label ?? placeholder}
-        </Text>
-        <Text style={{ color: C.muted, fontSize: 18 }}>▾</Text>
+        </CustomText>
+        <CustomText>▾</CustomText>
       </Pressable>
 
       {/* Sheet */}
@@ -50,19 +54,24 @@ export const GenericDropdown = <T,>({
         transparent
         animationType="fade"
         onRequestClose={() => setOpen(false)}
+        className={`${backgroundColor}`}
       >
-        <Pressable style={styles.modalBackdrop} onPress={() => setOpen(false)}>
+        <Pressable
+          style={styles.modalBackdrop}
+          onPress={() => setOpen(false)}
+        >
           <Pressable
             onPress={() => {}}
             style={[
               styles.sheet,
               { paddingBottom: Platform.OS === "ios" ? 24 : 16 },
             ]}
+            className={`${backgroundColor}`}
           >
             <View style={styles.sheetHeader}>
-              <Text style={styles.sheetTitle}>{title}</Text>
+              <CustomText>{title}</CustomText>
               <Pressable onPress={() => setOpen(false)}>
-                <Text style={styles.sheetClose}>Close</Text>
+                <CustomText>Close</CustomText>
               </Pressable>
             </View>
 
@@ -79,9 +88,12 @@ export const GenericDropdown = <T,>({
                       setState(item.value);
                       setOpen(false);
                     }}
+                    className={`${backgroundColor}`}
                   >
-                    <Text style={styles.optionLabel}>{item.label}</Text>
-                    {isSelected ? <Text style={styles.check}>✓</Text> : null}
+                    <CustomText>
+                      {item.label}
+                    </CustomText>
+                    {isSelected ? <CustomText>✓</CustomText> : null}
                   </Pressable>
                 );
               }}

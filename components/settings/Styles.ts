@@ -113,7 +113,6 @@ export const styles = {
     flexDirection: "row" as const,
     alignItems: "center" as const,
     justifyContent: "space-between" as const,
-    backgroundColor: C.panel,
     borderRadius: 22,
     paddingHorizontal: 16,
     paddingVertical: 14,
@@ -121,7 +120,6 @@ export const styles = {
   },
 
   dropdownTrigger: {
-    backgroundColor: C.panel2,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 999,
@@ -133,7 +131,6 @@ export const styles = {
   dropdownTriggerText: {
     fontSize: 18,
     lineHeight: 22,
-    color: C.accent,
   },
   dropdownTriggerPlaceholder: {
     fontSize: 18,
@@ -143,11 +140,10 @@ export const styles = {
 
   modalBackdrop: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.45)",
+    backgroundColor: "rgba(0,0,0,0.7)",
     justifyContent: "flex-end" as const,
   },
   sheet: {
-    backgroundColor: C.card,
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     padding: 16,
@@ -173,7 +169,6 @@ export const styles = {
     flexDirection: "row" as const,
     alignItems: "center" as const,
     justifyContent: "space-between" as const,
-    backgroundColor: C.panel,
     borderRadius: 18,
     paddingHorizontal: 14,
     paddingVertical: 14,
