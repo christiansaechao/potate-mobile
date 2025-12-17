@@ -19,6 +19,7 @@ export const ThemeContext = createContext<ThemeContextType>({
   setMode: () => {},
 });
 
+
 type Props = {
   children: React.ReactNode;
 };
