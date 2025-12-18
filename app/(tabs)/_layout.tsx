@@ -1,9 +1,20 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 
+import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 import { FloatingTabBar } from "../../components/ui/floating-tab-bar";
 import { IconSymbol } from "../../components/ui/icon-symbol";
 
 export default function TabLayout() {
+  const { completed, isLoading } = useOnboardingStatus();
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (!completed) {
+    return <Redirect href="/(onboarding)" />;
+  }
+
   return (
     <Tabs
       screenOptions={{

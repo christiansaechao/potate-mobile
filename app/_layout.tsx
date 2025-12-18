@@ -33,7 +33,6 @@ export default function RootLayout() {
   if (error) {
     return <CustomText>DB failed to initialize</CustomText>;
   }
-
   if (!success) {
     return <CustomText>Setting up database...</CustomText>;
   }
@@ -44,13 +43,12 @@ export default function RootLayout() {
         value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       >
         <ThemeProvider>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="modal"
-              options={{ presentation: "modal", title: "Modal" }}
-            />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(onboarding)" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
           </Stack>
+
           <StatusBar style="auto" />
         </ThemeProvider>
       </NavigationThemeProvider>
