@@ -2,6 +2,11 @@ import { userSettings } from "@/db/schema";
 import { db } from "../db/client";
 
 const userOps = {
+  async getUser() {
+    const result = await db.select().from(userSettings);
+    return result;
+  },
+
   async getAllSettings() {
     const result = await db.select().from(userSettings);
 
@@ -15,6 +20,11 @@ const userOps = {
       return result;
     }
 
+    return result;
+  },
+
+  async createUserSettings(settings: {}) {
+    const result = await db.insert(userSettings).values(settings);
     return result;
   },
 

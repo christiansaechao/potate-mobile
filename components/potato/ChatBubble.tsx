@@ -60,7 +60,10 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ text, visible }) => {
           }),
         }}
       >
-        <Text className="text-gray-800 font-bold text-center text-lg leading-snug">
+        <Text
+          style={{ fontFamily: "Baloo" }}
+          className="text-gray-800 font-bold text-center text-lg leading-snug"
+        >
           {text}
         </Text>
 

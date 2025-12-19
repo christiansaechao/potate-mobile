@@ -1,0 +1,212 @@
+import PotatoSprite from "@/components/potato/PotatoAnimate";
+import { DEFAULT_TIMES } from "@/constants/constants";
+import userOps from "@/lib/settings";
+import { TimerMode } from "@/types/types";
+import { router } from "expo-router";
+import { useState } from "react";
+import {
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+
+export default function Onboarding() {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    focus_duration: DEFAULT_TIMES[TimerMode.FOCUS] / 60,
+    short_break_duration: DEFAULT_TIMES[TimerMode.SHORT_BREAK] / 60,
+    long_break_duration: DEFAULT_TIMES[TimerMode.LONG_BREAK] / 60,
+  });
+  const updateUserSettings = async () => {
+    try {
+      await userOps.createUserSettings(formData);
+
+      router.replace("/(tabs)");
+    } catch (err) {
+      console.log("Error submiting form", err);
+    }
+  };
+
+  const nextStep = () => {
+    if (step === 3) {
+      if (!formData.name || !formData.email) {
+        alert("Please fill in all fields");
+        return;
+      }
+    }
+    setStep((prev) => prev + 1);
+  };
+
+  const updateFormData = (key: string, value: string | number) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView className="flex-1 bg-orange-50 justify-center px-6">
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+          }}
+        >
+          {/* Step 1: Welcome */}
+          {step === 1 && (
+            <View className="items-center space-y-4">
+              <Text className="text-4xl font-bold text-orange-900 text-center">
+                Welcome to Potate
+              </Text>
+              <Text className="text-lg text-orange-700 text-center">
+                Your little friend to keep you on track with your tasks.
+              </Text>
+            </View>
+          )}
+
+          {/* Step 2: Meet Potate */}
+          {step === 2 && (
+            <View className="items-center space-y-6">
+              <Text className="text-3xl font-bold text-orange-900 text-center">
+                Meet Potate
+              </Text>
+              <View className="h-60 w-60 bg-orange-200 rounded-full items-center justify-center border-4 border-orange-300">
+                <Text className="text-6xl">
+                  <PotatoSprite />
+                </Text>
+              </View>
+              <Text className="text-xl font-bold text-red-500 text-center ">
+                Don't let him die!
+              </Text>
+            </View>
+          )}
+
+          {/* Step 3: User Input */}
+          {step === 3 && (
+            <View className="space-y-6">
+              <Text className="text-2xl font-bold text-orange-900 text-center mb-4">
+                Let's get to know you
+              </Text>
+
+              <View className="space-y-2">
+                <Text className="text-orange-800 font-medium ml-1">Name</Text>
+                <TextInput
+                  className="bg-white p-4 rounded-xl border-2 border-orange-100 text-lg text-orange-900"
+                  placeholder="What should Potate call you?"
+                  value={formData.name}
+                  onChangeText={(text) => updateFormData("name", text)}
+                  placeholderTextColor="#fdba74"
+                />
+              </View>
+
+              <View className="space-y-2">
+                <Text className="text-orange-800 font-medium ml-1">Email</Text>
+                <TextInput
+                  className="bg-white p-4 rounded-xl border-2 border-orange-100 text-lg text-orange-900"
+                  placeholder="your@email.com"
+                  value={formData.email}
+                  onChangeText={(text) => updateFormData("email", text)}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  placeholderTextColor="#fdba74"
+                />
+              </View>
+            </View>
+          )}
+
+          {/* Step 4: Durations */}
+          {step === 4 && (
+            <View className="space-y-6">
+              <Text className="text-2xl font-bold text-orange-900 text-center mb-4">
+                Customize your flow
+              </Text>
+
+              <View className="space-y-2">
+                <Text className="text-orange-800 font-medium ml-1">
+                  Focus Duration (mins)
+                </Text>
+                <TextInput
+                  className="bg-white p-4 rounded-xl border-2 border-orange-100 text-lg text-orange-900"
+                  value={String(formData.focus_duration)}
+                  onChangeText={(text) =>
+                    updateFormData("focus_duration", Number(text))
+                  }
+                  keyboardType="numeric"
+                />
+              </View>
+
+              <View className="space-y-2">
+                <Text className="text-orange-800 font-medium ml-1">
+                  Short Break (mins)
+                </Text>
+                <TextInput
+                  className="bg-white p-4 rounded-xl border-2 border-orange-100 text-lg text-orange-900"
+                  value={String(formData.short_break_duration)}
+                  onChangeText={(text) =>
+                    updateFormData("short_break_duration", Number(text))
+                  }
+                  keyboardType="numeric"
+                />
+              </View>
+
+              <View className="space-y-2">
+                <Text className="text-orange-800 font-medium ml-1">
+                  Long Break (mins)
+                </Text>
+                <TextInput
+                  className="bg-white p-4 rounded-xl border-2 border-orange-100 text-lg text-orange-900"
+                  value={String(formData.long_break_duration)}
+                  onChangeText={(text) =>
+                    updateFormData("long_break_duration", Number(text))
+                  }
+                  keyboardType="numeric"
+                />
+              </View>
+            </View>
+          )}
+
+          {/* Step 5: Completion */}
+          {step === 5 && (
+            <View className="items-center space-y-6">
+              <Text className="text-6xl">🎉</Text>
+              <Text className="text-3xl font-bold text-orange-900 text-center">
+                Congrats!
+              </Text>
+              <Text className="text-lg text-orange-700 text-center px-4">
+                You're all set up. Time to lock in!
+              </Text>
+            </View>
+          )}
+
+          {/* Navigation Button */}
+          {step < 5 && (
+            <TouchableOpacity
+              onPress={nextStep}
+              className="mt-12 bg-orange-500 py-4 px-8 rounded-full shadow-lg active:bg-orange-600"
+            >
+              <Text className="text-white text-center font-bold text-lg">
+                {step === 4 ? "Finish Setup" : "Continue"}
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          {step === 5 && (
+            <TouchableOpacity
+              className="mt-12 bg-green-500 py-4 px-8 rounded-full shadow-lg active:bg-green-600"
+              onPress={() => {
+                updateUserSettings();
+              }}
+            >
+              <Text className="text-white text-center font-bold text-lg">
+                Let's Go!
+              </Text>
+            </TouchableOpacity>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+}
