@@ -8,6 +8,13 @@
       "when": 1765473277733,
       "tag": "0000_material_captain_flint",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1766185258000,
+      "tag": "0001_flimsy_maddog",
+      "breakpoints": true
     }
   ]
 }

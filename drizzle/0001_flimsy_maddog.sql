@@ -1,4 +1,4 @@
-CREATE TABLE `settings` (
+CREATE TABLE IF NOT EXISTS  `settings` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text,
 	`email` text,

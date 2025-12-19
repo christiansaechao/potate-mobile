@@ -4,7 +4,7 @@ import {
   ThemeProvider as NavigationThemeProvider,
 } from "@react-navigation/native";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
-import { SplashScreen, Stack, router } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -44,10 +44,10 @@ export default function RootLayout() {
     }
   }, [loaded, success, isLoading]);
 
-  useEffect(() => {
-    if (!success || isLoading) return;
-    router.replace(completed ? "/(tabs)" : "/(onboarding)");
-  }, [success, isLoading, completed]);
+  //   useEffect(() => {
+  //     if (!success || isLoading) return;
+  //     router.replace(completed ? "/(tabs)" : "/(onboarding)");
+  //   }, [success, isLoading, completed]);
 
   if (error) {
     return <CustomText>DB failed to initialize</CustomText>;
