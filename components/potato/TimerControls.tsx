@@ -26,7 +26,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
   const color = Colors[theme];
 
   return (
-    <View className="flex-row items-center gap-6 mt-4">
+    <View className="flex-row items-center gap-6 py-2">
       {/* Main play/pause button */}
       <ThemedPressable
         onPress={toggleTimer}

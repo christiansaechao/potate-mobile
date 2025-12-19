@@ -30,7 +30,7 @@ export type IntervalsType = {
   id: number;
   sessionId: number;
   startTime: number;
-  endTime: number;
+  endTime: number | null;
 }[];
 
 export type SessionType = {

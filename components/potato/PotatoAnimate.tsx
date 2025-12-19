@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, View } from "react-native";
 
-const frame1 = require("../../app/assets/images/idle-1.png");
-const frame2 = require("../../app/assets/images/idle-2.png");
-const frame3 = require("../../app/assets/images/idle-3.png");
+const frame1 = require("@/assets/images/idle-1.png");
+const frame2 = require("@/assets/images/idle-2.png");
+const frame3 = require("@/assets/images/idle-3.png");
 
 const frames = [frame1, frame2, frame3];
 

@@ -3,19 +3,19 @@ import { THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/useTheme";
 import sessionOps from "@/lib/sessions";
 
+import { getTimeInMins } from "@/lib/helper";
 import { IntervalsType, SessionType, TimerMode } from "@/types/types";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppBreakdown } from "../../components/potato/AppBreakdown";
 import IntervalOps from "../../lib/intervals";
-import { getTimeInMins } from "./helper";
 
 export default function Stats() {
   const { theme, mode } = useTheme();
   const [focusedIntervals, setFocusedIntervals] = useState<IntervalsType>([]);
-  const [shortBreaks, setShortBreaks] = useState<SessionType>();
-  const [longBreaks, setLongBreaks] = useState<SessionType>();
+  const [shortBreaks, setShortBreaks] = useState<SessionType[]>();
+  const [longBreaks, setLongBreaks] = useState<SessionType[]>();
 
   // group all intervals by session
   const focusedTime = getTimeInMins(focusedIntervals);
@@ -58,7 +58,12 @@ export default function Stats() {
       edges={["top"]}
     >
       <View className="py-12 h-screen">
-        <CustomText className="text-6xl text-center">Stats Page</CustomText>
+        <CustomText
+          className="text-6xl text-center"
+          style={{ height: 96, lineHeight: 96 }}
+        >
+          Stats Page
+        </CustomText>
         <View className="flex gap-2">
           <CustomText className="text-2xl text-center ">
             Number of Rotted Potatoes🍟: 42
