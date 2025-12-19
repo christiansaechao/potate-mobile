@@ -9,9 +9,7 @@ type TimerDisplayProps = {
 
 export const TimerDisplay: React.FC<TimerDisplayProps> = ({ time, label }) => (
   <View className="relative items-center">
-    <CustomText className="font-mono text-[80px] leading-[90px]">
-      {time}
-    </CustomText>
+    <CustomText className="text-[80px]">{time}</CustomText>
     <CustomText className=" text-lg uppercase mt-1">{label}</CustomText>
   </View>
 );

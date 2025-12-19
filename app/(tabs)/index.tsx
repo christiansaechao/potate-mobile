@@ -70,7 +70,7 @@ export default function App() {
     return () => {
       mounted = false;
     };
-  }, [mode, state, health, fetchQuote]);
+  }, [mode, state, health, fetchQuote, timeLeft]);
 
   const progress = useMemo(() => {
     const total = DEFAULT_TIMES[mode];

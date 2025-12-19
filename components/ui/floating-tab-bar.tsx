@@ -1,5 +1,6 @@
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import * as Haptics from "expo-haptics";
+import { BlurView } from "expo-blur";
 import { Pressable, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -11,7 +12,11 @@ export function FloatingTabBar({
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+    <View
+      style={[styles.container, { paddingBottom: insets.bottom }]}
+      className="bg-zinc-800/75 "
+    >
+      <BlurView intensity={60} style={StyleSheet.absoluteFill} />
       <View style={styles.tabBar}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -99,13 +104,13 @@ const styles = StyleSheet.create({
   tabBar: {
     flexDirection: "row",
     borderRadius: 60,
-    paddingVertical: 6,
+    paddingVertical: 2,
     justifyContent: "space-around",
     width: "100%",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 3,
     },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -115,11 +120,8 @@ const styles = StyleSheet.create({
     width: 100,
     height: 40,
     borderRadius: 30,
-    backgroundColor: "#2a2a2a",
     justifyContent: "center",
     alignItems: "center",
   },
-  tabButtonFocused: {
-    backgroundColor: "#3a3a3a",
-  },
+  tabButtonFocused: {},
 });
