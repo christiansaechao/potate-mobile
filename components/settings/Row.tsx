@@ -48,11 +48,7 @@ export const Row = <T,>({
         </CustomText>
       </View>
 
-      <GenericDropdown
-        state={state}
-        setState={setState}
-        options={options}
-      />
+      <GenericDropdown state={state} setState={setState} options={options} />
     </Pressable>
   );
 };

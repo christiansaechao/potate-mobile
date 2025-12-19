@@ -19,10 +19,10 @@ export default function Settings() {
 
   const [pomodoro, setPomodoro] = useState(DEFAULT_TIMES[TimerMode.FOCUS]);
   const [shortBreak, setShortBreak] = useState(
-    DEFAULT_TIMES[TimerMode.SHORT_BREAK],
+    DEFAULT_TIMES[TimerMode.SHORT_BREAK]
   );
   const [longBreak, setLongBreak] = useState(
-    DEFAULT_TIMES[TimerMode.LONG_BREAK],
+    DEFAULT_TIMES[TimerMode.LONG_BREAK]
   );
   const [vibration, setVibration] = useState(true);
   const { theme, mode } = useTheme();

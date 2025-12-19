@@ -27,7 +27,7 @@ export const GenericDropdown = <T,>({
 
   const selected = React.useMemo(
     () => options.find((o) => Object.is(o.value, state)),
-    [options, state],
+    [options, state]
   );
   const { theme, mode } = useTheme();
   const backgroundColor = THEMES[theme][mode];
@@ -40,9 +40,7 @@ export const GenericDropdown = <T,>({
         onPress={() => setOpen(true)}
         className={`${backgroundColor}`}
       >
-        <CustomText
-          numberOfLines={1}
-        >
+        <CustomText numberOfLines={1}>
           {selected?.label ?? placeholder}
         </CustomText>
         <CustomText>▾</CustomText>
@@ -56,10 +54,7 @@ export const GenericDropdown = <T,>({
         onRequestClose={() => setOpen(false)}
         className={`${backgroundColor}`}
       >
-        <Pressable
-          style={styles.modalBackdrop}
-          onPress={() => setOpen(false)}
-        >
+        <Pressable style={styles.modalBackdrop} onPress={() => setOpen(false)}>
           <Pressable
             onPress={() => {}}
             style={[
@@ -90,9 +85,7 @@ export const GenericDropdown = <T,>({
                     }}
                     className={`${backgroundColor}`}
                   >
-                    <CustomText>
-                      {item.label}
-                    </CustomText>
+                    <CustomText>{item.label}</CustomText>
                     {isSelected ? <CustomText>✓</CustomText> : null}
                   </Pressable>
                 );

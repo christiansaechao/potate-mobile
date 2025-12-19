@@ -8,7 +8,7 @@ export function CustomText({ style, className, ...rest }: TextProps) {
 
   return (
     <Text
-      style={[{ color: color.text, fontFamily: "Baloo" }, style]} 
+      style={[{ color: color.text, fontFamily: "Baloo" }, style]}
       className={className}
       {...rest}
     />

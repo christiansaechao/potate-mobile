@@ -27,7 +27,7 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
             hitSlop={6}
           >
             <Text
-              style={{fontFamily: "Nunito"}}
+              style={{ fontFamily: "Nunito" }}
               className={`text-xs font-bold ${
                 isActive ? "text-black" : "text-white/60"
               }`}
