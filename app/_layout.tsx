@@ -60,7 +60,7 @@ export default function RootLayout() {
   if (isLoading) {
     return null;
   }
-  
+
   return (
     <SafeAreaProvider className="flex-1">
       <NavigationThemeProvider
