@@ -4,7 +4,7 @@ import {
   ThemeProvider as NavigationThemeProvider,
 } from "@react-navigation/native";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -23,35 +23,44 @@ import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 
 import { useFonts } from "expo-font";
 
-export const unstable_settings = {
-  anchor: "(tabs)",
-};
+import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const { completed, isLoading } = useOnboardingStatus();
+  const { success, error } = useMigrations(db, migrations);
+  useDrizzleStudio(expo_db);
 
   const [loaded] = useFonts({
     Nunito: require("../assets/fonts/Nunito-Bold.ttf"),
     Baloo: require("../assets/fonts/Baloo2-Bold.ttf"),
   });
 
-  useDrizzleStudio(expo_db);
-
-  const { success, error } = useMigrations(db, migrations);
-
   useEffect(() => {
-    if (loaded) {
+    const appReady = loaded && success && !isLoading;
+
+    if (appReady) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, success, isLoading]);
+
+  useEffect(() => {
+    if (!success || isLoading) return;
+    router.replace(completed ? "/(tabs)" : "/(onboarding)");
+  }, [success, isLoading, completed]);
 
   if (error) {
     return <CustomText>DB failed to initialize</CustomText>;
   }
+
   if (!success) {
     return <CustomText>Setting up...</CustomText>;
   }
 
+  if (isLoading) {
+    return null;
+  }
+  
   return (
     <SafeAreaProvider className="flex-1">
       <NavigationThemeProvider
@@ -61,11 +70,10 @@ export default function RootLayout() {
           <Stack screenOptions={{ headerBlurEffect: "dark" }}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen
-              name="modal"
-              options={{ presentation: "modal", title: "Modal" }}
+              name="(onboarding)"
+              options={{ headerShown: false }}
             />
           </Stack>
-
           <StatusBar style="auto" />
         </ThemeProvider>
       </NavigationThemeProvider>

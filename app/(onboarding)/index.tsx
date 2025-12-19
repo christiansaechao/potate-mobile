@@ -22,6 +22,7 @@ export default function Onboarding() {
     short_break_duration: DEFAULT_TIMES[TimerMode.SHORT_BREAK] / 60,
     long_break_duration: DEFAULT_TIMES[TimerMode.LONG_BREAK] / 60,
   });
+
   const updateUserSettings = async () => {
     try {
       await userOps.createUserSettings(formData);
@@ -79,7 +80,7 @@ export default function Onboarding() {
                 </Text>
               </View>
               <Text className="text-xl font-bold text-red-500 text-center ">
-                Don't let him die!
+                Don&apos;t let him die!
               </Text>
             </View>
           )}
@@ -88,7 +89,7 @@ export default function Onboarding() {
           {step === 3 && (
             <View className="space-y-6">
               <Text className="text-2xl font-bold text-orange-900 text-center mb-4">
-                Let's get to know you
+                Let&apos;s get to know you
               </Text>
 
               <View className="space-y-2">
@@ -176,7 +177,7 @@ export default function Onboarding() {
                 Congrats!
               </Text>
               <Text className="text-lg text-orange-700 text-center px-4">
-                You're all set up. Time to lock in!
+                You&apos;re all set up. Time to lock in!
               </Text>
             </View>
           )}
@@ -201,7 +202,7 @@ export default function Onboarding() {
               }}
             >
               <Text className="text-white text-center font-bold text-lg">
-                Let's Go!
+                Let&apos;s Go!
               </Text>
             </TouchableOpacity>
           )}

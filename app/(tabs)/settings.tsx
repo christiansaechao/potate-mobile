@@ -1,17 +1,18 @@
 import { CustomText } from "@/components/custom";
 import { Row } from "@/components/settings/Row";
+import { DEFAULT_TIMES, SETTINGS_OPTIONS, THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/useTheme";
 import { StatusBar } from "expo-status-bar";
 import { Bed, Bell, Clock, Coffee, Target, User } from "lucide-react-native";
 import { useState } from "react";
-import { THEMES } from "@/constants/constants";
 import { Pressable, ScrollView, Switch, View } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-import { DEFAULT_TIMES, SETTINGS_OPTIONS } from "@/constants/constants";
+import userOps from "@/lib/settings";
+
 import { TimerMode } from "@/types/types";
 
 export default function Settings() {
@@ -27,6 +28,18 @@ export default function Settings() {
   const [vibration, setVibration] = useState(true);
   const { theme, mode } = useTheme();
   const backgroundColor = THEMES[theme][mode];
+
+  const resetData = async () => {
+    try {
+      const { success } = await userOps.resetUserData();
+
+      if (success) {
+        alert("Successful deletion");
+      }
+    } catch {
+      console.error("Error trying to reset user data");
+    }
+  };
 
   return (
     <SafeAreaView
@@ -287,6 +300,26 @@ export default function Settings() {
               }}
             >
               Save Changes
+            </CustomText>
+          </Pressable>
+          <Pressable
+            onPress={resetData}
+            style={{
+              backgroundColor: "#7FD7BE",
+              borderRadius: 999,
+              paddingVertical: 18,
+              marginTop: 18,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CustomText
+              style={{
+                fontSize: 24,
+                lineHeight: 30,
+              }}
+            >
+              Reset Data (dev)
             </CustomText>
           </Pressable>
         </View>

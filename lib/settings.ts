@@ -1,4 +1,4 @@
-import { userSettings } from "@/db/schema";
+import { intervals, sessions, userSettings } from "@/db/schema";
 import { db } from "../db/client";
 
 const userOps = {
@@ -30,6 +30,14 @@ const userOps = {
 
   async updateUserSettings(settings: {}) {
     await db.update(userSettings).set({ ...settings });
+  },
+
+  async resetUserData() {
+    await db.delete(intervals);
+    await db.delete(sessions);
+    await db.delete(userSettings);
+
+    return { success: true };
   },
 };
 
