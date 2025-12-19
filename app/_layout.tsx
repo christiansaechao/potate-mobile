@@ -48,7 +48,6 @@ export default function RootLayout() {
   if (error) {
     return <CustomText>DB failed to initialize</CustomText>;
   }
-
   if (!success) {
     return <CustomText>Setting up...</CustomText>;
   }
@@ -66,6 +65,7 @@ export default function RootLayout() {
               options={{ presentation: "modal", title: "Modal" }}
             />
           </Stack>
+
           <StatusBar style="auto" />
         </ThemeProvider>
       </NavigationThemeProvider>
