@@ -9,6 +9,9 @@ let config = getDefaultConfig(__dirname);
 // Let Metro treat .sql as source files so Babel can transform them
 config.resolver.sourceExts = [...config.resolver.sourceExts, "sql"];
 
+// Add support for WASM files
+config.resolver.assetExts = [...config.resolver.assetExts.filter(ext => ext !== "wasm"), "wasm"];
+
 // Add "@" alias pointing to project root
 config.resolver.alias = {
   ...(config.resolver.alias || {}),
