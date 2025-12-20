@@ -10,7 +10,10 @@ let config = getDefaultConfig(__dirname);
 config.resolver.sourceExts = [...config.resolver.sourceExts, "sql"];
 
 // Add support for WASM files
-config.resolver.assetExts = [...config.resolver.assetExts.filter(ext => ext !== "wasm"), "wasm"];
+config.resolver.assetExts = [
+  ...config.resolver.assetExts.filter((ext) => ext !== "wasm"),
+  "wasm",
+];
 
 // Add "@" alias pointing to project root
 config.resolver.alias = {
