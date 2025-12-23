@@ -1,3 +1,4 @@
+import Calendar from "@/components/Calendar";
 import { CustomText } from "@/components/custom";
 import { THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/useTheme";
@@ -37,10 +38,25 @@ export default function Stats() {
     longBreak: "0",
     allBreaks: "0",
   });
+  const [markedDates, setMarkedDates] = useState<string[]>([]);
 
   const getStats = async () => {
     try {
       const totalSessions = await sessionOps.getSessions();
+
+      const dates = totalSessions.map((session) => {
+        const d = new Date(session.createdAt);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      });
+
+      // valid date string 2024-12-24
+      // 2024-12-24T00:00:00.000Z
+
+      const uniqueDates = [...new Set(dates)];
+      setMarkedDates(uniqueDates);
 
       const focusedTime = await IntervalOps.getIntervalsBySessionMode(
         TimerMode.FOCUS
@@ -93,6 +109,7 @@ export default function Stats() {
         >
           Stats Page
         </CustomText>
+
         <View className="flex gap-2">
           <CustomText className="text-2xl text-center ">
             Number of Sessions Started: {stats.totalSessions}
@@ -115,6 +132,8 @@ export default function Stats() {
           <CustomText className="text-2xl text-center ">
             Time Spent On A Break🍟: {stats.allBreaks}
           </CustomText>
+
+          <Calendar markedDates={markedDates} />
         </View>
       </View>
     </SafeAreaView>
