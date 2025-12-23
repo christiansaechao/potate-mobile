@@ -1,46 +1,75 @@
 import { CustomText } from "@/components/custom";
 import { THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/useTheme";
-import sessionOps from "@/lib/sessions";
 
-import { getTimeInMins } from "@/lib/helper";
-import { IntervalsType, SessionType, TimerMode } from "@/types/types";
+import { formatTime, getTimeInSeconds } from "@/lib/helper";
+import sessionOps from "@/lib/sessions";
+import { TimerMode } from "@/types/types";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { AppBreakdown } from "../../components/potato/AppBreakdown";
 import IntervalOps from "../../lib/intervals";
+
+/**
+ * Time spent focused: count all intervals with only completed sessions time
+ * Time spent unfocused?
+ * Time spent on short break: count all intervals with only completed session time where session = short break
+ * Time spent on long break: count all intervals with only completed session time where session = long break
+ * Time spent on a break: count all intervals with only completed session time where session = short break & long break
+ *
+ */
+
+type StatsType = {
+  totalSessions: number;
+  timeFocused: string;
+  shortBreak: string;
+  longBreak: string;
+  allBreaks: string;
+};
 
 export default function Stats() {
   const { theme, mode } = useTheme();
-  const [focusedIntervals, setFocusedIntervals] = useState<IntervalsType>([]);
-  const [shortBreaks, setShortBreaks] = useState<SessionType[]>();
-  const [longBreaks, setLongBreaks] = useState<SessionType[]>();
 
-  // group all intervals by session
-  const focusedTime = getTimeInMins(focusedIntervals);
-  // group sessions by mode
+  const [stats, setStats] = useState<StatsType>({
+    totalSessions: 0,
+    timeFocused: "0",
+    shortBreak: "0",
+    longBreak: "0",
+    allBreaks: "0",
+  });
 
   const getStats = async () => {
     try {
-      const focusedIntervals = await IntervalOps.getIntervalsBySessionMode(
+      const totalSessions = await sessionOps.getSessions();
+
+      const focusedTime = await IntervalOps.getIntervalsBySessionMode(
         TimerMode.FOCUS
       );
 
-      setFocusedIntervals(focusedIntervals);
-
-      const longBreak = await sessionOps.getSessionsByMode(
-        TimerMode.LONG_BREAK
-      );
-
-      const shortBreak = await sessionOps.getSessionsByMode(
+      const longBreak = await IntervalOps.getIntervalsBySessionMode(
         TimerMode.SHORT_BREAK
       );
 
-      setLongBreaks(longBreak);
-      setShortBreaks(shortBreak);
+      const shortBreak = await IntervalOps.getIntervalsBySessionMode(
+        TimerMode.SHORT_BREAK
+      );
 
-      const test = await IntervalOps.getIntervalsBySessionMode(TimerMode.FOCUS);
+      const focused = formatTime(getTimeInSeconds(focusedTime));
+      const lBreak = formatTime(getTimeInSeconds(longBreak));
+      const sBreak = formatTime(getTimeInSeconds(shortBreak));
+      const aBreak = formatTime(
+        getTimeInSeconds(shortBreak) + getTimeInSeconds(longBreak)
+      );
+
+      const stats = {
+        totalSessions: totalSessions.length,
+        timeFocused: focused,
+        shortBreak: sBreak,
+        longBreak: lBreak,
+        allBreaks: aBreak,
+      };
+
+      setStats(stats);
     } catch (err) {
       console.log(err);
     }
@@ -66,32 +95,26 @@ export default function Stats() {
         </CustomText>
         <View className="flex gap-2">
           <CustomText className="text-2xl text-center ">
+            Number of Sessions Started: {stats.totalSessions}
+          </CustomText>
+          <CustomText className="text-2xl text-center ">
             Number of Rotted Potatoes🍟: 42
           </CustomText>
           <CustomText className="text-2xl text-center ">
-            Time Spent Focused🍟:{focusedTime}
-          </CustomText>
-          <CustomText className="text-2xl text-center">
-            Time Spent Unfocused🍟: 42
-          </CustomText>
-          <CustomText className="text-2xl text-center ">
-            Time Spent On A Short Break🍟: 42
+            Time Spent Focused🍟:{stats.timeFocused}
           </CustomText>
 
           <CustomText className="text-2xl text-center ">
-            Time Spent On A Long Break🍟: 42
+            Time Spent On A Short Break🍟: {stats.shortBreak}
           </CustomText>
 
           <CustomText className="text-2xl text-center ">
-            Time Spent On A Break🍟: 42
+            Time Spent On A Long Break🍟: {stats.longBreak}
           </CustomText>
-          <CustomText className="text-2xl text-center">
-            Time Spent On Other Apps:
+
+          <CustomText className="text-2xl text-center ">
+            Time Spent On A Break🍟: {stats.allBreaks}
           </CustomText>
-        </View>
-        <View className="flex gap-4 py-2">
-          <AppBreakdown time={80} appName={"Facebook"} />
-          <AppBreakdown time={30} appName={"Instagram"} />
         </View>
       </View>
     </SafeAreaView>
