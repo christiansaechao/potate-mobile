@@ -114,11 +114,11 @@ export default function Stats() {
           <CustomText className="text-2xl text-center ">
             Number of Sessions Started: {stats.totalSessions}
           </CustomText>
-          <CustomText className="text-2xl text-center ">
+          {/* <CustomText className="text-2xl text-center ">
             Number of Rotted Potatoes🍟: 42
-          </CustomText>
+          </CustomText> */}
           <CustomText className="text-2xl text-center ">
-            Time Spent Focused🍟:{stats.timeFocused}
+            Time Spent Focused🍟: {stats.timeFocused}
           </CustomText>
 
           <CustomText className="text-2xl text-center ">

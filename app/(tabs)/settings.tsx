@@ -11,6 +11,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
+import { generateMockData } from "@/lib/dev-utils";
 import userOps from "@/lib/settings";
 
 import { TimerMode } from "@/types/types";
@@ -320,6 +321,34 @@ export default function Settings() {
               }}
             >
               Reset Data (dev)
+            </CustomText>
+          </Pressable>
+
+          <Pressable
+            onPress={async () => {
+              const { success } = await generateMockData();
+              if (success) {
+                alert("Mock data generated!");
+              } else {
+                alert("Failed to generate data");
+              }
+            }}
+            style={{
+              backgroundColor: "#7FD7BE",
+              borderRadius: 999,
+              paddingVertical: 18,
+              marginTop: 18,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CustomText
+              style={{
+                fontSize: 24,
+                lineHeight: 30,
+              }}
+            >
+              Generate Data (dev)
             </CustomText>
           </Pressable>
         </View>

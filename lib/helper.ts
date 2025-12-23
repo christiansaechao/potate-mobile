@@ -33,9 +33,24 @@ export const getTimeInSeconds = (intervals: IntervalsType) => {
 };
 
 export const formatTime = (seconds: number) => {
-  if (seconds >= 60) {
-    const minutes = Math.floor(seconds / 60);
+  const MINUTE = 60;
+  const HOUR = 60 * MINUTE;
+  const DAY = 24 * HOUR;
+
+  if (seconds >= DAY) {
+    const days = Math.floor(seconds / DAY);
+    return `${days} day${days !== 1 ? "s" : ""}`;
+  }
+
+  if (seconds >= HOUR) {
+    const hours = Math.floor(seconds / HOUR);
+    return `${hours} hour${hours !== 1 ? "s" : ""}`;
+  }
+
+  if (seconds >= MINUTE) {
+    const minutes = Math.floor(seconds / MINUTE);
     return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
   }
+
   return `${seconds} second${seconds !== 1 ? "s" : ""}`;
 };

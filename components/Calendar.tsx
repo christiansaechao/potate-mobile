@@ -58,17 +58,45 @@ export default function Calendar({ markedDates }: CalendarProps) {
     THEMES[theme][mode] === "bg-white" ? "text-black" : "text-white";
   const iconColor = THEMES[theme][mode] === "bg-white" ? "black" : "white";
 
+  // Navigation Logic
+  const currentMonthIndex = year * 12 + month;
+  const today = new Date();
+  const todayMonthIndex = today.getFullYear() * 12 + today.getMonth();
+
+  let minIndex = todayMonthIndex;
+  let maxIndex = todayMonthIndex;
+
+  if (markedDates.length > 0) {
+    const indices = markedDates.map((d) => {
+      const [y, m] = d.split("-").map(Number);
+      return y * 12 + (m - 1);
+    });
+    minIndex = Math.min(...indices, todayMonthIndex);
+    maxIndex = Math.max(...indices, todayMonthIndex);
+  }
+
+  const canGoPrev = currentMonthIndex > minIndex;
+  const canGoNext = currentMonthIndex < maxIndex;
+
   return (
     <View className="p-4">
       {/* Header */}
       <View className="flex-row justify-between items-center mb-4">
-        <TouchableOpacity onPress={() => changeMonth(-1)} className="p-2">
+        <TouchableOpacity
+          onPress={() => changeMonth(-1)}
+          className={`p-2 ${!canGoPrev ? "opacity-30" : ""}`}
+          disabled={!canGoPrev}
+        >
           <ChevronLeft size={24} color={iconColor} />
         </TouchableOpacity>
         <Text className={`text-xl font-bold ${textColor}`}>
           {currentDate.toLocaleString("default", { month: "long" })} {year}
         </Text>
-        <TouchableOpacity onPress={() => changeMonth(1)} className="p-2">
+        <TouchableOpacity
+          onPress={() => changeMonth(1)}
+          className={`p-2 ${!canGoNext ? "opacity-30" : ""}`}
+          disabled={!canGoNext}
+        >
           <ChevronRight size={24} color={iconColor} />
         </TouchableOpacity>
       </View>
