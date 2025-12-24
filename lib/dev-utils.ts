@@ -41,14 +41,14 @@ export const generateMockData = async () => {
 
         const sessionDuration = durationMinutes * 60 * 1000;
         const endTime = new Date(sessionTime.getTime() + sessionDuration);
-
+        const completed = Math.floor(Math.random() * 2);
         const newSession = {
           mode: mode,
           createdAt: sessionTime.getTime(),
           updatedAt: endTime.getTime(),
           endedAt: endTime.getTime(),
           potatoHealth: 100,
-          completed: 1, // Mark as completed
+          completed: completed, // Mark as completed
         };
 
         // We need the ID to link intervals, so we might need to insert one by one or trust IDs if we could batch insert returning IDs.

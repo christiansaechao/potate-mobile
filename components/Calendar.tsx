@@ -2,7 +2,8 @@ import { THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/useTheme";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import { CustomText } from "./custom";
 
 type CalendarProps = {
   markedDates: string[];
@@ -54,9 +55,7 @@ export default function Calendar({ markedDates }: CalendarProps) {
   };
 
   // Theme colors
-  const textColor =
-    THEMES[theme][mode] === "bg-white" ? "text-black" : "text-white";
-  const iconColor = THEMES[theme][mode] === "bg-white" ? "black" : "white";
+  const ThemeColor = THEMES[theme][mode];
 
   // Navigation Logic
   const currentMonthIndex = year * 12 + month;
@@ -87,29 +86,29 @@ export default function Calendar({ markedDates }: CalendarProps) {
           className={`p-2 ${!canGoPrev ? "opacity-30" : ""}`}
           disabled={!canGoPrev}
         >
-          <ChevronLeft size={24} color={iconColor} />
+          <ChevronLeft size={24} className={ThemeColor} />
         </TouchableOpacity>
-        <Text className={`text-xl font-bold ${textColor}`}>
+        <CustomText className={`text-xl font-bold ${ThemeColor}`}>
           {currentDate.toLocaleString("default", { month: "long" })} {year}
-        </Text>
+        </CustomText>
         <TouchableOpacity
           onPress={() => changeMonth(1)}
           className={`p-2 ${!canGoNext ? "opacity-30" : ""}`}
           disabled={!canGoNext}
         >
-          <ChevronRight size={24} color={iconColor} />
+          <ChevronRight size={24} className={ThemeColor} />
         </TouchableOpacity>
       </View>
 
       {/* Days of Week */}
       <View className="flex-row justify-between mb-2">
         {DAYS_OF_WEEK.map((day, index) => (
-          <Text
+          <CustomText
             key={index}
-            className={`w-[14%] text-center font-bold ${textColor} opacity-60`}
+            className={`w-[14%] text-center font-bold ${ThemeColor} opacity-60`}
           >
             {day}
-          </Text>
+          </CustomText>
         ))}
       </View>
 
@@ -132,13 +131,13 @@ export default function Calendar({ markedDates }: CalendarProps) {
                   marked ? "bg-orange-500" : ""
                 }`}
               >
-                <Text
+                <CustomText
                   className={`text-center ${
-                    marked ? "text-white font-bold" : textColor
+                    marked ? "text-white font-bold" : ThemeColor
                   }`}
                 >
                   {day}
-                </Text>
+                </CustomText>
               </View>
             </View>
           );

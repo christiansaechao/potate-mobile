@@ -3,9 +3,10 @@ import { CustomText } from "@/components/custom";
 import { THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/useTheme";
 
+import StatCard from "@/components/ui/stats-card";
 import { formatTime, getTimeInSeconds } from "@/lib/helper";
 import sessionOps from "@/lib/sessions";
-import { TimerMode } from "@/types/types";
+import { StatsType, TimerMode } from "@/types/types";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,6 +14,7 @@ import IntervalOps from "../../lib/intervals";
 
 /**
  * Time spent focused: count all intervals with only completed sessions time
+ * Number of sessions finished
  * Time spent unfocused?
  * Time spent on short break: count all intervals with only completed session time where session = short break
  * Time spent on long break: count all intervals with only completed session time where session = long break
@@ -20,19 +22,12 @@ import IntervalOps from "../../lib/intervals";
  *
  */
 
-type StatsType = {
-  totalSessions: number;
-  timeFocused: string;
-  shortBreak: string;
-  longBreak: string;
-  allBreaks: string;
-};
-
 export default function Stats() {
   const { theme, mode } = useTheme();
 
   const [stats, setStats] = useState<StatsType>({
     totalSessions: 0,
+    totalCompletedSessions: 0,
     timeFocused: "0",
     shortBreak: "0",
     longBreak: "0",
@@ -52,8 +47,9 @@ export default function Stats() {
         return `${year}-${month}-${day}`;
       });
 
-      // valid date string 2024-12-24
-      // 2024-12-24T00:00:00.000Z
+      const completedSesssions = totalSessions.filter(
+        (session) => session.completed == 1
+      ).length;
 
       const uniqueDates = [...new Set(dates)];
       setMarkedDates(uniqueDates);
@@ -79,6 +75,7 @@ export default function Stats() {
 
       const stats = {
         totalSessions: totalSessions.length,
+        totalCompletedSessions: completedSesssions,
         timeFocused: focused,
         shortBreak: sBreak,
         longBreak: lBreak,
@@ -102,39 +99,48 @@ export default function Stats() {
       className={`flex-1 transition-colors duration-300 ${backgroundColor}`}
       edges={["top"]}
     >
-      <View className="py-12 h-screen">
+      <View className="py-2 h-screen">
         <CustomText
           className="text-6xl text-center"
           style={{ height: 96, lineHeight: 96 }}
         >
-          Stats Page
+          Stats
         </CustomText>
 
-        <View className="flex gap-2">
-          <CustomText className="text-2xl text-center ">
-            Number of Sessions Started: {stats.totalSessions}
-          </CustomText>
-          {/* <CustomText className="text-2xl text-center ">
-            Number of Rotted Potatoes🍟: 42
-          </CustomText> */}
-          <CustomText className="text-2xl text-center ">
-            Time Spent Focused🍟: {stats.timeFocused}
-          </CustomText>
-
-          <CustomText className="text-2xl text-center ">
-            Time Spent On A Short Break🍟: {stats.shortBreak}
-          </CustomText>
-
-          <CustomText className="text-2xl text-center ">
-            Time Spent On A Long Break🍟: {stats.longBreak}
-          </CustomText>
-
-          <CustomText className="text-2xl text-center ">
-            Time Spent On A Break🍟: {stats.allBreaks}
-          </CustomText>
-
-          <Calendar markedDates={markedDates} />
+        <View className="px-12 gap-2">
+          <StatCard
+            label="Sessions Started"
+            stats={stats.totalSessions}
+            backgroundColor={backgroundColor}
+          />
+          <StatCard
+            label="Completed Sessions"
+            stats={stats.totalCompletedSessions}
+            backgroundColor={backgroundColor}
+          />
+          <StatCard
+            label="Focused"
+            stats={stats.timeFocused}
+            backgroundColor={backgroundColor}
+          />
+          <StatCard
+            label="Short Break"
+            stats={stats.shortBreak}
+            backgroundColor={backgroundColor}
+          />
+          <StatCard
+            label="Long Break"
+            stats={stats.longBreak}
+            backgroundColor={backgroundColor}
+          />
+          <StatCard
+            label="Breaks"
+            stats={stats.allBreaks}
+            backgroundColor={backgroundColor}
+          />
         </View>
+
+        <Calendar markedDates={markedDates} />
       </View>
     </SafeAreaView>
   );
