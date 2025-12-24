@@ -19,7 +19,6 @@ import IntervalOps from "../../lib/intervals";
  * Time spent on short break: count all intervals with only completed session time where session = short break
  * Time spent on long break: count all intervals with only completed session time where session = long break
  * Time spent on a break: count all intervals with only completed session time where session = short break & long break
- *
  */
 
 export default function Stats() {
@@ -48,7 +47,7 @@ export default function Stats() {
       });
 
       const completedSesssions = totalSessions.filter(
-        (session) => session.completed == 1
+        (session) => session.completed === 1
       ).length;
 
       const uniqueDates = [...new Set(dates)];
