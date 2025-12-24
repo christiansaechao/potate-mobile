@@ -13,7 +13,6 @@ import { HealthBar } from "../../components/potato/HealthBar";
 import { ModeSwitcher } from "../../components/potato/ModeSwitcher";
 import { PotatoArea } from "../../components/potato/PotatoArea";
 import { ProgressBar } from "../../components/potato/ProgressBar";
-import { ThemeSelector } from "../../components/potato/ThemeSelector";
 import { TimerControls } from "../../components/potato/TimerControls";
 import { TimerDisplay } from "../../components/potato/TimerDisplay";
 
@@ -30,7 +29,6 @@ export default function App() {
   });
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
   const { theme, setTheme, mode, setMode } = useTheme();
-  const [showThemeSelector, setShowThemeSelector] = useState(false);
 
   useNotifications();
   const { StartSession, StopSession, StartInterval, StopInterval } =
@@ -93,17 +91,9 @@ export default function App() {
       className={`flex-1 transition-colors duration-300 ${backgroundColor}`}
     >
       <View className="flex-1 items-center justify-between py-6 px-4 pb-24">
-        <ThemeSelector
-          visible={showThemeSelector}
-          currentTheme={theme}
-          onSelect={setTheme}
-          onClose={() => setShowThemeSelector(false)}
-        />
-
         <Header
           isSound={isSoundEnabled}
           toggleSound={() => setIsSoundEnabled((p) => !p)}
-          openThemes={() => setShowThemeSelector(true)}
         />
 
         <ModeSwitcher mode={mode} switchMode={switchMode} />

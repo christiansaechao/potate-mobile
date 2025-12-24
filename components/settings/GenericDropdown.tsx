@@ -1,9 +1,9 @@
-import React from "react";
-import { FlatList, Modal, Platform, Pressable, Text, View } from "react-native";
-import { useTheme } from "@/hooks/useTheme";
 import { THEMES } from "@/constants/constants";
+import { useTheme } from "@/hooks/useTheme";
+import React from "react";
+import { FlatList, Modal, Platform, Pressable, View } from "react-native";
 
-import { C, styles } from "@/components/settings/Styles";
+import { styles } from "@/components/settings/Styles";
 import { CustomText } from "../custom/custom-text.tsx";
 
 type Option<T> = { label: string; value: T };
