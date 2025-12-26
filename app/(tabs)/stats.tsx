@@ -94,7 +94,7 @@ export default function Stats() {
         }
 
         const duration = Math.floor(
-          (interval.endTime - interval.startTime) / 1000
+          (interval.endTime - interval.startTime) / 1000,
         ); // in seconds
 
         if (session.mode === TimerMode.FOCUS) {
@@ -109,29 +109,29 @@ export default function Stats() {
       setDailyStats(calculatedDailyStats);
 
       const completedSesssions = totalSessions.filter(
-        (session) => session.completed === 1
+        (session) => session.completed === 1,
       ).length;
 
       const uniqueDates = [...new Set(dates)];
       setMarkedDates(uniqueDates);
 
       const focusedTime = await IntervalOps.getIntervalsBySessionMode(
-        TimerMode.FOCUS
+        TimerMode.FOCUS,
       );
 
       const longBreak = await IntervalOps.getIntervalsBySessionMode(
-        TimerMode.SHORT_BREAK
+        TimerMode.SHORT_BREAK,
       );
 
       const shortBreak = await IntervalOps.getIntervalsBySessionMode(
-        TimerMode.SHORT_BREAK
+        TimerMode.SHORT_BREAK,
       );
 
       const focused = formatTime(getTimeInSeconds(focusedTime));
       const lBreak = formatTime(getTimeInSeconds(longBreak));
       const sBreak = formatTime(getTimeInSeconds(shortBreak));
       const aBreak = formatTime(
-        getTimeInSeconds(shortBreak) + getTimeInSeconds(longBreak)
+        getTimeInSeconds(shortBreak) + getTimeInSeconds(longBreak),
       );
 
       const stats = {

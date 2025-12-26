@@ -36,10 +36,11 @@ export const Row = <T,>({
           gap: 12,
           marginBottom: 10,
         }}
+        className={`transition-colors duration-500`}
       >
         <View
           style={{ backgroundColor: color.text }}
-          className="p-2 rounded-full"
+          className="p-2 rounded-full transition-colors duration-300"
         >
           {icon}
         </View>

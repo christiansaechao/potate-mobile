@@ -29,12 +29,22 @@ export default function Settings() {
 
   const [pomodoro, setPomodoro] = useState(DEFAULT_TIMES[TimerMode.FOCUS]);
   const [shortBreak, setShortBreak] = useState(
-    DEFAULT_TIMES[TimerMode.SHORT_BREAK]
+    DEFAULT_TIMES[TimerMode.SHORT_BREAK],
   );
   const [longBreak, setLongBreak] = useState(
-    DEFAULT_TIMES[TimerMode.LONG_BREAK]
+    DEFAULT_TIMES[TimerMode.LONG_BREAK],
   );
   const [vibration, setVibration] = useState(true);
+
+  const getSettings = async () => {
+    try {
+      const settings = await userOps.getAllSettings();
+      if (settings) {
+        setPomodoro(settings.fo);
+        setShortBreak(settings.shortBreakLength);
+        setLongBreak(settings.longBreakLength);
+        setVibration(settings.vibration);
+      }
 
   const resetData = async () => {
     try {
@@ -97,7 +107,7 @@ export default function Settings() {
             shadowOffset: { width: 0, height: 10 },
             elevation: 6,
           }}
-          className={`${backgroundColor}`}
+          className={`transition-colors duration-300 ${backgroundColor}`}
         >
           {/* Profile */}
           <View style={{ alignItems: "center" }}>
@@ -152,12 +162,9 @@ export default function Settings() {
 
             <View
               style={{
-                shadowColor: "#000",
-                shadowOpacity: 0.25,
-                shadowRadius: 18,
-                shadowOffset: { width: 0, height: 10 },
                 padding: 16,
               }}
+              className={`transition-colors duration-300`}
             >
               <Row
                 icon={<Clock color={color.buttonIconColor} size={24} />}
