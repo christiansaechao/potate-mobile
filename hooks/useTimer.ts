@@ -157,11 +157,12 @@ export const useTimer: IUseTimer = (
             // implement levels to scale
             const newExp = prev + reward;
             userOps.updateUserSettings({ exp: newExp });
+
             return newExp;
           });
           fetchQuote(mode, TimerState.COMPLETED, health);
           setState(TimerState.COMPLETED);
-          return 0;
+          return DEFAULT_TIMES[mode];
         }
         return t - 1;
       });
