@@ -154,6 +154,7 @@ export const useTimer: IUseTimer = (
           setExp((prev) => {
             const reward =
               EXP_REWARDS[mode] + Math.floor(Math.random() * 10) - 5;
+            // implement levels to scale
             const newExp = prev + reward;
             userOps.updateUserSettings({ exp: newExp });
             return newExp;
