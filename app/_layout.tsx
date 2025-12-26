@@ -13,6 +13,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ThemeProvider } from "../contexts/theming/ThemeProviders";
 import { useColorScheme } from "../hooks/use-color-scheme";
+import { useDbMigrations } from "../hooks/useDbMigration";
 
 import { CustomText } from "@/components/custom";
 import { db, expo_db } from "../db/client";
@@ -28,7 +29,7 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const { success, error } = useMigrations(db, migrations);
+  const { ready, error } = useDbMigrations();
 
   useDrizzleStudio(expo_db);
 
@@ -37,7 +38,7 @@ export default function RootLayout() {
     Baloo: require("../assets/fonts/Baloo2-Bold.ttf"),
   });
 
-  const appReady = success && fontsLoaded;
+  const appReady = ready && fontsLoaded;
 
   useEffect(() => {
     if (appReady) {
