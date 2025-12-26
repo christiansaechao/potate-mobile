@@ -1,10 +1,10 @@
+import { useTheme } from "@/hooks/useTheme";
 import { PickerProps } from "@/types/settings.types";
 import { Pressable, View } from "react-native";
+import { Colors } from "../../constants/theme";
 import { CustomText } from "../custom";
 import { GenericDropdown } from "./GenericDropdown";
 
-import { useTheme } from "@/hooks/useTheme";
-import { THEMES } from "@/constants/constants";
 interface RowProps<T> extends PickerProps<T> {
   icon: React.ReactNode;
   label: string;
@@ -17,8 +17,9 @@ export const Row = <T,>({
   options,
   setState,
 }: RowProps<T>) => {
-  const { theme, mode } = useTheme();
-  const backgroundColor = THEMES[theme][mode];
+  const { theme } = useTheme();
+
+  const color = Colors[theme];
   return (
     <Pressable
       style={{
@@ -35,13 +36,18 @@ export const Row = <T,>({
           gap: 12,
           marginBottom: 10,
         }}
-        className={`${backgroundColor}`}
       >
-        {icon}
+        <View
+          style={{ backgroundColor: color.text }}
+          className="p-2 rounded-full"
+        >
+          {icon}
+        </View>
         <CustomText
           style={{
             fontSize: 18,
-            lineHeight: 22,
+            lineHeight: 36,
+            textAlignVertical: "center",
           }}
         >
           {label}

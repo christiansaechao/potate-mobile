@@ -1,5 +1,5 @@
 import { useTheme } from "@/hooks/useTheme";
-import { Image, Volume2, VolumeX } from "lucide-react-native";
+import { Volume2, VolumeX } from "lucide-react-native";
 import React from "react";
 import { View } from "react-native";
 import { CustomText } from "../custom";
@@ -8,14 +8,9 @@ import { ThemedPressable } from "../ui/themed-pressable";
 type HeaderProps = {
   isSound: boolean;
   toggleSound: () => void;
-  openThemes: () => void;
 };
 
-export const Header: React.FC<HeaderProps> = ({
-  isSound,
-  toggleSound,
-  openThemes,
-}) => {
+export const Header: React.FC<HeaderProps> = ({ isSound, toggleSound }) => {
   const { colors } = useTheme();
 
   return (
@@ -25,14 +20,6 @@ export const Header: React.FC<HeaderProps> = ({
       </CustomText>
 
       <View className="flex-row gap-2">
-        <ThemedPressable
-          onPress={openThemes}
-          className="p-2 bg-white/20 rounded-full active:opacity-70"
-          hitSlop={8}
-        >
-          <Image size={18} color={colors.buttonIconColor} />
-        </ThemedPressable>
-
         <ThemedPressable
           onPress={toggleSound}
           className="p-2 bg-white/20 rounded-full active:opacity-70"

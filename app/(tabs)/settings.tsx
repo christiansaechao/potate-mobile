@@ -10,13 +10,22 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import { Colors } from "../../constants/theme";
 
+import { generateMockData } from "@/lib/dev-utils";
 import userOps from "@/lib/settings";
 
 import { TimerMode } from "@/types/types";
 
+import { ThemeSelector } from "@/components/potato/ThemeSelector";
+
 export default function Settings() {
   const insets = useSafeAreaInsets();
+
+  // Theme(s)
+  const { theme, setTheme, mode } = useTheme();
+  const backgroundColor = THEMES[theme][mode];
+  const color = Colors[theme];
 
   const [pomodoro, setPomodoro] = useState(DEFAULT_TIMES[TimerMode.FOCUS]);
   const [shortBreak, setShortBreak] = useState(
@@ -26,8 +35,6 @@ export default function Settings() {
     DEFAULT_TIMES[TimerMode.LONG_BREAK]
   );
   const [vibration, setVibration] = useState(true);
-  const { theme, mode } = useTheme();
-  const backgroundColor = THEMES[theme][mode];
 
   const resetData = async () => {
     try {
@@ -153,9 +160,8 @@ export default function Settings() {
               }}
             >
               <Row
-                icon={<Clock color="#EAF0F7" size={24} />}
+                icon={<Clock color={color.buttonIconColor} size={24} />}
                 label="Pomodoro Length"
-                value={`${pomodoro} min`}
                 state={pomodoro}
                 setState={setPomodoro}
                 options={SETTINGS_OPTIONS.POMODORO}
@@ -169,9 +175,8 @@ export default function Settings() {
               />
 
               <Row
-                icon={<Coffee color="#EAF0F7" size={24} />}
+                icon={<Coffee color={color.buttonIconColor} size={24} />}
                 label="Short Break"
-                value={`${shortBreak} min`}
                 state={shortBreak}
                 setState={setShortBreak}
                 options={SETTINGS_OPTIONS.SHORT_BREAK}
@@ -185,9 +190,8 @@ export default function Settings() {
               />
 
               <Row
-                icon={<Bed color="#EAF0F7" size={24} />}
+                icon={<Bed color={color.buttonIconColor} size={24} />}
                 label="Long Break"
-                value={`${longBreak} min`}
                 state={longBreak}
                 setState={setLongBreak}
                 options={SETTINGS_OPTIONS.LONG_BREAK}
@@ -195,13 +199,14 @@ export default function Settings() {
             </View>
           </View>
 
+          <ThemeSelector currentTheme={theme} onSelect={setTheme} />
+
           {/* Vibration */}
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              backgroundColor: "#2B3545",
               borderRadius: 22,
               paddingHorizontal: 16,
               paddingVertical: 14,
@@ -215,9 +220,13 @@ export default function Settings() {
                 alignItems: "center",
                 gap: 12,
               }}
-              className={`${backgroundColor}`}
             >
-              <Bell color="#EAF0F7" size={24} />
+              <View
+                style={{ backgroundColor: color.text }}
+                className="p-2 rounded-full"
+              >
+                <Bell color={color.buttonIconColor} size={24} />
+              </View>
               <CustomText
                 style={{
                   fontSize: 18,
@@ -245,7 +254,6 @@ export default function Settings() {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              backgroundColor: "#2B3545",
               borderRadius: 22,
               paddingHorizontal: 16,
               paddingVertical: 16,
@@ -261,7 +269,12 @@ export default function Settings() {
               }}
               className={`${backgroundColor}`}
             >
-              <Target color="#EAF0F7" size={24} />
+              <View
+                style={{ backgroundColor: color.text }}
+                className="p-2 rounded-full"
+              >
+                <Target color={color.buttonIconColor} size={24} />
+              </View>
               <CustomText
                 style={{
                   fontSize: 18,
@@ -278,7 +291,7 @@ export default function Settings() {
                 lineHeight: 22,
               }}
             >
-              20 Pomodo
+              20 Pomodoros
             </CustomText>
           </View>
 
@@ -320,6 +333,34 @@ export default function Settings() {
               }}
             >
               Reset Data (dev)
+            </CustomText>
+          </Pressable>
+
+          <Pressable
+            onPress={async () => {
+              const { success } = await generateMockData();
+              if (success) {
+                alert("Mock data generated!");
+              } else {
+                alert("Failed to generate data");
+              }
+            }}
+            style={{
+              backgroundColor: "#7FD7BE",
+              borderRadius: 999,
+              paddingVertical: 18,
+              marginTop: 18,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CustomText
+              style={{
+                fontSize: 24,
+                lineHeight: 30,
+              }}
+            >
+              Generate Data (dev)
             </CustomText>
           </Pressable>
         </View>

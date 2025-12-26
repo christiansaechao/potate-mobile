@@ -1,5 +1,5 @@
 import { IntervalsType } from "@/types/types";
-export const getTimeInMins = (intervals: IntervalsType) => {
+export const getTimeInSeconds = (intervals: IntervalsType) => {
   const groupedIntervals =
     intervals?.reduce((acc: Record<number, typeof intervals>, curr) => {
       const key = curr.sessionId;
@@ -28,7 +28,29 @@ export const getTimeInMins = (intervals: IntervalsType) => {
     return allSecs;
   });
   const seconds = getIntervalTimeInSecs.reduce((acc, curr) => acc + curr, 0);
-  const timeSpendInMins = Math.floor(seconds / 60);
 
-  return timeSpendInMins;
+  return seconds;
+};
+
+export const formatTime = (seconds: number) => {
+  const MINUTE = 60;
+  const HOUR = 60 * MINUTE;
+  const DAY = 24 * HOUR;
+
+  if (seconds >= DAY) {
+    const days = Math.floor(seconds / DAY);
+    return `${days} day${days !== 1 ? "s" : ""}`;
+  }
+
+  if (seconds >= HOUR) {
+    const hours = Math.floor(seconds / HOUR);
+    return `${hours} hour${hours !== 1 ? "s" : ""}`;
+  }
+
+  if (seconds >= MINUTE) {
+    const minutes = Math.floor(seconds / MINUTE);
+    return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+  }
+
+  return `${seconds} second${seconds !== 1 ? "s" : ""}`;
 };
