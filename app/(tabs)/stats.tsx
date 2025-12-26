@@ -8,8 +8,11 @@ import { formatTime, getTimeInSeconds } from "@/lib/helper";
 import sessionOps from "@/lib/sessions";
 import { StatsType, TimerMode } from "@/types/types";
 import { useEffect, useState } from "react";
-import { TouchableWithoutFeedback, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { TouchableWithoutFeedback, View, ScrollView } from "react-native";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import IntervalOps from "../../lib/intervals";
 
 /**
@@ -154,62 +157,71 @@ export default function Stats() {
   }, []);
 
   const backgroundColor = THEMES[theme][mode];
+  const insets = useSafeAreaInsets();
 
   return (
     <SafeAreaView
       className={`flex-1 transition-colors duration-300 ${backgroundColor}`}
       edges={["top"]}
     >
-      <TouchableWithoutFeedback onPress={() => setSelectedDate(null)}>
-        <View className="py-2 h-screen">
-          <CustomText
-            className="text-6xl text-center"
-            style={{ height: 96, lineHeight: 96 }}
-          >
-            Stats
-          </CustomText>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 18,
+          paddingBottom: insets.bottom,
+        }}
+      >
+        <TouchableWithoutFeedback onPress={() => setSelectedDate(null)}>
+          <View className="py-2 h-screen">
+            <CustomText
+              className="text-6xl text-center"
+              style={{ height: 96, lineHeight: 96 }}
+            >
+              Stats
+            </CustomText>
 
-          <View className="px-12 gap-2">
-            <StatCard
-              label="Sessions Started"
-              stats={stats.totalSessions}
-              backgroundColor={backgroundColor}
-            />
-            <StatCard
-              label="Completed Sessions"
-              stats={stats.totalCompletedSessions}
-              backgroundColor={backgroundColor}
-            />
-            <StatCard
-              label="Focused"
-              stats={stats.timeFocused}
-              backgroundColor={backgroundColor}
-            />
-            <StatCard
-              label="Short Break"
-              stats={stats.shortBreak}
-              backgroundColor={backgroundColor}
-            />
-            <StatCard
-              label="Long Break"
-              stats={stats.longBreak}
-              backgroundColor={backgroundColor}
-            />
-            <StatCard
-              label="Breaks"
-              stats={stats.allBreaks}
-              backgroundColor={backgroundColor}
+            <View className="px-12 gap-2">
+              <StatCard
+                label="Sessions Started"
+                stats={stats.totalSessions}
+                backgroundColor={backgroundColor}
+              />
+              <StatCard
+                label="Completed Sessions"
+                stats={stats.totalCompletedSessions}
+                backgroundColor={backgroundColor}
+              />
+              <StatCard
+                label="Focused"
+                stats={stats.timeFocused}
+                backgroundColor={backgroundColor}
+              />
+              <StatCard
+                label="Short Break"
+                stats={stats.shortBreak}
+                backgroundColor={backgroundColor}
+              />
+              <StatCard
+                label="Long Break"
+                stats={stats.longBreak}
+                backgroundColor={backgroundColor}
+              />
+              <StatCard
+                label="Breaks"
+                stats={stats.allBreaks}
+                backgroundColor={backgroundColor}
+              />
+            </View>
+
+            <Calendar
+              markedDates={markedDates}
+              dailyStats={dailyStats}
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
             />
           </View>
-
-          <Calendar
-            markedDates={markedDates}
-            dailyStats={dailyStats}
-            selectedDate={selectedDate}
-            onSelectDate={setSelectedDate}
-          />
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </ScrollView>
     </SafeAreaView>
   );
 }
