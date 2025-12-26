@@ -42,3 +42,12 @@ export type SessionType = {
   potatoHealth: number | null;
   completed: number | null;
 };
+
+export type StatsType = {
+  totalSessions: number;
+  totalCompletedSessions: number;
+  timeFocused: string;
+  shortBreak: string;
+  longBreak: string;
+  allBreaks: string;
+};
