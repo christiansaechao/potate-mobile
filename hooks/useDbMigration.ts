@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { migrate } from "drizzle-orm/expo-sqlite/migrator";
 import { db } from "../db/client";
-import { migrations } from "../drizzle/migrations";
-import journal from "../drizzle/meta/_journal.json" with { type: "json" };
+import migrations from "../drizzle/migrations";
 
 let migrationsDone = false;
 
@@ -10,9 +9,6 @@ export function useDbMigrations() {
   const [ready, setReady] = useState(migrationsDone);
   const [error, setError] = useState<unknown>(null);
 
-  const data = {
-    migrationsFolder: "../drizzle/",
-  };
   useEffect(() => {
     if (migrationsDone) return;
 
@@ -20,7 +16,7 @@ export function useDbMigrations() {
     console.log("Starting migrations...", db);
     (async () => {
       try {
-        await migrate(db, { journal, migrations });
+        await migrate(db, migrations);
         migrationsDone = true;
         if (!cancelled) setReady(true);
       } catch (e) {
