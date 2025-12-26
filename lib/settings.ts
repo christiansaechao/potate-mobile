@@ -11,16 +11,16 @@ const userOps = {
     const result = await db.select().from(userSettings);
 
     if (result.length === 0) {
-      const result = await db
+      const newUser = await db
         .insert(userSettings)
         .values({ name: "default", email: "default" })
         .returning()
         .then((res) => res[0]);
 
-      return result;
+      return newUser;
     }
 
-    return result;
+    return result[0];
   },
 
   async createUserSettings(settings: {}) {

@@ -15,20 +15,25 @@ import { PotatoArea } from "../../components/potato/PotatoArea";
 import { ProgressBar } from "../../components/potato/ProgressBar";
 import { TimerControls } from "../../components/potato/TimerControls";
 import { TimerDisplay } from "../../components/potato/TimerDisplay";
+import { LevelDisplay } from "@/components/potato/LevelDisplay";
 
 import { DEFAULT_TIMES, THEMES } from "../../constants/constants";
 
 import { View } from "react-native";
 import { useTheme } from "../../hooks/useTheme";
 
+import userOps from "@/lib/settings";
+
 export default function App() {
-  const [health, setHealth] = useState(80);
+  const [health, setHealth] = useState(100);
   const [quote, setQuote] = useState<PotatoQuote>({
     text: "Ready to lock in?",
     mood: "happy",
   });
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
   const { theme, setTheme, mode, setMode } = useTheme();
+
+  const [exp, setExp] = useState(0);
 
   useNotifications();
   const { StartSession, StopSession, StartInterval, StopInterval } =
@@ -38,6 +43,7 @@ export default function App() {
     state,
     setState,
     timeLeft,
+    setTimeLeft,
     switchMode,
     toggleTimer,
     resetTimer,
@@ -50,10 +56,19 @@ export default function App() {
     StartSession,
     StopSession,
     StartInterval,
-    StopInterval
+    StopInterval,
+    setExp
   );
 
-  useLeaveAppConsequence(state, setHealth, setState, fetchQuote, mode);
+  useLeaveAppConsequence(
+    state,
+    setHealth,
+    setState,
+    setTimeLeft,
+    fetchQuote,
+    mode,
+    setExp
+  );
   const timeToCallQuote = 300;
 
   useEffect(() => {
@@ -86,6 +101,14 @@ export default function App() {
 
   const backgroundColor = THEMES[theme][mode];
 
+  useEffect(() => {
+    const fetchExp = async () => {
+      const result = await userOps.getAllSettings();
+      setExp(result.exp ?? 0);
+    };
+    fetchExp();
+  }, []);
+
   return (
     <SafeAreaView
       className={`flex-1 transition-colors duration-300 ${backgroundColor}`}
@@ -108,6 +131,8 @@ export default function App() {
           fetchWisdom={fetchQuote}
           mood={quote.mood}
         />
+
+        <LevelDisplay total_exp={exp} />
 
         <TimerDisplay time={timeLabel} label={TimerState[state]} />
 

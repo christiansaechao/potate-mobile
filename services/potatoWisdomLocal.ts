@@ -146,11 +146,11 @@ const determineMood = (
    MAIN FUNCTION — DROP-IN REPLACEMENT
 --------------------------------------------------------*/
 
-export const getPotatoWisdom = async (
+export const getPotatoWisdom = (
   mode: TimerMode,
   state: TimerState,
   health: number
-): Promise<PotatoQuote> => {
+) => {
   const mood = determineMood(state, health);
   const text = pickRandom(QUOTES[mood]);
 

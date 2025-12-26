@@ -14,4 +14,6 @@ export const userSettings = sqliteTable("settings", {
   ),
   vibration: integer("vibration").default(0),
   weekly_goal: integer("weekly_goal").default(5),
+  exp: integer("exp").default(0),
+  level: integer("level").default(1),
 });

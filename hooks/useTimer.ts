@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
-import { DEFAULT_TIMES } from "../constants/constants";
+import { DEFAULT_TIMES, EXP_REWARDS } from "../constants/constants";
 import { getPotatoWisdom } from "../services/potatoWisdomLocal";
 import { SessionType, TimerMode, TimerState } from "../types/types";
+import userOps from "@/lib/settings";
 
 type IUseTimer = (
   mode: TimerMode,
@@ -12,12 +13,14 @@ type IUseTimer = (
   StartSession: (mode: string) => Promise<SessionType>,
   StopSession: (h: number, completed?: number) => void,
   StartInterval: (id: number) => void,
-  StopInterval: () => void
+  StopInterval: () => void,
+  setExp: React.Dispatch<React.SetStateAction<number>>
 ) => {
   mode: TimerMode;
   state: TimerState;
   setState: React.Dispatch<React.SetStateAction<TimerState>>;
   timeLeft: number;
+  setTimeLeft: React.Dispatch<React.SetStateAction<number>>;
   switchMode: (newMode: TimerMode) => void;
   toggleTimer: () => void;
   resetTimer: () => void;
@@ -36,7 +39,8 @@ export const useTimer: IUseTimer = (
   StartSession,
   StopSession,
   StartInterval,
-  StopInterval
+  StopInterval,
+  setExp
 ) => {
   const [state, setState] = useState<TimerState>(TimerState.IDLE);
   const [timeLeft, setTimeLeft] = useState(DEFAULT_TIMES[TimerMode.FOCUS]);
@@ -46,7 +50,7 @@ export const useTimer: IUseTimer = (
 
   const fetchQuote = useCallback(
     async (m: TimerMode, s: TimerState, hp: number) => {
-      return await getPotatoWisdom(m, s, hp);
+      return getPotatoWisdom(m, s, hp);
     },
     []
   );
@@ -74,6 +78,7 @@ export const useTimer: IUseTimer = (
         const sessionRes = await StartSession(mode);
         setSession(sessionRes);
         StartInterval(sessionRes.id);
+        setHealth(100);
         setState(TimerState.RUNNING);
       } catch (err) {
         console.error("Failed to start session", err);
@@ -98,7 +103,30 @@ export const useTimer: IUseTimer = (
       setState(TimerState.RUNNING);
       return;
     }
-  }, [state, mode, StartSession, StartInterval, StopInterval, session]);
+
+    // 🔹 Case 4: COMPLETED → start fresh session
+    if (state === TimerState.COMPLETED) {
+      try {
+        setTimeLeft(DEFAULT_TIMES[mode]);
+        const sessionRes = await StartSession(mode);
+        setSession(sessionRes);
+        StartInterval(sessionRes.id);
+        setHealth(100);
+        setState(TimerState.RUNNING);
+      } catch (err) {
+        console.error("Failed to start session", err);
+      }
+      return;
+    }
+  }, [
+    state,
+    mode,
+    StartSession,
+    StartInterval,
+    StopInterval,
+    setHealth,
+    session,
+  ]);
 
   const resetTimer = useCallback(() => {
     StopInterval();
@@ -121,18 +149,26 @@ export const useTimer: IUseTimer = (
       setTimeLeft((t) => {
         if (t <= 1) {
           if (timerRef.current) clearInterval(timerRef.current);
-          setState(TimerState.COMPLETED);
           StopSession(health, 1);
-          // fire and forget wisdom
+          // Award XP
+          setExp((prev) => {
+            const reward =
+              EXP_REWARDS[mode] + Math.floor(Math.random() * 10) - 5;
+            // implement levels to scale
+            const newExp = prev + reward;
+            userOps.updateUserSettings({ exp: newExp });
+
+            return newExp;
+          });
           fetchQuote(mode, TimerState.COMPLETED, health);
-          return 0;
+          setState(TimerState.COMPLETED);
+          return DEFAULT_TIMES[mode];
         }
         return t - 1;
       });
 
-      // ❤️ Regen health slowly if app is focused
       if (AppState.currentState === "active") {
-        setHealth((h: number) => Math.min(100, h + 0.05)); // 20secs + 1% health
+        setHealth((h: number) => Math.min(100, h + 0.05)); // 20secs + 0.05% health
       }
     }, 1000);
 
@@ -146,6 +182,7 @@ export const useTimer: IUseTimer = (
     state,
     setState,
     timeLeft,
+    setTimeLeft,
     switchMode,
     toggleTimer,
     resetTimer,

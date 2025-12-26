@@ -1,14 +1,18 @@
 import * as Notifications from "expo-notifications";
 import { Dispatch, useEffect, useRef } from "react";
 import { AppState, AppStateStatus } from "react-native";
-import { TimerState } from "../types/types";
+import { DEFAULT_TIMES } from "../constants/constants";
+import { TimerMode, TimerState } from "../types/types";
+import userOps from "@/lib/settings";
 
 export const useLeaveAppConsequence = (
   state: TimerState,
   setHealth: Dispatch<React.SetStateAction<number>>,
   setState: Dispatch<React.SetStateAction<TimerState>>,
+  setTimeLeft: Dispatch<React.SetStateAction<number>>,
   fetchQuote: any,
-  mode: any
+  mode: TimerMode,
+  setExp: Dispatch<React.SetStateAction<number>>
 ) => {
   const healthRef = useRef<number | null>(null);
   const notificationRef = useRef<string | null>(null);
@@ -21,10 +25,21 @@ export const useLeaveAppConsequence = (
         if (nextAppState === "background" && state === TimerState.RUNNING) {
           //   setState(TimerState.PAUSED);
           // 30 second timer here
-          deathRef.current = setTimeout(() => {
-            setHealth(0);
-            setState(TimerState.PAUSED);
-          }, 45000); // 1000 x 45 = 45 seconds
+          let countdown = 45;
+          deathRef.current = setInterval(() => {
+            countdown--;
+            console.log("death countdown:", countdown);
+            if (countdown <= 0) {
+              console.log("potato dead");
+              if (deathRef.current) clearInterval(deathRef.current);
+              setHealth(0);
+              setState(TimerState.IDLE);
+              setTimeLeft(DEFAULT_TIMES[mode]);
+              // Reset exp on death
+              setExp(0);
+              userOps.updateUserSettings({ exp: 0 });
+            }
+          }, 1000); // every 1 second
 
           // 15 second notif here
           notificationRef.current =
@@ -43,13 +58,13 @@ export const useLeaveAppConsequence = (
           // start damage
           if (healthRef.current) clearInterval(healthRef.current);
           healthRef.current = setInterval(() => {
-            setHealth((prev: number) => Math.max(0, prev - 1));
+            setHealth((prev: number) => Math.max(0, prev - 5));
           }, 1000 * 10);
         } else if (nextAppState === "active") {
           // stop damage
           if (healthRef.current) clearInterval(healthRef.current);
           // stop death timer
-          if (deathRef.current) clearTimeout(deathRef.current);
+          if (deathRef.current) clearInterval(deathRef.current);
           // stop notificaiton timer
           if (notificationRef.current) {
             Notifications.cancelScheduledNotificationAsync(
@@ -70,10 +85,10 @@ export const useLeaveAppConsequence = (
     return () => {
       subscription.remove();
       if (healthRef.current) clearInterval(healthRef.current);
-      if (deathRef.current) clearTimeout(deathRef.current);
+      if (deathRef.current) clearInterval(deathRef.current);
       if (notificationRef.current) {
         Notifications.cancelScheduledNotificationAsync(notificationRef.current);
       }
     };
-  }, [state, setHealth, fetchQuote, mode]);
+  }, [state, setHealth, setState, setTimeLeft, fetchQuote, mode, setExp]);
 };

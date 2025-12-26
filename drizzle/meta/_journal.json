@@ -8,6 +8,13 @@
       "when": 1766193778062,
       "tag": "0000_heavy_ironclad",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1766643520195,
+      "tag": "0001_unknown_hex",
+      "breakpoints": true
     }
   ]
 }

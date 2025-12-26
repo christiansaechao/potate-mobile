@@ -1,9 +1,15 @@
 import { AppTheme, TimerMode } from "../types/types";
 
 export const DEFAULT_TIMES = {
-  [TimerMode.FOCUS]: 25 * 60,
+  [TimerMode.FOCUS]: 25 * 60, // 5 sec for testing. was 25 * 60
   [TimerMode.SHORT_BREAK]: 5 * 60,
   [TimerMode.LONG_BREAK]: 15 * 60,
+};
+
+export const EXP_REWARDS = {
+  [TimerMode.FOCUS]: 25, // increase for faster progression
+  [TimerMode.SHORT_BREAK]: 1,
+  [TimerMode.LONG_BREAK]: 2,
 };
 
 export const SETTINGS_OPTIONS = {
