@@ -4,7 +4,7 @@ import { DEFAULT_TIMES, SETTINGS_OPTIONS, THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/useTheme";
 import { StatusBar } from "expo-status-bar";
 import { Bed, Bell, Clock, Coffee, Target, User } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, Switch, View } from "react-native";
 import {
   SafeAreaView,
@@ -15,12 +15,16 @@ import { Colors } from "../../constants/theme";
 import { generateMockData } from "@/lib/dev-utils";
 import userOps from "@/lib/settings";
 
-import { TimerMode } from "@/types/types";
+import { SettingsType, TimerMode } from "@/types/types";
 
 import { ThemeSelector } from "@/components/potato/ThemeSelector";
 
 export default function Settings() {
   const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    setSettings();
+  }, []);
 
   // Theme(s)
   const { theme, setTheme, mode } = useTheme();
@@ -34,6 +38,18 @@ export default function Settings() {
   const [longBreak, setLongBreak] = useState(
     DEFAULT_TIMES[TimerMode.LONG_BREAK]
   );
+  const [userSettings, setUserSettings] = useState<SettingsType>({
+    email: "Not found",
+    exp: 0,
+    focus_duration: DEFAULT_TIMES[TimerMode.FOCUS],
+    id: 0,
+    level: 1,
+    long_break_duration: DEFAULT_TIMES[TimerMode.LONG_BREAK],
+    name: "Not found",
+    short_break_duration: DEFAULT_TIMES[TimerMode.SHORT_BREAK],
+    vibration: 0,
+    weekly_goal: 0,
+  });
   const [vibration, setVibration] = useState(true);
 
   const resetData = async () => {
@@ -45,6 +61,15 @@ export default function Settings() {
       }
     } catch {
       console.error("Error trying to reset user data");
+    }
+  };
+
+  const setSettings = async () => {
+    try {
+      const settings = await userOps.getAllSettings();
+      setUserSettings((prev) => ({ ...prev, ...settings }));
+    } catch (error) {
+      console.error("Error fetching user settings:", error);
     }
   };
 
@@ -97,7 +122,7 @@ export default function Settings() {
             shadowOffset: { width: 0, height: 10 },
             elevation: 6,
           }}
-          className={`${backgroundColor}`}
+          className={`transition-colors duration-300 ${backgroundColor}`}
         >
           {/* Profile */}
           <View style={{ alignItems: "center" }}>
@@ -122,7 +147,7 @@ export default function Settings() {
                 lineHeight: 34,
               }}
             >
-              Akhilan
+              {userSettings.name}
             </CustomText>
 
             <CustomText
@@ -133,7 +158,7 @@ export default function Settings() {
                 marginTop: 2,
               }}
             >
-              test@email.com
+              {userSettings.email}
             </CustomText>
           </View>
 
@@ -155,7 +180,6 @@ export default function Settings() {
                 shadowColor: "#000",
                 shadowOpacity: 0.25,
                 shadowRadius: 18,
-                shadowOffset: { width: 0, height: 10 },
                 padding: 16,
               }}
             >

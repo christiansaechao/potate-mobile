@@ -13,7 +13,6 @@ export function useDbMigrations() {
     if (migrationsDone) return;
 
     let cancelled = false;
-    console.log("Starting migrations...", db);
     (async () => {
       try {
         await migrate(db, migrations);
@@ -29,6 +28,5 @@ export function useDbMigrations() {
       cancelled = true;
     };
   }, []);
-
   return { ready, error };
 }

@@ -51,3 +51,16 @@ export type StatsType = {
   longBreak: string;
   allBreaks: string;
 };
+//should fix this later (add normalizer)
+export type SettingsType = {
+  email: string | null;
+  id: number | null;
+  level: number | null;
+  exp: number | null;
+  focus_duration: number | null;
+  short_break_duration: number | null;
+  long_break_duration: number | null;
+  vibration: number | null;
+  weekly_goal: number | null;
+  name: string | null;
+};
