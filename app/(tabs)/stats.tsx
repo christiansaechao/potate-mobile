@@ -1,7 +1,7 @@
 import Calendar from "@/components/Calendar";
 import { CustomText } from "@/components/custom";
 import { THEMES } from "@/constants/constants";
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 
 import StatCard from "@/components/ui/stats-card";
 import { formatTime, getTimeInSeconds } from "@/lib/helper";

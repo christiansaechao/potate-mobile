@@ -1,4 +1,4 @@
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { PickerProps } from "@/types/settings.types";
 import { Pressable, View } from "react-native";
 import { Colors } from "../../constants/theme";

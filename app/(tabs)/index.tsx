@@ -20,7 +20,7 @@ import { LevelDisplay } from "@/components/potato/LevelDisplay";
 import { DEFAULT_TIMES, THEMES } from "../../constants/constants";
 
 import { View } from "react-native";
-import { useTheme } from "../../hooks/useTheme";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 
 import userOps from "@/lib/settings";
 

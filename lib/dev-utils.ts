@@ -1,6 +1,7 @@
 import { db } from "@/db/client";
 import { intervals, sessions } from "@/db/schema";
 import { TimerMode } from "@/types/types";
+import userOps from "@/lib/settings";
 
 export const generateMockData = async () => {
   try {
@@ -77,5 +78,17 @@ export const generateMockData = async () => {
   } catch (error) {
     console.error("Error generating mock data:", error);
     return { success: false, error };
+  }
+};
+
+export const resetData = async () => {
+  try {
+    const { success } = await userOps.resetUserData();
+
+    if (success) {
+      alert("Successful deletion");
+    }
+  } catch {
+    console.error("Error trying to reset user data");
   }
 };

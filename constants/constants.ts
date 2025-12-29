@@ -14,6 +14,7 @@ export const EXP_REWARDS = {
 
 export const SETTINGS_OPTIONS = {
   POMODORO: [
+    { label: "25 min", value: 25 },
     { label: "30 min", value: 30 },
     { label: "45 min", value: 45 },
     { label: "60 min", value: 60 },
