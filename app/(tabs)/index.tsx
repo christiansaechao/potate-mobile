@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { View } from "react-native";
+
 import { PotatoQuote, TimerState } from "../../types/types";
 
 import { useNotifications } from "@/hooks/useNotifications";
@@ -17,27 +19,31 @@ import { TimerControls } from "../../components/potato/TimerControls";
 import { TimerDisplay } from "../../components/potato/TimerDisplay";
 import { LevelDisplay } from "@/components/potato/LevelDisplay";
 
-import { DEFAULT_TIMES, THEMES } from "../../constants/constants";
+import { THEMES } from "../../constants/constants";
 
-import { View } from "react-native";
-import { useTheme } from "../../hooks/useTheme";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 
-import userOps from "@/lib/settings";
+import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
 
 export default function App() {
+  // hook calls
+  const user = useUserDefaults();
+  const { theme, mode, setMode } = useTheme();
+  const { StartSession, StopSession, StartInterval, StopInterval } =
+    useSessionManager();
+  useNotifications();
+
+  // states
   const [health, setHealth] = useState(100);
   const [quote, setQuote] = useState<PotatoQuote>({
     text: "Ready to lock in?",
     mood: "happy",
   });
+  const [exp, setExp] = useState<number>(user.exp ?? 0);
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
-  const { theme, setTheme, mode, setMode } = useTheme();
 
-  const [exp, setExp] = useState(0);
-
-  useNotifications();
-  const { StartSession, StopSession, StartInterval, StopInterval } =
-    useSessionManager();
+  const timeToCallQuote = 300;
+  const backgroundColor = THEMES[theme][mode];
 
   const {
     state,
@@ -57,7 +63,8 @@ export default function App() {
     StopSession,
     StartInterval,
     StopInterval,
-    setExp
+    setExp,
+    user
   );
 
   useLeaveAppConsequence(
@@ -69,7 +76,23 @@ export default function App() {
     mode,
     setExp
   );
-  const timeToCallQuote = 300;
+
+  const progress = useMemo(() => {
+    const totalMinutes = user?.[mode];
+    if (totalMinutes == null || totalMinutes <= 0) return 0;
+
+    const totalSeconds = totalMinutes * 60;
+    const pct = ((totalSeconds - timeLeft) / totalSeconds) * 100;
+    return Math.max(0, Math.min(100, pct));
+  }, [mode, timeLeft, user]);
+
+  const timeLabel = useMemo(() => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    const mm = String(minutes).padStart(2, "0");
+    const ss = String(seconds).padStart(2, "0");
+    return `${mm}:${ss}`;
+  }, [timeLeft]);
 
   useEffect(() => {
     let mounted = true;
@@ -85,30 +108,6 @@ export default function App() {
     };
   }, [mode, state, health, fetchQuote, timeLeft]);
 
-  const progress = useMemo(() => {
-    const total = DEFAULT_TIMES[mode];
-    if (!total) return 0;
-    return ((total - timeLeft) / total) * 100;
-  }, [mode, timeLeft]);
-
-  const timeLabel = useMemo(() => {
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    const mm = String(minutes).padStart(2, "0");
-    const ss = String(seconds).padStart(2, "0");
-    return `${mm}:${ss}`;
-  }, [timeLeft]);
-
-  const backgroundColor = THEMES[theme][mode];
-
-  useEffect(() => {
-    const fetchExp = async () => {
-      const result = await userOps.getAllSettings();
-      setExp(result.exp ?? 0);
-    };
-    fetchExp();
-  }, []);
-
   return (
     <SafeAreaView
       className={`flex-1 transition-colors duration-300 ${backgroundColor}`}
@@ -122,7 +121,6 @@ export default function App() {
         <ModeSwitcher mode={mode} switchMode={switchMode} />
 
         <HealthBar health={health} />
-
         <PotatoArea
           quote={quote}
           mode={mode}

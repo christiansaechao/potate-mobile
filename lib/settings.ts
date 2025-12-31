@@ -1,5 +1,6 @@
 import { intervals, sessions, userSettings } from "@/db/schema";
 import { db } from "../db/client";
+import { IUserContext } from "@/types/settings.types";
 
 const userOps = {
   async getUser() {
@@ -29,7 +30,12 @@ const userOps = {
   },
 
   async updateUserSettings(settings: {}) {
-    await db.update(userSettings).set({ ...settings });
+    const user = await db
+      .update(userSettings)
+      .set({ ...settings })
+      .returning();
+
+    return { success: true, data: user[0] };
   },
 
   async resetUserData() {

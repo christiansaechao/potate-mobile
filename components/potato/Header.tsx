@@ -1,4 +1,4 @@
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { Volume2, VolumeX } from "lucide-react-native";
 import React from "react";
 import { View } from "react-native";

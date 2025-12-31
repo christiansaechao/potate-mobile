@@ -1,10 +1,10 @@
 import { THEMES } from "@/constants/constants";
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 import React from "react";
 import { FlatList, Modal, Platform, Pressable, View } from "react-native";
 
 import { styles } from "@/components/settings/Styles";
-import { CustomText } from "../custom/custom-text.tsx";
+import { CustomText } from "../custom/custom-text";
 
 type Option<T> = { label: string; value: T };
 

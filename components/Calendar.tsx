@@ -1,5 +1,5 @@
 import { HEX_THEMES, THEMES } from "@/constants/constants";
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { formatTime } from "@/lib/helper";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { useState } from "react";

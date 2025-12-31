@@ -1,88 +1,100 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { View, Animated, Dimensions } from "react-native";
 
-interface Particle {
+type ConfettiParticle = {
   id: number;
-  x: number; // px
-  y: number; // px
   color: string;
-  rotation: number;
   scale: number;
-  speedX: number; // px per frame-ish
-  speedY: number; // px per frame-ish
-}
+  pos: Animated.ValueXY;
+  rotation: Animated.Value;
+};
 
 export const Confetti: React.FC = () => {
-  const [particles, setParticles] = useState<Particle[]>([]);
-  const rafRef = useRef<number | null>(null);
+  const { width, height } = Dimensions.get("window");
+  const colors = ["#FFD700", "#FF6347", "#00BFFF", "#32CD32", "#FF69B4"];
+
+  const particles = useRef<ConfettiParticle[]>(
+    Array.from({ length: 60 }, (_, i) => ({
+      id: i,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      scale: Math.random() * 0.6 + 0.4,
+      pos: new Animated.ValueXY({ x: width / 2, y: height / 2 }),
+      rotation: new Animated.Value(0),
+    }))
+  ).current;
 
   useEffect(() => {
-    const { width, height } = Dimensions.get("window");
-    const colors = ["#FFD700", "#FF6347", "#00BFFF", "#32CD32", "#FF69B4"];
+    const animations = particles.map((p) => {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = Math.random() * 220 + 120;
 
-    // spawn
-    const initial: Particle[] = [];
-    for (let i = 0; i < 50; i++) {
-      initial.push({
-        id: i,
-        x: width / 2,
-        y: height / 2,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        rotation: Math.random() * 360,
-        scale: Math.random() * 0.5 + 0.5,
-        speedX: (Math.random() - 0.5) * 8, // horizontal spread
-        speedY: (Math.random() - 1.2) * 10, // upward burst
-      });
-    }
-    setParticles(initial);
+      const burstX = Math.cos(angle) * radius;
+      const burstY = Math.sin(angle) * radius;
 
-    let last = Date.now();
+      const driftX = burstX * 0.4; // more sideways drift = more natural
+      const fallY = height + 900;
 
-    const tick = () => {
-      const now = Date.now();
-      const dt = Math.min(2, (now - last) / 16); // normalize to ~60fps steps
-      last = now;
+      return Animated.parallel([
+        Animated.sequence([
+          Animated.timing(p.pos, {
+            toValue: { x: width / 2 + burstX, y: height / 2 + burstY },
+            duration: 550,
+            useNativeDriver: true,
+          }),
+          Animated.timing(p.pos, {
+            toValue: { x: width / 2 + burstX + driftX, y: fallY },
+            duration: 1700,
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.timing(p.rotation, {
+          toValue: 1,
+          duration: 2200,
+          useNativeDriver: true,
+        }),
+      ]);
+    });
 
-      setParticles(
-        (prev) =>
-          prev
-            .map((p) => ({
-              ...p,
-              x: p.x + p.speedX * dt,
-              y: p.y + p.speedY * dt,
-              rotation: p.rotation + 10 * dt,
-              speedY: p.speedY + 0.35 * dt, // gravity
-            }))
-            .filter((p) => p.y < height + 60) // remove if off bottom
-      );
-
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
-
-    return () => {
-      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
-    };
+    Animated.stagger(6, animations).start();
   }, []);
 
   return (
-    <View className="absolute inset-0 pointer-events-none overflow-hidden z-50">
-      {particles.map((p) => (
-        <Animated.View
-          key={p.id}
-          style={{
-            position: "absolute",
-            left: p.x,
-            top: p.y,
-            width: 12,
-            height: 12,
-            backgroundColor: p.color,
-            borderRadius: 2,
-            transform: [{ rotate: `${p.rotation}deg` }, { scale: p.scale }],
-          }}
-        />
-      ))}
+    <View
+      pointerEvents="none"
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 999,
+      }}
+    >
+      {particles.map((p) => {
+        const rotate = p.rotation.interpolate({
+          inputRange: [0, 1],
+          outputRange: ["0deg", "720deg"],
+        });
+
+        return (
+          <Animated.View
+            key={p.id}
+            style={{
+              position: "absolute",
+              width: 12,
+              height: 12,
+              backgroundColor: p.color,
+              borderRadius: 3,
+              transform: [
+                { translateX: p.pos.x },
+                { translateY: p.pos.y },
+                { rotate },
+                { scale: p.scale },
+              ],
+            }}
+          />
+        );
+      })}
     </View>
   );
 };

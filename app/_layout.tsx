@@ -1,8 +1,3 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider as NavigationThemeProvider,
-} from "@react-navigation/native";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
@@ -10,9 +5,6 @@ import "react-native-reanimated";
 import "../global.css";
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
-import { ThemeProvider } from "../contexts/theming/ThemeProviders";
-import { useColorScheme } from "../hooks/use-color-scheme";
 
 import { CustomText } from "@/components/custom";
 import { db, expo_db } from "../db/client";
@@ -27,7 +19,6 @@ import { useFonts } from "expo-font";
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const { success, error } = useMigrations(db, migrations);
 
   useDrizzleStudio(expo_db);
@@ -55,21 +46,12 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider className="flex-1">
-      <NavigationThemeProvider
-        value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-      >
-        <ThemeProvider>
-          <Stack screenOptions={{ headerBlurEffect: "dark" }}>
-            <Stack.Screen name="(gate)" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="(onboarding)"
-              options={{ headerShown: false }}
-            />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </NavigationThemeProvider>
+      <Stack screenOptions={{ headerBlurEffect: "dark" }}>
+        <Stack.Screen name="(gate)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+      </Stack>
+      <StatusBar style="auto" />
     </SafeAreaProvider>
   );
 }

@@ -14,6 +14,11 @@ export const EXP_REWARDS = {
 
 export const SETTINGS_OPTIONS = {
   POMODORO: [
+    { label: "5 min", value: 5 },
+    { label: "10 min", value: 10 },
+    { label: "15 min", value: 15 },
+    { label: "20 min", value: 20 },
+    { label: "25 min", value: 25 },
     { label: "30 min", value: 30 },
     { label: "45 min", value: 45 },
     { label: "60 min", value: 60 },
@@ -22,11 +27,13 @@ export const SETTINGS_OPTIONS = {
   SHORT_BREAK: [
     { label: "5 min", value: 5 },
     { label: "10 min", value: 10 },
+    { label: "15 min", value: 15 },
   ],
 
   LONG_BREAK: [
     { label: "15 min", value: 15 },
     { label: "20 min", value: 20 },
+    { label: "30 min", value: 30 },
   ],
 };
 

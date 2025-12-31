@@ -2,7 +2,7 @@ import { Pause, Play, RotateCcw, SkipForward } from "lucide-react-native";
 import React from "react";
 import { View } from "react-native";
 import { Colors } from "../../constants/theme";
-import { useTheme } from "../../hooks/useTheme";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { TimerMode, TimerState } from "../../types/types";
 import { ThemedPressable } from "../ui/themed-pressable";
 

@@ -2,34 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 import { DEFAULT_TIMES, EXP_REWARDS } from "../constants/constants";
 import { getPotatoWisdom } from "../services/potatoWisdomLocal";
-import { SessionType, TimerMode, TimerState } from "../types/types";
 import userOps from "@/lib/settings";
-
-type IUseTimer = (
-  mode: TimerMode,
-  setMode: (mode: TimerMode) => void,
-  health: number,
-  setHealth: (h: number | ((h: number) => number)) => void,
-  StartSession: (mode: string) => Promise<SessionType>,
-  StopSession: (h: number, completed?: number) => void,
-  StartInterval: (id: number) => void,
-  StopInterval: () => void,
-  setExp: React.Dispatch<React.SetStateAction<number>>
-) => {
-  mode: TimerMode;
-  state: TimerState;
-  setState: React.Dispatch<React.SetStateAction<TimerState>>;
-  timeLeft: number;
-  setTimeLeft: React.Dispatch<React.SetStateAction<number>>;
-  switchMode: (newMode: TimerMode) => void;
-  toggleTimer: () => void;
-  resetTimer: () => void;
-  fetchQuote: (
-    m: TimerMode,
-    s: TimerState,
-    hp: number
-  ) => Promise<{ text: string; mood: string }>;
-};
+import { SessionType, TimerMode, TimerState } from "@/types/types";
+import { IUseTimer } from "@/types/settings.types";
 
 export const useTimer: IUseTimer = (
   mode,
@@ -40,13 +15,25 @@ export const useTimer: IUseTimer = (
   StopSession,
   StartInterval,
   StopInterval,
-  setExp
+  setExp,
+  user
 ) => {
+  // ✅ Always compute current mode duration from latest user settings
+  // Use ?? (not ||) so 0 doesn't get treated as "missing"
+  const userTimeSeconds =
+    user?.[mode] != null ? Number(user[mode]) * 60 : undefined;
+  const modeDuration = userTimeSeconds ?? DEFAULT_TIMES[mode];
   const [state, setState] = useState<TimerState>(TimerState.IDLE);
-  const [timeLeft, setTimeLeft] = useState(DEFAULT_TIMES[TimerMode.FOCUS]);
+  const [timeLeft, setTimeLeft] = useState<number>(modeDuration);
   const [session, setSession] = useState<SessionType | null>(null);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const stopLocalTimer = useCallback(() => {
+    if (timerRef.current == null) return;
+    clearInterval(timerRef.current);
+    timerRef.current = null;
+  }, []);
 
   const fetchQuote = useCallback(
     async (m: TimerMode, s: TimerState, hp: number) => {
@@ -55,20 +42,31 @@ export const useTimer: IUseTimer = (
     []
   );
 
+  // ✅ When user settings arrive / change, sync timeLeft *only if not running*
+  // (prevents overwriting countdown mid-session)
+  useEffect(() => {
+    if (state === TimerState.RUNNING) return;
+
+    setTimeLeft(modeDuration);
+  }, [modeDuration, state]);
+
   const switchMode = useCallback(
     (newMode: TimerMode) => {
       // stop everything about the current session
       StopInterval();
       StopSession(health);
-
-      if (timerRef.current) clearInterval(timerRef.current);
+      stopLocalTimer();
 
       setMode(newMode);
       setState(TimerState.IDLE);
-      setTimeLeft(DEFAULT_TIMES[newMode]);
+
+      // ✅ IMPORTANT: compute duration based on newMode (not old mode)
+      const newDuration = user?.[newMode] ?? DEFAULT_TIMES[newMode];
+      setTimeLeft(newDuration);
+
       setSession(null);
     },
-    [StopSession, StopInterval, health, setMode]
+    [StopSession, StopInterval, health, setMode, stopLocalTimer, user]
   );
 
   const toggleTimer = useCallback(async () => {
@@ -107,7 +105,7 @@ export const useTimer: IUseTimer = (
     // 🔹 Case 4: COMPLETED → start fresh session
     if (state === TimerState.COMPLETED) {
       try {
-        setTimeLeft(DEFAULT_TIMES[mode]);
+        setTimeLeft(modeDuration);
         const sessionRes = await StartSession(mode);
         setSession(sessionRes);
         StartInterval(sessionRes.id);
@@ -121,6 +119,7 @@ export const useTimer: IUseTimer = (
   }, [
     state,
     mode,
+    modeDuration,
     StartSession,
     StartInterval,
     StopInterval,
@@ -131,14 +130,20 @@ export const useTimer: IUseTimer = (
   const resetTimer = useCallback(() => {
     StopInterval();
     StopSession(health);
-
-    if (timerRef.current) clearInterval(timerRef.current);
+    stopLocalTimer();
 
     setState(TimerState.IDLE);
-    setTimeLeft(DEFAULT_TIMES[mode]);
+    setTimeLeft(modeDuration);
     setHealth(100);
     setSession(null);
-  }, [mode, setHealth, StopInterval, StopSession, health]);
+  }, [
+    modeDuration,
+    setHealth,
+    StopInterval,
+    StopSession,
+    health,
+    stopLocalTimer,
+  ]);
 
   // Timer countdown + health regen
   useEffect(() => {
@@ -148,34 +153,47 @@ export const useTimer: IUseTimer = (
       // ⏳ countdown
       setTimeLeft((t) => {
         if (t <= 1) {
-          if (timerRef.current) clearInterval(timerRef.current);
+          stopLocalTimer();
           StopSession(health, 1);
+
           // Award XP
           setExp((prev) => {
             const reward =
               EXP_REWARDS[mode] + Math.floor(Math.random() * 10) - 5;
-            // implement levels to scale
             const newExp = prev + reward;
             userOps.updateUserSettings({ exp: newExp });
-
             return newExp;
           });
+
           fetchQuote(mode, TimerState.COMPLETED, health);
           setState(TimerState.COMPLETED);
-          return DEFAULT_TIMES[mode];
+
+          // ✅ reset display to current mode duration
+          return modeDuration;
         }
+
         return t - 1;
       });
 
       if (AppState.currentState === "active") {
-        setHealth((h: number) => Math.min(100, h + 0.05)); // 20secs + 0.05% health
+        setHealth((h: number) => Math.min(100, h + 0.05));
       }
     }, 1000);
 
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      stopLocalTimer();
     };
-  }, [state, mode, fetchQuote, health, setHealth, StopSession]);
+  }, [
+    state,
+    mode,
+    modeDuration,
+    fetchQuote,
+    health,
+    setHealth,
+    StopSession,
+    setExp,
+    stopLocalTimer,
+  ]);
 
   return {
     mode,
