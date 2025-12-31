@@ -13,16 +13,10 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import IntervalOps from "../../lib/intervals";
+import IntervalOps from "@/lib/intervals";
 
-/**
- * Time spent focused: count all intervals with only completed sessions time
- * Number of sessions finished
- * Time spent unfocused?
- * Time spent on short break: count all intervals with only completed session time where session = short break
- * Time spent on long break: count all intervals with only completed session time where session = long break
- * Time spent on a break: count all intervals with only completed session time where session = short break & long break
- */
+import Animated, { FadeInDown } from "react-native-reanimated";
+import AnimatedDashedBorder from "@/components/ui/AnimatedDashedBoarder";
 
 export default function Stats() {
   const { theme, mode } = useTheme();
@@ -171,55 +165,46 @@ export default function Stats() {
           paddingBottom: insets.bottom,
         }}
       >
+        <View className="py-2">
+          <CustomText
+            className="text-6xl text-center"
+            style={{ height: 96, lineHeight: 96 }}
+          >
+            Spud Report
+          </CustomText>
+          <AnimatedDashedBorder>
+            {[
+              { label: "Sessions Started", value: stats.totalSessions },
+              {
+                label: "Completed Sessions",
+                value: stats.totalCompletedSessions,
+              },
+              { label: "Focused", value: stats.timeFocused },
+              { label: "Short Break", value: stats.shortBreak },
+              { label: "Long Break", value: stats.longBreak },
+              { label: "Breaks", value: stats.allBreaks },
+            ].map((item, index) => (
+              <Animated.View
+                key={item.label}
+                entering={FadeInDown.delay(index * 300).springify()}
+              >
+                <StatCard
+                  label={item.label}
+                  stats={item.value}
+                  backgroundColor={backgroundColor}
+                />
+              </Animated.View>
+            ))}
+          </AnimatedDashedBorder>
+        </View>
+
         <TouchableWithoutFeedback onPress={() => setSelectedDate(null)}>
-          <View className="py-2 h-screen">
-            <CustomText
-              className="text-6xl text-center"
-              style={{ height: 96, lineHeight: 96 }}
-            >
-              Stats
-            </CustomText>
-
-            <View className="px-12 gap-2">
-              <StatCard
-                label="Sessions Started"
-                stats={stats.totalSessions}
-                backgroundColor={backgroundColor}
-              />
-              <StatCard
-                label="Completed Sessions"
-                stats={stats.totalCompletedSessions}
-                backgroundColor={backgroundColor}
-              />
-              <StatCard
-                label="Focused"
-                stats={stats.timeFocused}
-                backgroundColor={backgroundColor}
-              />
-              <StatCard
-                label="Short Break"
-                stats={stats.shortBreak}
-                backgroundColor={backgroundColor}
-              />
-              <StatCard
-                label="Long Break"
-                stats={stats.longBreak}
-                backgroundColor={backgroundColor}
-              />
-              <StatCard
-                label="Breaks"
-                stats={stats.allBreaks}
-                backgroundColor={backgroundColor}
-              />
-            </View>
-
-            <Calendar
-              markedDates={markedDates}
-              dailyStats={dailyStats}
-              selectedDate={selectedDate}
-              onSelectDate={setSelectedDate}
-            />
-          </View>
+          <Calendar
+            markedDates={markedDates}
+            dailyStats={dailyStats}
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
+          />
         </TouchableWithoutFeedback>
       </ScrollView>
     </SafeAreaView>
