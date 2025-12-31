@@ -3,23 +3,23 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { View } from "react-native";
 
-import { PotatoQuote, TimerState } from "../../types/types";
+import { PotatoQuote, TimerState } from "@/types/types";
 
 import { useNotifications } from "@/hooks/useNotifications";
 import { useSessionManager } from "@/hooks/useSessionManager";
-import { useLeaveAppConsequence } from "../../hooks/useLeaveAppConsequence";
-import { useTimer } from "../../hooks/useTimer";
+import { useLeaveAppConsequence } from "@/hooks/useLeaveAppConsequence";
+import { useTimer } from "@/hooks/useTimer";
 
-import { Header } from "../../components/potato/Header";
-import { HealthBar } from "../../components/potato/HealthBar";
-import { ModeSwitcher } from "../../components/potato/ModeSwitcher";
-import { PotatoArea } from "../../components/potato/PotatoArea";
-import { ProgressBar } from "../../components/potato/ProgressBar";
-import { TimerControls } from "../../components/potato/TimerControls";
-import { TimerDisplay } from "../../components/potato/TimerDisplay";
+import { Header } from "@/components/potato/Header";
+import { HealthBar } from "@/components/potato/HealthBar";
+import { ModeSwitcher } from "@/components/potato/ModeSwitcher";
+import { PotatoArea } from "@/components/potato/PotatoArea";
+import { ProgressBar } from "@/components/potato/ProgressBar";
+import { TimerControls } from "@/components/potato/TimerControls";
+import { TimerDisplay } from "@/components/potato/TimerDisplay";
 import { LevelDisplay } from "@/components/potato/LevelDisplay";
 
-import { THEMES } from "../../constants/constants";
+import { THEMES } from "@/constants/constants";
 
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 
