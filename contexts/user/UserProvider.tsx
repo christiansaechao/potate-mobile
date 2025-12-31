@@ -4,20 +4,40 @@ import { TimerMode } from "@/types/types";
 import UserOps from "@/lib/settings";
 import { IUserContext } from "@/types/settings.types";
 
-export const UserContext = createContext<IUserContext>({
+export const UserContext = createContext<
+  IUserContext & {
+    updateUser: (user: IUserContext) => void;
+  }
+>({
   name: "",
   email: "",
-  focus_duration: DEFAULT_TIMES[TimerMode.FOCUS],
-  short_break_duration: DEFAULT_TIMES[TimerMode.SHORT_BREAK],
-  long_break_duration: DEFAULT_TIMES[TimerMode.LONG_BREAK],
-  vibration: false,
+  FOCUS: DEFAULT_TIMES[TimerMode.FOCUS],
+  SHORT_BREAK: DEFAULT_TIMES[TimerMode.SHORT_BREAK],
+  LONG_BREAK: DEFAULT_TIMES[TimerMode.LONG_BREAK],
+  vibration: 0,
   weekly_goal: 5,
   exp: 0,
   level: 0,
+  updateUser: () => {},
 });
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<IUserContext | undefined>();
+  const [user, setUser] = useState<IUserContext>({
+    name: "",
+    email: "",
+    FOCUS: DEFAULT_TIMES[TimerMode.FOCUS],
+    SHORT_BREAK: DEFAULT_TIMES[TimerMode.SHORT_BREAK],
+    LONG_BREAK: DEFAULT_TIMES[TimerMode.LONG_BREAK],
+    vibration: 0,
+    weekly_goal: 5,
+    exp: 0,
+    level: 0,
+  });
+
+  function updateUser(user: IUserContext) {
+    setUser(user);
+  }
+
   useEffect(() => {
     const getUserData = async () => {
       const users = await UserOps.getUser();
@@ -30,13 +50,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       setUser({
         name: userData.name ?? "",
         email: userData.email ?? "",
-        focus_duration:
-          userData.focus_duration ?? DEFAULT_TIMES[TimerMode.FOCUS],
-        short_break_duration:
-          userData.short_break_duration ?? DEFAULT_TIMES[TimerMode.SHORT_BREAK],
-        long_break_duration:
-          userData.long_break_duration ?? DEFAULT_TIMES[TimerMode.LONG_BREAK],
-        vibration: (userData.vibration ?? 0) === 1,
+        FOCUS: userData.focus_duration,
+        SHORT_BREAK: userData.short_break_duration,
+        LONG_BREAK: userData.long_break_duration,
+        vibration: userData.vibration,
         weekly_goal: userData.weekly_goal ?? 5,
         exp: userData.exp ?? 0,
         level: userData.level ?? 0,
@@ -46,23 +63,5 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     getUserData();
   }, []);
 
-  return (
-    <UserContext
-      value={
-        user ?? {
-          name: "",
-          email: "",
-          focus_duration: DEFAULT_TIMES[TimerMode.FOCUS],
-          short_break_duration: DEFAULT_TIMES[TimerMode.SHORT_BREAK],
-          long_break_duration: DEFAULT_TIMES[TimerMode.LONG_BREAK],
-          vibration: false,
-          weekly_goal: 5,
-          exp: 0,
-          level: 0,
-        }
-      }
-    >
-      {children}
-    </UserContext>
-  );
+  return <UserContext value={{ ...user, updateUser }}>{children}</UserContext>;
 };

@@ -12,6 +12,8 @@ import {
   View,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useConfetti } from "@/hooks/useConfetti";
+import { Confetti } from "@/components/potato/Confetti";
 
 export default function Onboarding() {
   const [step, setStep] = useState(1);
@@ -22,6 +24,8 @@ export default function Onboarding() {
     short_break_duration: DEFAULT_TIMES[TimerMode.SHORT_BREAK] / 60,
     long_break_duration: DEFAULT_TIMES[TimerMode.LONG_BREAK] / 60,
   });
+
+  const { showConfetti, triggerConfetti } = useConfetti();
 
   const updateUserSettings = async () => {
     try {
@@ -40,6 +44,11 @@ export default function Onboarding() {
         return;
       }
     }
+
+    if (step === 4) {
+      triggerConfetti();
+    }
+
     setStep((prev) => prev + 1);
   };
 
@@ -50,6 +59,7 @@ export default function Onboarding() {
   return (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1 bg-orange-50 justify-center px-6">
+        <Text>{step}</Text>
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -70,17 +80,15 @@ export default function Onboarding() {
 
           {/* Step 2: Meet Potate */}
           {step === 2 && (
-            <View className="items-center space-y-6">
+            <View className="flex gap-4 items-center space-y-6">
               <Text className="text-3xl font-bold text-orange-900 text-center">
                 Meet Potate
               </Text>
               <View className="h-60 w-60 bg-orange-200 rounded-full items-center justify-center border-4 border-orange-300">
-                <Text className="text-6xl">
-                  <PotatoSprite />
-                </Text>
+                <PotatoSprite />
               </View>
               <Text className="text-xl font-bold text-red-500 text-center ">
-                Don&apos;t let him die!
+                Stay on task… Potate believes in you!
               </Text>
             </View>
           )}
@@ -169,19 +177,6 @@ export default function Onboarding() {
             </View>
           )}
 
-          {/* Step 5: Completion */}
-          {step === 5 && (
-            <View className="items-center space-y-6">
-              <Text className="text-6xl">🎉</Text>
-              <Text className="text-3xl font-bold text-orange-900 text-center">
-                Congrats!
-              </Text>
-              <Text className="text-lg text-orange-700 text-center px-4">
-                You&apos;re all set up. Time to lock in!
-              </Text>
-            </View>
-          )}
-
           {/* Navigation Button */}
           {step < 5 && (
             <TouchableOpacity
@@ -194,19 +189,30 @@ export default function Onboarding() {
             </TouchableOpacity>
           )}
 
+          {/* Step 5: Completion */}
           {step === 5 && (
-            <TouchableOpacity
-              className="mt-12 bg-green-500 py-4 px-8 rounded-full shadow-lg active:bg-green-600"
-              onPress={() => {
-                updateUserSettings();
-              }}
-            >
-              <Text className="text-white text-center font-bold text-lg">
-                Let&apos;s Go!
+            <View className="items-center space-y-6">
+              <Text className="text-6xl">🎉</Text>
+              <Text className="text-3xl font-bold text-orange-900 text-center">
+                Congrats!
               </Text>
-            </TouchableOpacity>
+              <Text className="text-lg text-orange-700 text-center px-4">
+                You&apos;re all set up. Time to lock in!
+              </Text>
+              <TouchableOpacity
+                className="mt-12 bg-green-500 py-4 px-8 rounded-full shadow-lg active:bg-green-600 w-full"
+                onPress={() => {
+                  updateUserSettings();
+                }}
+              >
+                <Text className="text-white text-center font-bold text-lg">
+                  Let&apos;s Go!
+                </Text>
+              </TouchableOpacity>
+            </View>
           )}
         </ScrollView>
+        {showConfetti && <Confetti />}
       </SafeAreaView>
     </SafeAreaProvider>
   );

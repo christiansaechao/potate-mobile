@@ -21,11 +21,13 @@ export default function Settings() {
   // User Settings
   const user = useUserDefaults();
 
-  const [pomodoro, setPomodoro] = useState(user.focus_duration);
-  const [shortBreak, setShortBreak] = useState(user.short_break_duration);
-  const [longBreak, setLongBreak] = useState(user.long_break_duration);
+  const [pomodoro, setPomodoro] = useState(user.FOCUS);
+  const [shortBreak, setShortBreak] = useState(user.SHORT_BREAK);
+  const [longBreak, setLongBreak] = useState(user.LONG_BREAK);
   const [weeklyGoal, setWeeklyGoal] = useState(user.weekly_goal);
-  const [vibration, setVibration] = useState(user.vibration);
+  const [vibration, setVibration] = useState<boolean>(
+    Boolean(user.vibration ?? 0)
+  );
 
   return (
     <SafeAreaView

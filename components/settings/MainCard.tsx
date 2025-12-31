@@ -1,10 +1,13 @@
+import { useState, useRef, useEffect } from "react";
 import { View, Pressable, Switch } from "react-native";
 import { Bed, Bell, Clock, Coffee, Target, User } from "lucide-react-native";
+import * as Haptics from "expo-haptics";
 
 // Components
 import { CustomText } from "../custom";
 import { Row } from "./Row";
 import { ThemeSelector } from "@/components/potato/ThemeSelector";
+import { Confetti } from "../potato/Confetti";
 
 // constants
 import { SETTINGS_OPTIONS, THEMES } from "@/constants/constants";
@@ -17,19 +20,22 @@ import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { generateMockData, resetData } from "@/lib/dev-utils";
 import { IUserContext } from "@/types/settings.types";
 import UserOps from "@/lib/settings";
+import { useConfetti } from "@/hooks/useConfetti";
 
 interface IMainCard {
-  user: IUserContext;
-  pomodoro: number;
-  shortBreak: number;
-  longBreak: number;
-  weeklyGoal: number;
-  vibration: boolean;
-  setPomodoro: React.Dispatch<React.SetStateAction<number>>;
-  setShortBreak: React.Dispatch<React.SetStateAction<number>>;
-  setLongBreak: React.Dispatch<React.SetStateAction<number>>;
+  user: IUserContext & {
+    updateUser: (user: IUserContext) => void;
+  };
+  pomodoro: number | null;
+  shortBreak: number | null;
+  longBreak: number | null;
+  weeklyGoal: number | null;
+  vibration: boolean | null;
+  setPomodoro: React.Dispatch<React.SetStateAction<number | null>>;
+  setShortBreak: React.Dispatch<React.SetStateAction<number | null>>;
+  setLongBreak: React.Dispatch<React.SetStateAction<number | null>>;
   setVibration: React.Dispatch<React.SetStateAction<boolean>>;
-  setWeeklyGoal: React.Dispatch<React.SetStateAction<number>>;
+  setWeeklyGoal: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 export const MainCard = ({
@@ -48,6 +54,26 @@ export const MainCard = ({
   const { theme, setTheme, mode } = useTheme();
   const backgroundColor = THEMES[theme][mode];
   const color = Colors[theme];
+  const vibrationValue = vibration ? true : false;
+
+  const { showConfetti, triggerConfetti } = useConfetti();
+
+  function handleSaveSettings() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    triggerConfetti();
+    UserOps.updateUserSettings(
+      {
+        name: user.name,
+        email: user.email,
+        focus_duration: pomodoro,
+        short_break_duration: shortBreak,
+        long_break_duration: longBreak,
+        weekly_goal: weeklyGoal,
+        vibration,
+      },
+      user.updateUser
+    );
+  }
 
   return (
     <View
@@ -202,7 +228,7 @@ export const MainCard = ({
         </View>
 
         <Switch
-          value={vibration}
+          value={vibrationValue}
           onValueChange={setVibration}
           trackColor={{
             false: "rgba(255,255,255,0.18)",
@@ -261,17 +287,7 @@ export const MainCard = ({
 
       {/* Save */}
       <Pressable
-        onPress={() =>
-          UserOps.updateUserSettings({
-            name: user.name,
-            email: user.email,
-            focus_duration: pomodoro,
-            short_break_duration: shortBreak,
-            long_break_duration: longBreak,
-            weekly_goal: weeklyGoal,
-            vibration,
-          })
-        }
+        onPress={() => handleSaveSettings()}
         style={{
           backgroundColor: "#7FD7BE",
           borderRadius: 999,
@@ -338,6 +354,7 @@ export const MainCard = ({
           Generate Data (dev)
         </CustomText>
       </Pressable>
+      {showConfetti && <Confetti />}
     </View>
   );
 };
