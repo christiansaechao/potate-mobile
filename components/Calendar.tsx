@@ -1,4 +1,4 @@
-import { HEX_THEMES, THEMES } from "@/constants/constants";
+import { COLORS, HEX_THEMES, THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { formatTime } from "@/lib/helper";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
@@ -69,6 +69,7 @@ export default function Calendar({
 
   // Theme colors
   const ThemeColor = THEMES[theme][mode];
+  const AccentColor = COLORS[theme].text;
   const BorderThemeColor = HEX_THEMES[theme][mode];
 
   // Navigation Logic
@@ -112,7 +113,7 @@ export default function Calendar({
           className={`p-2 ${!canGoPrev ? "opacity-30" : ""}`}
           disabled={!canGoPrev}
         >
-          <ChevronLeft size={24} className={ThemeColor} />
+          <ChevronLeft size={24} color={AccentColor} />
         </TouchableOpacity>
         <CustomText className={`text-xl font-bold ${ThemeColor}`}>
           {currentDate.toLocaleString("default", { month: "long" })} {year}
@@ -122,7 +123,7 @@ export default function Calendar({
           className={`p-2 ${!canGoNext ? "opacity-30" : ""}`}
           disabled={!canGoNext}
         >
-          <ChevronRight size={24} className={ThemeColor} />
+          <ChevronRight size={24} color={AccentColor} />
         </TouchableOpacity>
       </View>
 
