@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 import { PotatoQuote, TimerState } from "../../types/types";
 
@@ -19,7 +19,7 @@ import { TimerControls } from "../../components/potato/TimerControls";
 import { TimerDisplay } from "../../components/potato/TimerDisplay";
 import { LevelDisplay } from "@/components/potato/LevelDisplay";
 
-import { DEFAULT_TIMES, THEMES } from "../../constants/constants";
+import { THEMES } from "../../constants/constants";
 
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 

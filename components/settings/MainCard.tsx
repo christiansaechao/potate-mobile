@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { View, Pressable, Switch } from "react-native";
 import { Bed, Bell, Clock, Coffee, Target, User } from "lucide-react-native";
 import * as Haptics from "expo-haptics";
@@ -21,59 +21,78 @@ import { generateMockData, resetData } from "@/lib/dev-utils";
 import { IUserContext } from "@/types/settings.types";
 import UserOps from "@/lib/settings";
 import { useConfetti } from "@/hooks/useConfetti";
+import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
 
-interface IMainCard {
-  user: IUserContext & {
-    updateUser: (user: IUserContext) => void;
-  };
-  pomodoro: number | null;
-  shortBreak: number | null;
-  longBreak: number | null;
-  weeklyGoal: number | null;
-  vibration: boolean | null;
-  setPomodoro: React.Dispatch<React.SetStateAction<number | null>>;
-  setShortBreak: React.Dispatch<React.SetStateAction<number | null>>;
-  setLongBreak: React.Dispatch<React.SetStateAction<number | null>>;
-  setVibration: React.Dispatch<React.SetStateAction<boolean>>;
-  setWeeklyGoal: React.Dispatch<React.SetStateAction<number | null>>;
-}
-
-export const MainCard = ({
-  user,
-  pomodoro,
-  shortBreak,
-  longBreak,
-  weeklyGoal,
-  vibration,
-  setPomodoro,
-  setShortBreak,
-  setLongBreak,
-  setVibration,
-  setWeeklyGoal,
-}: IMainCard) => {
+export const MainCard = () => {
+  // hooks
+  const {
+    name,
+    email,
+    FOCUS,
+    SHORT_BREAK,
+    LONG_BREAK,
+    vibration: userVibration,
+    weekly_goal,
+    updateUser,
+  } = useUserDefaults();
   const { theme, setTheme, mode } = useTheme();
-  const backgroundColor = THEMES[theme][mode];
-  const color = Colors[theme];
-  const vibrationValue = vibration ? true : false;
-
   const { showConfetti, triggerConfetti } = useConfetti();
 
-  function handleSaveSettings() {
+  // state variables
+  const [pomodoro, setPomodoro] = useState(FOCUS);
+  const [shortBreak, setShortBreak] = useState(SHORT_BREAK);
+  const [longBreak, setLongBreak] = useState(LONG_BREAK);
+  const [weeklyGoal, setWeeklyGoal] = useState(weekly_goal);
+  const [vibration, setVibration] = useState(userVibration === 1);
+
+  const backgroundColor = THEMES[theme][mode];
+  const color = Colors[theme];
+
+  async function handleSaveSettings() {
+    const { success, data } = await UserOps.updateUserSettings({
+      name: name,
+      email: email,
+      focus_duration: pomodoro,
+      short_break_duration: shortBreak,
+      long_break_duration: longBreak,
+      weekly_goal: weeklyGoal,
+      vibration: vibration,
+    });
+
+    if (!success)
+      throw new Error("There was an issue when trying to save user data");
+
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     triggerConfetti();
-    UserOps.updateUserSettings(
-      {
-        name: user.name,
-        email: user.email,
-        focus_duration: pomodoro,
-        short_break_duration: shortBreak,
-        long_break_duration: longBreak,
-        weekly_goal: weeklyGoal,
-        vibration,
-      },
-      user.updateUser
-    );
+
+    // Map the database response to IUserContext format
+    const mappedUser: IUserContext = {
+      name: data.name,
+      email: data.email,
+      FOCUS: data.focus_duration,
+      SHORT_BREAK: data.short_break_duration,
+      LONG_BREAK: data.long_break_duration,
+      vibration: data.vibration === 1 ? 1 : 0,
+      weekly_goal: data.weekly_goal,
+      exp: data.exp,
+      level: data.level,
+    };
+
+    // Ensure updateUser exists before calling it
+    if (updateUser) {
+      updateUser(mappedUser);
+    } else {
+      console.error("updateUser is not available");
+    }
   }
+
+  useEffect(() => {
+    setPomodoro(FOCUS);
+    setShortBreak(SHORT_BREAK);
+    setLongBreak(LONG_BREAK);
+    setWeeklyGoal(weekly_goal);
+    setVibration(Boolean(userVibration));
+  }, [FOCUS, SHORT_BREAK, LONG_BREAK, weekly_goal, userVibration]);
 
   return (
     <View
@@ -112,7 +131,7 @@ export const MainCard = ({
             lineHeight: 34,
           }}
         >
-          {user.name}
+          {name}
         </CustomText>
 
         <CustomText
@@ -123,7 +142,7 @@ export const MainCard = ({
             marginTop: 2,
           }}
         >
-          {user.email}
+          {email}
         </CustomText>
       </View>
 
@@ -228,7 +247,7 @@ export const MainCard = ({
         </View>
 
         <Switch
-          value={vibrationValue}
+          value={Boolean(userVibration)}
           onValueChange={setVibration}
           trackColor={{
             false: "rgba(255,255,255,0.18)",

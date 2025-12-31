@@ -18,17 +18,6 @@ export default function Settings() {
   const { theme, mode } = useTheme();
   const backgroundColor = THEMES[theme][mode];
 
-  // User Settings
-  const user = useUserDefaults();
-
-  const [pomodoro, setPomodoro] = useState(user.FOCUS);
-  const [shortBreak, setShortBreak] = useState(user.SHORT_BREAK);
-  const [longBreak, setLongBreak] = useState(user.LONG_BREAK);
-  const [weeklyGoal, setWeeklyGoal] = useState(user.weekly_goal);
-  const [vibration, setVibration] = useState<boolean>(
-    Boolean(user.vibration ?? 0)
-  );
-
   return (
     <SafeAreaView
       edges={["top"]}
@@ -43,19 +32,7 @@ export default function Settings() {
         }}
       >
         <SettingsHeader />
-        <MainCard
-          user={user}
-          pomodoro={pomodoro}
-          shortBreak={shortBreak}
-          longBreak={longBreak}
-          weeklyGoal={weeklyGoal}
-          vibration={vibration}
-          setPomodoro={setPomodoro}
-          setShortBreak={setShortBreak}
-          setLongBreak={setLongBreak}
-          setVibration={setVibration}
-          setWeeklyGoal={setWeeklyGoal}
-        />
+        <MainCard />
       </ScrollView>
 
       <StatusBar style="light" />

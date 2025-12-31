@@ -59,7 +59,6 @@ export default function Onboarding() {
   return (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1 bg-orange-50 justify-center px-6">
-        <Text>{step}</Text>
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,

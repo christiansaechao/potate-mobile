@@ -40,24 +40,29 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const getUserData = async () => {
-      const users = await UserOps.getUser();
+      try {
+        const users = await UserOps.getUser();
 
-      if (!users || users.length === 0) {
-        throw new Error("There was in issue when trying to get user data");
+        if (!users || users.length === 0) {
+          throw new Error("There was in issue when trying to get user data");
+        }
+
+        const userData = users[0];
+        setUser({
+          name: userData.name ?? "",
+          email: userData.email ?? "",
+          FOCUS: userData.focus_duration,
+          SHORT_BREAK: userData.short_break_duration,
+          LONG_BREAK: userData.long_break_duration,
+          vibration: userData.vibration === 1 ? 1 : 0,
+          weekly_goal: userData.weekly_goal ?? 5,
+          exp: userData.exp ?? 0,
+          level: userData.level ?? 0,
+        });
+      } catch (error) {
+        console.error("getUserData failed in UserDefaultsProvider", { error });
+        alert("Oops! We couldn't load your settings. Please try again.");
       }
-
-      const userData = users[0];
-      setUser({
-        name: userData.name ?? "",
-        email: userData.email ?? "",
-        FOCUS: userData.focus_duration,
-        SHORT_BREAK: userData.short_break_duration,
-        LONG_BREAK: userData.long_break_duration,
-        vibration: userData.vibration,
-        weekly_goal: userData.weekly_goal ?? 5,
-        exp: userData.exp ?? 0,
-        level: userData.level ?? 0,
-      });
     };
 
     getUserData();

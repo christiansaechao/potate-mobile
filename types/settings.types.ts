@@ -17,7 +17,7 @@ export interface IUserContext {
   FOCUS: number | null;
   SHORT_BREAK: number | null;
   LONG_BREAK: number | null;
-  vibration: number | null;
+  vibration: number;
   weekly_goal: number | null;
   exp: number | null;
   level: number | null;
