@@ -1,6 +1,6 @@
 import { Redirect, Tabs } from "expo-router";
 import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
-import { FloatingTabBar } from "../../components/ui/floating-tab-bar";
+import { Navbar } from "../../components/ui/navbar/navbar.tsx";
 import { IconSymbol } from "../../components/ui/icon-symbol";
 import { UserProvider } from "@/contexts/user/UserProvider";
 import { ThemeProvider } from "@/contexts/theming/ThemeProviders";
@@ -32,7 +32,7 @@ export default function TabLayout() {
               headerShown: false,
               tabBarShowLabel: false,
             }}
-            tabBar={(props) => <FloatingTabBar {...props} />}
+            tabBar={(props) => <Navbar {...props} />}
           >
             <Tabs.Screen
               name="stats"
