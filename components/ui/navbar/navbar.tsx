@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: "center",
-    paddingHorizontal: 30,
+    paddingHorizontal: 45,
   },
   tabBar: {
     overflow: "hidden",
