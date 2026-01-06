@@ -185,7 +185,7 @@ export default function Stats() {
           <View className="py-2">
             <CustomText
               className="text-6xl text-center"
-              style={{ height: 96, lineHeight: 96 }}
+              style={{ height: 70, lineHeight: 70 }}
             >
               Spud Report
             </CustomText>
