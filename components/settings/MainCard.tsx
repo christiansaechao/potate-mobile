@@ -8,6 +8,7 @@ import { CustomText } from "../custom";
 import { Row } from "./Row";
 import { ThemeSelector } from "@/components/potato/ThemeSelector";
 import { Confetti } from "../potato/Confetti";
+import Divider from "../ui/divider";
 
 // constants
 import { SETTINGS_OPTIONS, THEMES } from "@/constants/constants";
@@ -146,6 +147,8 @@ export const MainCard = () => {
         </CustomText>
       </View>
 
+      <Divider />
+
       {/* Focus Timer */}
       <View style={{ marginTop: 18 }}>
         <CustomText
@@ -207,6 +210,8 @@ export const MainCard = () => {
           />
         </View>
       </View>
+
+      <Divider />
 
       <ThemeSelector currentTheme={theme} onSelect={setTheme} />
 
@@ -303,6 +308,8 @@ export const MainCard = () => {
           {weeklyGoal}
         </CustomText>
       </View>
+
+      <Divider />
 
       {/* Save */}
       <Pressable

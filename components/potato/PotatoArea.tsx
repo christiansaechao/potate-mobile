@@ -55,9 +55,9 @@ export const PotatoArea: React.FC<PotatoAreaProps> = ({
   });
 
   return (
-    <View className="relative h-72 w-full flex-col items-center justify-end pb-4">
+    <View className="relative w-full flex-col items-center justify-end">
       {/* Chat bubble pinned to top */}
-      <View className="absolute top-0 w-full z-20">
+      <View className="w-full">
         <ChatBubble text={quote.text} visible={true} />
       </View>
 

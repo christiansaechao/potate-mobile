@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Animated, Easing, Platform, Text, View } from "react-native";
 
 interface ChatBubbleProps {
@@ -8,6 +8,27 @@ interface ChatBubbleProps {
 
 export const ChatBubble: React.FC<ChatBubbleProps> = ({ text, visible }) => {
   const bounceAnim = useRef(new Animated.Value(0)).current;
+  const [displayed, setDisplayed] = useState("");
+  const [showTail, setShowTail] = useState(false);
+
+  useEffect(() => {
+    let i = 0;
+    setDisplayed(""); // reset when new text comes in
+
+    const interval = setInterval(() => {
+      i++;
+      setDisplayed(text.slice(0, i));
+
+      if (i === 30) setShowTail(true);
+
+      if (i >= text.length) clearInterval(interval);
+    }, 40);
+
+    return () => {
+      setShowTail(false);
+      clearInterval(interval);
+    };
+  }, [text]);
 
   useEffect(() => {
     if (!visible || !text) return;
@@ -41,11 +62,11 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ text, visible }) => {
   });
 
   return (
-    <View className="items-center mb-4">
+    <View className="items-center">
       <Animated.View
         className="
-          relative bg-white border-4 border-gray-800 rounded-2xl
-          p-4 max-w-xs items-center
+          relative bg-white border-2 border-gray-800 rounded-2xl
+          p-4 items-center
         "
         style={{
           transform: [{ scale }],
@@ -64,44 +85,45 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ text, visible }) => {
           style={{ fontFamily: "Baloo" }}
           className="text-gray-800 font-bold text-center text-lg leading-snug"
         >
-          {text}
+          {displayed}
         </Text>
+        {showTail && (
+          <>
+            <View
+              style={{
+                position: "absolute",
+                bottom: -15,
+                left: "50%",
+                marginLeft: -10,
+                width: 0,
+                height: 0,
+                borderLeftWidth: 10,
+                borderRightWidth: 10,
+                borderTopWidth: 15,
+                borderLeftColor: "transparent",
+                borderRightColor: "transparent",
+                borderTopColor: "#1F2937", // gray-800
+              }}
+            />
 
-        {/* Tail outer */}
-        <View
-          style={{
-            position: "absolute",
-            bottom: -15,
-            left: "50%",
-            marginLeft: -10,
-            width: 0,
-            height: 0,
-            borderLeftWidth: 10,
-            borderRightWidth: 10,
-            borderTopWidth: 15,
-            borderLeftColor: "transparent",
-            borderRightColor: "transparent",
-            borderTopColor: "#1F2937", // gray-800
-          }}
-        />
-
-        {/* Tail inner */}
-        <View
-          style={{
-            position: "absolute",
-            bottom: -11,
-            left: "50%",
-            marginLeft: -6,
-            width: 0,
-            height: 0,
-            borderLeftWidth: 6,
-            borderRightWidth: 6,
-            borderTopWidth: 11,
-            borderLeftColor: "transparent",
-            borderRightColor: "transparent",
-            borderTopColor: "#FFFFFF",
-          }}
-        />
+            <View
+              style={{
+                position: "absolute",
+                bottom: -11,
+                left: "50%",
+                marginLeft: -6,
+                width: 0,
+                height: 0,
+                borderLeftWidth: 6,
+                borderRightWidth: 6,
+                borderTopWidth: 11,
+                borderLeftColor: "transparent",
+                borderRightColor: "transparent",
+                borderTopColor: "#FFFFFF",
+              }}
+            />
+          </>
+        )}
       </Animated.View>
     </View>
   );

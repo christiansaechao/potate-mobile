@@ -17,6 +17,9 @@ import IntervalOps from "@/lib/intervals";
 
 import Animated, { FadeInDown } from "react-native-reanimated";
 import AnimatedDashedBorder from "@/components/ui/AnimatedDashedBoarder";
+import AnimatedScreen from "@/components/ui/AnimatedScreen";
+
+import Divider from "@/components/ui/divider";
 
 export default function Stats() {
   const { theme, mode } = useTheme();
@@ -29,6 +32,19 @@ export default function Stats() {
     longBreak: "0",
     allBreaks: "0",
   });
+
+  const formattedStats = [
+    { label: "Sessions Started", value: stats.totalSessions },
+    {
+      label: "Completed Sessions",
+      value: stats.totalCompletedSessions,
+    },
+    { label: "Focused", value: stats.timeFocused },
+    { label: "Short Break", value: stats.shortBreak },
+    { label: "Long Break", value: stats.longBreak },
+    { label: "Breaks", value: stats.allBreaks },
+  ];
+
   const [markedDates, setMarkedDates] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
@@ -165,25 +181,15 @@ export default function Stats() {
           paddingBottom: insets.bottom,
         }}
       >
-        <View className="py-2">
-          <CustomText
-            className="text-6xl text-center"
-            style={{ height: 96, lineHeight: 96 }}
-          >
-            Spud Report
-          </CustomText>
-          <AnimatedDashedBorder>
-            {[
-              { label: "Sessions Started", value: stats.totalSessions },
-              {
-                label: "Completed Sessions",
-                value: stats.totalCompletedSessions,
-              },
-              { label: "Focused", value: stats.timeFocused },
-              { label: "Short Break", value: stats.shortBreak },
-              { label: "Long Break", value: stats.longBreak },
-              { label: "Breaks", value: stats.allBreaks },
-            ].map((item, index) => (
+        <AnimatedScreen>
+          <View className="py-2">
+            <CustomText
+              className="text-6xl text-center"
+              style={{ height: 96, lineHeight: 96 }}
+            >
+              Spud Report
+            </CustomText>
+            {formattedStats.map((item, index) => (
               <Animated.View
                 key={item.label}
                 entering={FadeInDown.delay(index * 300).springify()}
@@ -195,17 +201,19 @@ export default function Stats() {
                 />
               </Animated.View>
             ))}
-          </AnimatedDashedBorder>
-        </View>
+          </View>
 
-        <TouchableWithoutFeedback onPress={() => setSelectedDate(null)}>
-          <Calendar
-            markedDates={markedDates}
-            dailyStats={dailyStats}
-            selectedDate={selectedDate}
-            onSelectDate={setSelectedDate}
-          />
-        </TouchableWithoutFeedback>
+          <Divider />
+
+          <TouchableWithoutFeedback onPress={() => setSelectedDate(null)}>
+            <Calendar
+              markedDates={markedDates}
+              dailyStats={dailyStats}
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+            />
+          </TouchableWithoutFeedback>
+        </AnimatedScreen>
       </ScrollView>
     </SafeAreaView>
   );

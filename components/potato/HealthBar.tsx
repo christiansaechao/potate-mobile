@@ -12,10 +12,10 @@ export const HealthBar: React.FC<HealthBarProps> = ({ health }) => {
     health < 30 ? "bg-red-500" : health < 70 ? "bg-yellow-400" : "bg-green-400";
 
   return (
-    <View className="w-full px-8 mt-2">
+    <View className="w-full">
       <View className="flex-row justify-between">
-        <CustomText className="text-xs font-bold">Potato Health</CustomText>
-        <CustomText className="text-xs font-bold">
+        <CustomText className="text-md font-bold">HP</CustomText>
+        <CustomText className="text-md font-bold">
           {Math.round(health)}%
         </CustomText>
       </View>

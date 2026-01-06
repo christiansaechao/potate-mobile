@@ -16,10 +16,8 @@ type TimerControlsProps = {
 
 export const TimerControls: React.FC<TimerControlsProps> = ({
   state,
-  mode,
   toggleTimer,
   resetTimer,
-  switchMode,
 }) => {
   const { theme } = useTheme();
 
@@ -30,7 +28,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
       {/* Main play/pause button */}
       <ThemedPressable
         onPress={toggleTimer}
-        className="w-20 h-20 rounded-3xl flex items-center justify-center active:scale-95"
+        className="w-20 h-20 rounded-3xl flex items-center justify-center active:scale-95 "
         style={{
           // shadow-lg equivalent
           shadowColor: "#000",
@@ -47,17 +45,27 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
           <Play size={32} color={color.buttonIconColor} />
         )}
       </ThemedPressable>
+      <ThemedPressable
+        onPress={resetTimer}
+        className="w-20 h-20 rounded-3xl flex items-center justify-center active:scale-95"
+        style={{
+          // shadow-lg equivalent
+          shadowColor: "#000",
+          shadowOpacity: 0.2,
+          shadowRadius: 8,
+          shadowOffset: { width: 0, height: 4 },
+          elevation: 6,
+        }}
+        hitSlop={8}
+      >
+        <RotateCcw size={32} color={color.buttonIconColor} />
+      </ThemedPressable>
+    </View>
+  );
+};
 
-      {/* Side controls */}
-      <View className="flex-col gap-3">
-        <ThemedPressable
-          onPress={resetTimer}
-          className="p-3 bg-white/20 rounded-xl active:opacity-80"
-          hitSlop={6}
-        >
-          <RotateCcw size={20} color={color.buttonIconColor} />
-        </ThemedPressable>
-
+{
+  /* add back in mdoe and switchMode to the props if you want to add thsi back in 
         <ThemedPressable
           onPress={() =>
             switchMode(
@@ -68,8 +76,5 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
           hitSlop={6}
         >
           <SkipForward size={20} color={color.buttonIconColor} />
-        </ThemedPressable>
-      </View>
-    </View>
-  );
-};
+        </ThemedPressable> */
+}

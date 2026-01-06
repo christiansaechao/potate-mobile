@@ -24,6 +24,7 @@ import { THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 
 import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
+import AnimatedScreen from "@/components/ui/AnimatedScreen";
 
 export default function App() {
   // hook calls
@@ -112,38 +113,40 @@ export default function App() {
     <SafeAreaView
       className={`flex-1 transition-colors duration-300 ${backgroundColor}`}
     >
-      <View className="flex-1 items-center justify-between py-6 px-4 pb-24">
-        <Header
-          isSound={isSoundEnabled}
-          toggleSound={() => setIsSoundEnabled((p) => !p)}
-        />
+      <AnimatedScreen>
+        <View className="flex-1 items-center justify-between py-6 px-4 pb-24">
+          <Header
+            isSound={isSoundEnabled}
+            toggleSound={() => setIsSoundEnabled((p) => !p)}
+          />
 
-        <ModeSwitcher mode={mode} switchMode={switchMode} />
+          <ModeSwitcher mode={mode} switchMode={switchMode} />
+          <View className="w-full flex justify-center items-center gap-4 py-2">
+            <HealthBar health={health} />
+            <LevelDisplay total_exp={exp} />
+          </View>
 
-        <HealthBar health={health} />
-        <PotatoArea
-          quote={quote}
-          mode={mode}
-          state={state}
-          health={health}
-          fetchWisdom={fetchQuote}
-          mood={quote.mood}
-        />
+          <PotatoArea
+            quote={quote}
+            mode={mode}
+            state={state}
+            health={health}
+            fetchWisdom={fetchQuote}
+            mood={quote.mood}
+          />
+          <TimerDisplay time={timeLabel} label={TimerState[state]} />
 
-        <LevelDisplay total_exp={exp} />
+          <TimerControls
+            state={state}
+            mode={mode}
+            toggleTimer={toggleTimer}
+            resetTimer={resetTimer}
+            switchMode={switchMode}
+          />
 
-        <TimerDisplay time={timeLabel} label={TimerState[state]} />
-
-        <TimerControls
-          state={state}
-          mode={mode}
-          toggleTimer={toggleTimer}
-          resetTimer={resetTimer}
-          switchMode={switchMode}
-        />
-
-        <ProgressBar progress={progress} />
-      </View>
+          <ProgressBar progress={progress} />
+        </View>
+      </AnimatedScreen>
     </SafeAreaView>
   );
 }

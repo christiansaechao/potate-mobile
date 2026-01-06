@@ -105,7 +105,7 @@ export default function Calendar({
   };
 
   return (
-    <View className="p-4 z-50">
+    <View className="z-50">
       {/* Header */}
       <View className="flex-row justify-between items-center mb-4">
         <TouchableOpacity

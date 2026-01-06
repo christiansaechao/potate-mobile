@@ -10,6 +10,7 @@ import {
 import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
 import { SettingsHeader } from "@/components/settings/SettingsHeader";
 import { MainCard } from "@/components/settings/MainCard";
+import AnimatedScreen from "@/components/ui/AnimatedScreen";
 
 export default function Settings() {
   const insets = useSafeAreaInsets();
@@ -31,8 +32,10 @@ export default function Settings() {
           paddingBottom: insets.bottom + 80,
         }}
       >
-        <SettingsHeader />
-        <MainCard />
+        <AnimatedScreen>
+          <SettingsHeader />
+          <MainCard />
+        </AnimatedScreen>
       </ScrollView>
 
       <StatusBar style="light" />

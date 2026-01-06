@@ -35,8 +35,8 @@ export default function PotatoSprite() {
       <Image
         source={frames[index]}
         style={{
-          width: 150,
-          height: 150,
+          width: 200,
+          height: 200,
           resizeMode: "contain",
         }}
       />

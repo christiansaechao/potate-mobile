@@ -19,10 +19,10 @@ export const LevelDisplay = ({ total_exp }: LevelDisplayProps) => {
   console.log("total_exp:", total_exp, "level:", level);
 
   return (
-    <View className="w-full px-8">
+    <View className="w-full">
       <View className="flex-row justify-between items-center mb-1">
-        <CustomText className="text-sm font-bold">Level {level}</CustomText>
-        <CustomText className="text-xs">
+        <CustomText className="text-md font-bold">LVL {level}</CustomText>
+        <CustomText className="text-md">
           {current_exp} / {needed_exp} XP
         </CustomText>
       </View>
