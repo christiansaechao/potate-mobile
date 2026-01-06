@@ -29,10 +29,6 @@ export default function AnimatedScreen({
         duration: 1000,
         easing: Easing.out(Easing.cubic),
       });
-    } else {
-      // Reset so it animates again when you come back
-      opacity.value = 0;
-      translateY.value = 10;
     }
   }, [isFocused]);
 
