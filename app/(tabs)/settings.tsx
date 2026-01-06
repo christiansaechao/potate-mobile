@@ -17,7 +17,6 @@ export default function Settings() {
   // Theme(s)
   const { theme, mode } = useTheme();
   const backgroundColor = THEMES[theme][mode];
-
   return (
     <SafeAreaView
       edges={["top"]}
