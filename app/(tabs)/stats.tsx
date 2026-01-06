@@ -184,8 +184,8 @@ export default function Stats() {
         <AnimatedScreen>
           <View className="py-2">
             <CustomText
-              className="text-6xl text-center"
-              style={{ height: 70, lineHeight: 70 }}
+              className="text-5xl text-center"
+              style={{ height: 96, lineHeight: 96 }}
             >
               Spud Report
             </CustomText>
