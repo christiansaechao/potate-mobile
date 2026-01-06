@@ -216,7 +216,7 @@ export const MainCard = () => {
       <ThemeSelector currentTheme={theme} onSelect={setTheme} />
 
       {/* Vibration */}
-      <View
+      {/* <View
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -260,10 +260,10 @@ export const MainCard = () => {
           }}
           thumbColor="#F2F6FB"
         />
-      </View>
+      </View> */}
 
       {/* Weekly Goal */}
-      <View
+      {/* <View
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -307,7 +307,7 @@ export const MainCard = () => {
         >
           {weeklyGoal}
         </CustomText>
-      </View>
+      </View> */}
 
       <Divider />
 

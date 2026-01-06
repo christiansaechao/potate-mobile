@@ -2,13 +2,18 @@ import Calendar from "@/components/Calendar";
 import { CustomText } from "@/components/custom";
 import { THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
+import {
+  Image,
+  TouchableWithoutFeedback,
+  View,
+  ScrollView,
+} from "react-native";
 
 import StatCard from "@/components/ui/stats-card";
 import { formatTime, getTimeInSeconds } from "@/lib/helper";
 import sessionOps from "@/lib/sessions";
 import { StatsType, TimerMode } from "@/types/types";
 import { useEffect, useState } from "react";
-import { TouchableWithoutFeedback, View, ScrollView } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -32,6 +37,8 @@ export default function Stats() {
     longBreak: "0",
     allBreaks: "0",
   });
+
+  const LoadedAnim = require("../../assets/videos/potato.gif");
 
   const formattedStats = [
     { label: "Sessions Started", value: stats.totalSessions },
@@ -183,12 +190,24 @@ export default function Stats() {
       >
         <AnimatedScreen>
           <View className="py-2">
-            <CustomText
-              className="text-5xl text-center"
-              style={{ height: 96, lineHeight: 96 }}
-            >
-              Spud Report
-            </CustomText>
+            <View className="flex justify-between items-center flex-row">
+              <View>
+                <CustomText
+                  className="text-5xl text-center z-100"
+                  style={{ height: 96, lineHeight: 96 }}
+                >
+                  Spud Report
+                </CustomText>
+              </View>
+              <Animated.View className="w-20 h-20">
+                <Image
+                  key={String(LoadedAnim)}
+                  source={LoadedAnim}
+                  resizeMode="contain"
+                  className="w-full h-full"
+                />
+              </Animated.View>
+            </View>
             {formattedStats.map((item, index) => (
               <Animated.View
                 key={item.label}
