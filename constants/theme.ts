@@ -15,6 +15,7 @@ export const Colors = {
     tabIconDefault: "#687076",
     tabIconSelected: tintColorLight,
     buttonIconColor: "white",
+    buttonColor: "#11181C", // Dark text color for contrast
   },
   dark: {
     text: "#ECEDEE",
@@ -24,6 +25,7 @@ export const Colors = {
     tabIconDefault: "#9BA1A6",
     tabIconSelected: tintColorDark,
     buttonIconColor: "black",
+    buttonColor: "#ECEDEE", // Light text color for contrast
   },
   vaporwave: {
     text: "#ffffff",
@@ -33,6 +35,7 @@ export const Colors = {
     tabIconDefault: "#bd00ff",
     tabIconSelected: "#ff00ff",
     buttonIconColor: "#2b003b",
+    buttonColor: "#ff00ff", // Hot pink
   },
   cozy: {
     text: "#5D4037",
@@ -42,6 +45,7 @@ export const Colors = {
     tabIconDefault: "#A1887F",
     tabIconSelected: "#5D4037",
     buttonIconColor: "#F5F5DC",
+    buttonColor: "#8D6E63", // Cozy brown
   },
 };
 

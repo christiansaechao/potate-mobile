@@ -15,10 +15,10 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 // Components
 import Calendar from "@/components/Calendar";
 import { CustomText } from "@/components/custom";
-import AnimatedScreen from "@/components/ui/AnimatedScreen";
-// import AnimatedDashedBorder from "@/components/ui/AnimatedDashedBoarder"; // Unused in original code? No, it was imported but not used? Let's check original. It was imported. Usage? Not used in JSX.
+import ParallaxScrollView from "@/components/ui/parallax-scroll-view";
 import Divider from "@/components/ui/divider";
 import StatCard from "@/components/ui/stats-card";
+import AnimatedScreen from "@/components/ui/AnimatedScreen";
 
 // Constants & Types
 import { THEMES } from "@/constants/constants";
@@ -184,8 +184,6 @@ export default function Stats() {
       console.log(err);
     }
   };
-
-  // --- Effects ---
 
   // --- Effects ---
 

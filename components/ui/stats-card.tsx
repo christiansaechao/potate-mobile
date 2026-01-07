@@ -6,6 +6,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { CustomText } from "../custom";
+import { AnimatedNumber } from "./AnimatedNumber";
 
 const StatCard = ({
   label,
@@ -42,9 +43,17 @@ const StatCard = ({
           >
             · · · · · · · · · · · · · · · · · · · · · · · · · ·
           </CustomText>
-          <CustomText className="text-2xl font-semibold leading-8">
-            {stats}
-          </CustomText>
+          {typeof stats === "number" ? (
+            <AnimatedNumber
+              value={stats}
+              style={{ fontSize: 24, lineHeight: 36, fontFamily: "Nunito" }} // Match CustomText style manually for now or import CustomText style
+              className="text-2xl font-semibold leading-8"
+            />
+          ) : (
+            <CustomText className="text-2xl font-semibold leading-8">
+              {stats}
+            </CustomText>
+          )}
         </View>
       </Animated.View>
     </Pressable>
