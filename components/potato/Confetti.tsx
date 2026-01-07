@@ -11,7 +11,8 @@ type ConfettiParticle = {
   rotation: Animated.Value;
 };
 
-export const Confetti: React.FC = () => {
+export const Confetti: React.FC<{ show: boolean }> = ({ show }) => {
+  if (!show) return null;
   // --- Constants ---
 
   const { width, height } = Dimensions.get("window");

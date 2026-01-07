@@ -1,10 +1,10 @@
 export function expNeededForLevel(current_level: number): number {
-  // Level 1 = 0 XP, Level 2 = 75 XP, Level 3 = 300 XP, Level 4 = 675 XP
-  return Math.pow(current_level - 1, 2) * 75;
+  // Level 1 = 0 XP, Level 2 = 100 XP, Level 3 ~= 282 XP, Level 4 ~= 519 XP
+  return Math.floor(Math.pow(current_level - 1, 1.5) * 100);
 }
 
 export function calculateLevel(total_exp: number): number {
-  return Math.floor(Math.sqrt(total_exp / 75)) + 1;
+  return Math.floor(Math.pow(total_exp / 100, 1 / 1.5)) + 1;
 }
 
 export function calculateCurrentExp(

@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 // Components
-import { AppBreakdown } from "@/components/potato/AppBreakdown"; // Wait invalid import in original? No AppBreakdown in imports
+import { AchievementToast } from "@/components/ui/AchievementToast";
 import { Header } from "@/components/potato/Header";
 import { HealthBar } from "@/components/potato/HealthBar";
 import { LevelDisplay } from "@/components/potato/LevelDisplay";
@@ -13,10 +13,12 @@ import { ProgressBar } from "@/components/potato/ProgressBar";
 import { TimerControls } from "@/components/potato/TimerControls";
 import { TimerDisplay } from "@/components/potato/TimerDisplay";
 import AnimatedScreen from "@/components/ui/AnimatedScreen";
+import { Confetti } from "@/components/potato/Confetti";
 
 // Constants & Types
 import { THEMES } from "@/constants/constants";
 import { PotatoQuote, TimerState } from "@/types/types";
+import { calculateLevel } from "@/lib/leveling";
 
 // Hooks
 import { useTheme } from "@/hooks/context-hooks/useTheme";
@@ -43,8 +45,8 @@ export default function App() {
     text: "Ready to lock in?",
     mood: "happy",
   });
-  const [exp, setExp] = useState<number>(user.exp ?? 0);
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   // --- Constants ---
 
@@ -52,6 +54,16 @@ export default function App() {
   const backgroundColor = THEMES[theme][mode];
 
   // --- Custom Hooks ---
+
+  const handleUpdateExp = (updater: number | ((prev: number) => number)) => {
+    const newExp =
+      typeof updater === "function" ? updater(user.exp ?? 0) : updater;
+    user.updateUser({
+      ...user,
+      exp: newExp,
+      level: calculateLevel(newExp),
+    });
+  };
 
   const {
     state,
@@ -62,6 +74,7 @@ export default function App() {
     toggleTimer,
     resetTimer,
     fetchQuote,
+    achievementToToast,
   } = useTimer(
     mode,
     setMode,
@@ -71,7 +84,7 @@ export default function App() {
     StopSession,
     StartInterval,
     StopInterval,
-    setExp,
+    handleUpdateExp,
     user
   );
 
@@ -82,7 +95,7 @@ export default function App() {
     setTimeLeft,
     fetchQuote,
     mode,
-    setExp
+    handleUpdateExp
   );
 
   // --- Derived State ---
@@ -136,7 +149,7 @@ export default function App() {
           <ModeSwitcher mode={mode} switchMode={switchMode} />
           <View className="w-full flex justify-center items-center gap-4 py-2">
             <HealthBar health={health} />
-            <LevelDisplay total_exp={exp} />
+            <LevelDisplay total_exp={user.exp} />
           </View>
 
           <PotatoArea
@@ -158,6 +171,10 @@ export default function App() {
           <ProgressBar progress={progress} />
         </View>
       </AnimatedScreen>
+      <Confetti show={showConfetti} />
+      {achievementToToast && (
+        <AchievementToast achievement={achievementToToast} />
+      )}
     </SafeAreaView>
   );
 }

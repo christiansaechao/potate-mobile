@@ -43,6 +43,15 @@ export default function TabLayout() {
             tabBar={(props) => <FloatingTabBar {...props} />}
           >
             <Tabs.Screen
+              name="trophy-case"
+              options={{
+                title: "Badges",
+                tabBarIcon: ({ color }) => (
+                  <IconSymbol size={24} name="trophy.fill" color={color} />
+                ),
+              }}
+            />
+            <Tabs.Screen
               name="stats"
               options={{
                 title: "Stats",
