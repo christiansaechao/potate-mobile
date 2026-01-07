@@ -1,9 +1,13 @@
+import React from "react";
+import { Pressable, View } from "react-native";
+
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { PickerProps } from "@/types/settings.types";
-import { Pressable, View } from "react-native";
 import { Colors } from "../../constants/theme";
 import { CustomText } from "../custom";
 import { GenericDropdown } from "./GenericDropdown";
+
+// --- Types ---
 
 interface RowProps<T> extends PickerProps<T> {
   icon: React.ReactNode;
@@ -17,9 +21,16 @@ export const Row = <T,>({
   options,
   setState,
 }: RowProps<T>) => {
+  // --- Hooks ---
+
   const { theme } = useTheme();
 
+  // --- Constants ---
+
   const color = Colors[theme];
+
+  // --- Render ---
+
   return (
     <Pressable
       style={{

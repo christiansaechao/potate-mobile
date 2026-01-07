@@ -1,5 +1,9 @@
+import React from "react";
 import { View } from "react-native";
+
 import { CustomText } from "../custom";
+
+// --- Types ---
 
 type AppBreakdownProps = {
   time: number;

@@ -1,13 +1,19 @@
 import Svg, { Circle, G, Line, Path, Rect } from "react-native-svg";
 
+// --- Types ---
+
 interface IFallBackPotatoProps {
   mood: "happy" | "angry" | "sleepy" | "chaotic" | "cool";
   health: number;
 }
 
 export const FallBackPotato = ({ mood, health }: IFallBackPotatoProps) => {
+  // --- Derived State ---
+
   const isMad = mood === "angry" || mood === "chaotic" || health < 40;
   const isCool = mood === "cool";
+
+  // --- Render ---
 
   return (
     <Svg viewBox="0 0 200 200" width="100%" height="100%">

@@ -1,10 +1,11 @@
 import { View, Pressable } from "react-native";
-import { CustomText } from "../custom";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
+
+import { CustomText } from "../custom";
 
 const StatCard = ({
   label,
@@ -14,11 +15,15 @@ const StatCard = ({
   stats: string | number;
   backgroundColor: string;
 }) => {
+  // --- Animations ---
+
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
+
+  // --- Render ---
 
   return (
     <Pressable

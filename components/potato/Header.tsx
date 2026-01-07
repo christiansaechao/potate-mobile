@@ -1,9 +1,12 @@
-import { useTheme } from "@/hooks/context-hooks/useTheme";
-import { Volume2, VolumeX } from "lucide-react-native";
 import React from "react";
 import { View } from "react-native";
+import { Volume2, VolumeX } from "lucide-react-native";
+
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { CustomText } from "../custom";
 import { ThemedPressable } from "../ui/themed-pressable";
+
+// --- Types ---
 
 type HeaderProps = {
   isSound: boolean;
@@ -11,7 +14,11 @@ type HeaderProps = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ isSound, toggleSound }) => {
+  // --- Hooks ---
+
   const { colors } = useTheme();
+
+  // --- Render ---
 
   return (
     <View className="w-full max-w-md flex-row justify-between items-center z-20">

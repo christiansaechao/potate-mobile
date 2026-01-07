@@ -1,5 +1,6 @@
-import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 import { Redirect, Stack } from "expo-router";
+
+import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 
 export default function OnboardingLayout() {
   const { completed, isLoading } = useOnboardingStatus();

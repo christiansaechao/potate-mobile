@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Easing, Image } from "react-native";
 import { FallBackPotato } from "./FallBackPotato";
 
+// --- Types ---
+
 interface PotatoProps {
   mood: "happy" | "angry" | "sleepy" | "chaotic" | "cool";
   isAnimating: boolean; // still accepted, but no longer gates animation
@@ -13,7 +15,11 @@ export const Potato: React.FC<PotatoProps> = ({
   isAnimating,
   health,
 }) => {
+  // --- State & Hooks ---
+
   const [imgError, setImgError] = useState(false);
+
+  // --- Constants & Assets ---
 
   // Base Images
   const Loaded = require("../../app/assets/images/1.png");
@@ -22,7 +28,15 @@ export const Potato: React.FC<PotatoProps> = ({
   const Bad = require("../../app/assets/images/4.png");
 
   // Animated Videos/GIFS
-  const LoadedAnim = require("../../app/assets/videos/potato.gif");
+  // const LoadedAnim = require("../../app/assets/videos/potato.gif"); // Unused currently?
+
+  // --- Animation Refs ---
+
+  const breathe = useRef(new Animated.Value(0)).current;
+  const float = useRef(new Animated.Value(0)).current;
+  const shake = useRef(new Animated.Value(0)).current;
+
+  // --- Derived State ---
 
   // Determine image based on health
   const imageSource = useMemo(() => {
@@ -32,14 +46,9 @@ export const Potato: React.FC<PotatoProps> = ({
     return Bad;
   }, [health, Loaded, Regular, Rotting, Bad]);
 
-  useEffect(() => setImgError(false), [imageSource]);
+  // --- Effects ---
 
-  /**
-   * Animated values (always running)
-   */
-  const breathe = useRef(new Animated.Value(0)).current;
-  const float = useRef(new Animated.Value(0)).current;
-  const shake = useRef(new Animated.Value(0)).current;
+  useEffect(() => setImgError(false), [imageSource]);
 
   // Start all loops once; never reset; never restart on mood change
   useEffect(() => {
@@ -111,6 +120,8 @@ export const Potato: React.FC<PotatoProps> = ({
     };
   }, [breathe, float, shake]);
 
+  // --- Interpolations ---
+
   const breatheScale = breathe.interpolate({
     inputRange: [0, 1],
     outputRange: [1, 1.05],
@@ -134,6 +145,8 @@ export const Potato: React.FC<PotatoProps> = ({
         ? { transform: [{ translateY: floatY }] }
         : { transform: [{ scale: breatheScale }] };
 
+  // --- Render ---
+
   return (
     <Animated.View className="w-40 h-40" style={animatedStyle}>
       {imgError ? (
@@ -153,15 +166,3 @@ export const Potato: React.FC<PotatoProps> = ({
     </Animated.View>
   );
 };
-
-// This is the original base image rendering code, keep it here for reference if we decide not to use the animations
-// <Image
-//   key={String(imageSource)}
-//   source={imageSource}
-//   resizeMode="contain"
-//   className="w-full h-full"
-//   onError={() => setImgError(true)}
-//   style={{
-//     opacity: health < 40 ? 0.85 : 1,
-//   }}
-// />

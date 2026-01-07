@@ -8,8 +8,11 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
+
 import { COLORS } from "@/constants/constants";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
+
+// --- Constants & Types ---
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 
@@ -32,11 +35,18 @@ export default function AnimatedDashedBorder({
   gap = 8,
   duration = 900,
 }: AnimatedDashedBorderProps) {
+  // --- State & Hooks ---
+
   const [size, setSize] = useState({ width: 0, height: 0 });
   const dashOffset = useSharedValue(0);
-  const dashCycle = dash + gap;
   const { theme } = useTheme();
+
+  // --- Derived State ---
+
+  const dashCycle = dash + gap;
   const strokeColor = COLORS[theme].text;
+
+  // --- Effects ---
 
   useEffect(() => {
     dashOffset.value = withRepeat(
@@ -46,14 +56,20 @@ export default function AnimatedDashedBorder({
     );
   }, [dashCycle, duration, dashOffset]);
 
+  // --- Animations ---
+
   const animatedProps = useAnimatedProps(() => ({
     strokeDashoffset: dashOffset.value,
   }));
+
+  // --- Handlers ---
 
   const onLayout = (e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
     setSize({ width, height });
   };
+
+  // --- Render ---
 
   return (
     <View onLayout={onLayout} style={{ position: "relative" }}>

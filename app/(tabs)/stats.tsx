@@ -1,25 +1,44 @@
-import Calendar from "@/components/Calendar";
-import { CustomText } from "@/components/custom";
-import { THEMES } from "@/constants/constants";
-import { useTheme } from "@/hooks/context-hooks/useTheme";
-
-import StatCard from "@/components/ui/stats-card";
-import { formatTime, getTimeInSeconds } from "@/lib/helper";
-import sessionOps from "@/lib/sessions";
-import { StatsType, TimerMode } from "@/types/types";
-import { useEffect, useState } from "react";
-import { TouchableWithoutFeedback, View, ScrollView } from "react-native";
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import {
+  Image,
+  TouchableWithoutFeedback,
+  View,
+  ScrollView,
+} from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import Animated, { FadeInDown } from "react-native-reanimated";
+
+// Components
+import Calendar from "@/components/Calendar";
+import { CustomText } from "@/components/custom";
+import AnimatedScreen from "@/components/ui/AnimatedScreen";
+// import AnimatedDashedBorder from "@/components/ui/AnimatedDashedBoarder"; // Unused in original code? No, it was imported but not used? Let's check original. It was imported. Usage? Not used in JSX.
+import Divider from "@/components/ui/divider";
+import StatCard from "@/components/ui/stats-card";
+
+// Constants & Types
+import { THEMES } from "@/constants/constants";
+import { StatsType, TimerMode } from "@/types/types";
+
+// Hooks
+import { useTheme } from "@/hooks/context-hooks/useTheme";
+
+// Libs
+import { formatTime, getTimeInSeconds } from "@/lib/helper";
+import sessionOps from "@/lib/sessions";
 import IntervalOps from "@/lib/intervals";
 
-import Animated, { FadeInDown } from "react-native-reanimated";
-import AnimatedDashedBorder from "@/components/ui/AnimatedDashedBoarder";
-
 export default function Stats() {
+  // --- Hooks ---
+
   const { theme, mode } = useTheme();
+  const insets = useSafeAreaInsets();
+
+  // --- State ---
 
   const [stats, setStats] = useState<StatsType>({
     totalSessions: 0,
@@ -29,12 +48,32 @@ export default function Stats() {
     longBreak: "0",
     allBreaks: "0",
   });
+
   const [markedDates, setMarkedDates] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const [dailyStats, setDailyStats] = useState<
     Record<string, { focus: number; shortBreak: number; longBreak: number }>
   >({});
+
+  // --- Constants ---
+
+  const LoadedAnim = require("../../assets/videos/potato.gif");
+  const backgroundColor = THEMES[theme][mode];
+
+  const formattedStats = [
+    { label: "Sessions Started", value: stats.totalSessions },
+    {
+      label: "Completed Sessions",
+      value: stats.totalCompletedSessions,
+    },
+    { label: "Focused", value: stats.timeFocused },
+    { label: "Short Break", value: stats.shortBreak },
+    { label: "Long Break", value: stats.longBreak },
+    { label: "Breaks", value: stats.allBreaks },
+  ];
+
+  // --- Helpers ---
 
   const getStats = async () => {
     try {
@@ -146,12 +185,17 @@ export default function Stats() {
     }
   };
 
-  useEffect(() => {
-    getStats();
-  }, []);
+  // --- Effects ---
 
-  const backgroundColor = THEMES[theme][mode];
-  const insets = useSafeAreaInsets();
+  // --- Effects ---
+
+  useFocusEffect(
+    useCallback(() => {
+      getStats();
+    }, [])
+  );
+
+  // --- Render ---
 
   return (
     <SafeAreaView
@@ -165,25 +209,27 @@ export default function Stats() {
           paddingBottom: insets.bottom,
         }}
       >
-        <View className="py-2">
-          <CustomText
-            className="text-6xl text-center"
-            style={{ height: 96, lineHeight: 96 }}
-          >
-            Spud Report
-          </CustomText>
-          <AnimatedDashedBorder>
-            {[
-              { label: "Sessions Started", value: stats.totalSessions },
-              {
-                label: "Completed Sessions",
-                value: stats.totalCompletedSessions,
-              },
-              { label: "Focused", value: stats.timeFocused },
-              { label: "Short Break", value: stats.shortBreak },
-              { label: "Long Break", value: stats.longBreak },
-              { label: "Breaks", value: stats.allBreaks },
-            ].map((item, index) => (
+        <AnimatedScreen>
+          <View className="py-2">
+            <View className="flex justify-between items-center flex-row">
+              <View>
+                <CustomText
+                  className="text-5xl text-center z-100"
+                  style={{ height: 96, lineHeight: 96 }}
+                >
+                  Spud Report
+                </CustomText>
+              </View>
+              <Animated.View className="w-20 h-20">
+                <Image
+                  key={String(LoadedAnim)}
+                  source={LoadedAnim}
+                  resizeMode="contain"
+                  className="w-full h-full"
+                />
+              </Animated.View>
+            </View>
+            {formattedStats.map((item, index) => (
               <Animated.View
                 key={item.label}
                 entering={FadeInDown.delay(index * 300).springify()}
@@ -195,17 +241,19 @@ export default function Stats() {
                 />
               </Animated.View>
             ))}
-          </AnimatedDashedBorder>
-        </View>
+          </View>
 
-        <TouchableWithoutFeedback onPress={() => setSelectedDate(null)}>
-          <Calendar
-            markedDates={markedDates}
-            dailyStats={dailyStats}
-            selectedDate={selectedDate}
-            onSelectDate={setSelectedDate}
-          />
-        </TouchableWithoutFeedback>
+          <Divider />
+
+          <TouchableWithoutFeedback onPress={() => setSelectedDate(null)}>
+            <Calendar
+              markedDates={markedDates}
+              dailyStats={dailyStats}
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+            />
+          </TouchableWithoutFeedback>
+        </AnimatedScreen>
       </ScrollView>
     </SafeAreaView>
   );

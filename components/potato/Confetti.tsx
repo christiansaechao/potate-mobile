@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { View, Animated, Dimensions } from "react-native";
 
+// --- Types ---
+
 type ConfettiParticle = {
   id: number;
   color: string;
@@ -10,8 +12,12 @@ type ConfettiParticle = {
 };
 
 export const Confetti: React.FC = () => {
+  // --- Constants ---
+
   const { width, height } = Dimensions.get("window");
   const colors = ["#FFD700", "#FF6347", "#00BFFF", "#32CD32", "#FF69B4"];
+
+  // --- Refs ---
 
   const particles = useRef<ConfettiParticle[]>(
     Array.from({ length: 60 }, (_, i) => ({
@@ -22,6 +28,8 @@ export const Confetti: React.FC = () => {
       rotation: new Animated.Value(0),
     }))
   ).current;
+
+  // --- Effects ---
 
   useEffect(() => {
     const animations = particles.map((p) => {
@@ -57,6 +65,8 @@ export const Confetti: React.FC = () => {
 
     Animated.stagger(6, animations).start();
   }, []);
+
+  // --- Render ---
 
   return (
     <View
