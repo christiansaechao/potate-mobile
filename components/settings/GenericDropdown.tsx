@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList, Modal, Platform, Pressable, View } from "react-native";
 
 import { styles } from "@/components/settings/Styles";
-import { THEMES } from "@/constants/constants";
+import { THEMES } from "@/constants/theme";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { CustomText } from "../custom/custom-text";
 import { SquishyButton } from "../ui/SquishyButton";

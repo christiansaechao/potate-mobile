@@ -9,7 +9,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { COLORS } from "@/constants/constants";
+import { COLORS } from "@/constants/theme";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 
 // --- Constants & Types ---

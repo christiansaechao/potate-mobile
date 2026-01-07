@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 
-import { COLORS, HEX_THEMES, THEMES } from "@/constants/constants";
+import { COLORS, HEX_THEMES, THEMES } from "@/constants/theme";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { formatTime } from "@/lib/helper";
 import { CustomText } from "./custom";

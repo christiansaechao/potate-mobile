@@ -13,8 +13,8 @@ import { CustomText } from "../custom";
 import { Row } from "./Row";
 
 // Constants
-import { SETTINGS_OPTIONS, THEMES } from "@/constants/constants";
-import { Colors } from "@/constants/theme";
+import { SETTINGS_OPTIONS } from "@/constants/constants";
+import { COLORS, THEMES } from "@/constants/theme";
 
 // Hooks
 import { useTheme } from "@/hooks/context-hooks/useTheme";
@@ -50,7 +50,7 @@ export const MainCard = ({ onSave }: { onSave?: () => void }) => {
   // --- Constants ---
 
   const backgroundColor = THEMES[theme][mode];
-  const color = Colors[theme];
+  const color = COLORS[theme];
 
   // --- Handlers ---
 

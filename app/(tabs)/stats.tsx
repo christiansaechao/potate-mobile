@@ -21,8 +21,8 @@ import StatCard from "@/components/ui/stats-card";
 import { WeeklyBarChart } from "@/components/ui/WeeklyBarChart";
 
 // Constants & Types
-import { THEMES } from "@/constants/constants";
-import { Colors } from "@/constants/theme";
+
+import { COLORS, THEMES } from "@/constants/theme";
 import { StatsType, TimerMode } from "@/types/types";
 
 // Hooks
@@ -43,8 +43,8 @@ export default function Stats() {
 
   const LoadedAnim = require("../../assets/videos/potato.gif");
   const backgroundColor = THEMES[theme][mode];
-  const themeColor = Colors[theme].buttonColor || "#81C784";
-  const textColor = Colors[theme].text;
+  const themeColor = COLORS[theme].buttonColor || "#81C784";
+  const textColor = COLORS[theme].text;
 
   // --- State ---
 
@@ -305,7 +305,7 @@ export default function Stats() {
                     <CustomText
                       style={{
                         color: isActive
-                          ? Colors[theme].buttonIconColor
+                          ? COLORS[theme].buttonIconColor
                           : textColor,
                         fontWeight: isActive ? "600" : "400",
                         opacity: isActive ? 1 : 0.6,

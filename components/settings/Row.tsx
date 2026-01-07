@@ -3,7 +3,7 @@ import { Pressable, View } from "react-native";
 
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { PickerProps } from "@/types/settings.types";
-import { Colors } from "../../constants/theme";
+import { COLORS } from "../../constants/theme";
 import { CustomText } from "../custom";
 import { GenericDropdown } from "./GenericDropdown";
 
@@ -27,7 +27,7 @@ export const Row = <T,>({
 
   // --- Constants ---
 
-  const color = Colors[theme];
+  const color = COLORS[theme];
 
   // --- Render ---
 

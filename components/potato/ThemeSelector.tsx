@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import { SquishyButton } from "../ui/SquishyButton";
 
-import { THEMES } from "../../constants/constants";
+import { THEMES } from "../../constants/theme";
 import { AppTheme } from "../../types/types";
 import { CustomText } from "../custom";
 

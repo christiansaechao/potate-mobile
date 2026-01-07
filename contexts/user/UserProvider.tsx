@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
-import { DEFAULT_TIMES, THEMES } from "@/constants/constants";
+import { DEFAULT_TIMES } from "@/constants/constants";
+import { THEMES } from "@/constants/theme";
 import { TimerMode } from "@/types/types";
 import UserOps from "@/lib/settings";
 import { IUserContext } from "@/types/settings.types";

@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Pause, Play, RotateCcw } from "lucide-react-native";
 
-import { Colors } from "../../constants/theme";
+import { COLORS } from "../../constants/theme";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { TimerState } from "../../types/types";
 import { ThemedPressable } from "../ui/themed-pressable";
@@ -26,7 +26,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
 
   // --- Constants ---
 
-  const color = Colors[theme];
+  const color = COLORS[theme];
 
   // --- Render ---
 
