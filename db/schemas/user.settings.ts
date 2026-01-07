@@ -13,7 +13,9 @@ export const userSettings = sqliteTable("settings", {
     DEFAULT_TIMES.LONG_BREAK
   ),
   vibration: integer("vibration").default(0),
+  theme: text("theme").default("potate"),
   weekly_goal: integer("weekly_goal").default(5),
+  weekly_focus_time_goal: integer("weekly_focus_time_goal").default(120),
   exp: integer("exp").default(0),
   level: integer("level").default(1),
 });

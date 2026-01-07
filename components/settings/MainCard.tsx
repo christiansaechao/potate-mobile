@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-import { View, Pressable } from "react-native";
+import { useState } from "react";
+import { View } from "react-native";
 import { Bed, Clock, Coffee, User } from "lucide-react-native";
+import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
+import { SquishyButton } from "../ui/SquishyButton";
 
 // Components
 import { ThemeSelector } from "@/components/potato/ThemeSelector";
@@ -24,7 +26,7 @@ import { generateMockData, resetData } from "@/lib/dev-utils";
 import UserOps from "@/lib/settings";
 import { IUserContext } from "@/types/settings.types";
 
-export const MainCard = () => {
+export const MainCard = ({ onSave }: { onSave?: () => void }) => {
   // --- Hooks ---
 
   const {
@@ -33,75 +35,30 @@ export const MainCard = () => {
     FOCUS,
     SHORT_BREAK,
     LONG_BREAK,
-    vibration: userVibration,
+    vibration,
     weekly_goal,
+    weekly_focus_time_goal,
     updateUser,
+    theme: userTheme,
+    ...userData
   } = useUserDefaults();
   const { theme, setTheme, mode } = useTheme();
   const { showConfetti, triggerConfetti } = useConfetti();
 
   // --- State ---
 
-  const [pomodoro, setPomodoro] = useState(FOCUS);
-  const [shortBreak, setShortBreak] = useState(SHORT_BREAK);
-  const [longBreak, setLongBreak] = useState(LONG_BREAK);
-  const [weeklyGoal, setWeeklyGoal] = useState(weekly_goal);
-  const [vibration, setVibration] = useState(userVibration === 1);
-
   // --- Constants ---
 
   const backgroundColor = THEMES[theme][mode];
   const color = Colors[theme];
 
-  // --- Effects ---
-
-  useEffect(() => {
-    setPomodoro(FOCUS);
-    setShortBreak(SHORT_BREAK);
-    setLongBreak(LONG_BREAK);
-    setWeeklyGoal(weekly_goal);
-    setVibration(Boolean(userVibration));
-  }, [FOCUS, SHORT_BREAK, LONG_BREAK, weekly_goal, userVibration]);
-
   // --- Handlers ---
 
-  async function handleSaveSettings() {
-    const { success, data } = await UserOps.updateUserSettings({
-      name: name,
-      email: email,
-      focus_duration: pomodoro,
-      short_break_duration: shortBreak,
-      long_break_duration: longBreak,
-      weekly_goal: weeklyGoal,
-      vibration: vibration ? 1 : 0,
-    });
-
-    if (!success)
-      throw new Error("There was an issue when trying to save user data");
-
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-    triggerConfetti();
-
-    // Map the database response to IUserContext format
-    const mappedUser: IUserContext = {
-      name: data.name,
-      email: data.email,
-      FOCUS: data.focus_duration,
-      SHORT_BREAK: data.short_break_duration,
-      LONG_BREAK: data.long_break_duration,
-      vibration: data.vibration === 1 ? 1 : 0,
-      weekly_goal: data.weekly_goal,
-      exp: data.exp,
-      level: data.level,
-    };
-
-    // Ensure updateUser exists before calling it
-    if (updateUser) {
-      updateUser(mappedUser);
-    } else {
-      console.error("updateUser is not available");
-    }
-  }
+  const handleAutoSave = async (newUser: IUserContext) => {
+    await updateUser(newUser);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    if (onSave) onSave();
+  };
 
   // --- Render ---
 
@@ -111,10 +68,10 @@ export const MainCard = () => {
         borderRadius: 28,
         padding: 18,
         marginTop: 18,
-        shadowColor: "#000",
-        shadowOpacity: 0.25,
-        shadowRadius: 18,
-        shadowOffset: { width: 0, height: 10 },
+        // shadowColor: "#000",
+        // shadowOpacity: 0.25,
+        // shadowRadius: 18,
+        // shadowOffset: { width: 0, height: 10 },
         elevation: 6,
       }}
       className={`${backgroundColor}`}
@@ -174,18 +131,27 @@ export const MainCard = () => {
 
         <View
           style={{
-            shadowColor: "#000",
-            shadowOpacity: 0.25,
-            shadowRadius: 18,
-            shadowOffset: { width: 0, height: 10 },
             padding: 16,
           }}
         >
           <Row
             icon={<Clock color={color.buttonIconColor} size={24} />}
             label="Pomodoro Length"
-            state={pomodoro}
-            setState={setPomodoro}
+            state={FOCUS}
+            setState={(val: number) =>
+              handleAutoSave({
+                ...userData,
+                FOCUS: val,
+                SHORT_BREAK,
+                LONG_BREAK,
+                vibration,
+                weekly_goal,
+                weekly_focus_time_goal,
+                theme: userTheme,
+                name,
+                email,
+              })
+            }
             options={SETTINGS_OPTIONS.POMODORO}
           />
 
@@ -199,8 +165,21 @@ export const MainCard = () => {
           <Row
             icon={<Coffee color={color.buttonIconColor} size={24} />}
             label="Short Break"
-            state={shortBreak}
-            setState={setShortBreak}
+            state={SHORT_BREAK}
+            setState={(val: number) =>
+              handleAutoSave({
+                ...userData,
+                FOCUS,
+                SHORT_BREAK: val,
+                LONG_BREAK,
+                vibration,
+                weekly_goal,
+                weekly_focus_time_goal,
+                theme: userTheme,
+                name,
+                email,
+              })
+            }
             options={SETTINGS_OPTIONS.SHORT_BREAK}
           />
 
@@ -214,9 +193,93 @@ export const MainCard = () => {
           <Row
             icon={<Bed color={color.buttonIconColor} size={24} />}
             label="Long Break"
-            state={longBreak}
-            setState={setLongBreak}
+            state={LONG_BREAK}
+            setState={(val: number) =>
+              handleAutoSave({
+                ...userData,
+                FOCUS,
+                SHORT_BREAK,
+                LONG_BREAK: val,
+                vibration,
+                weekly_goal,
+                weekly_focus_time_goal,
+                theme: userTheme,
+                name,
+                email,
+              })
+            }
             options={SETTINGS_OPTIONS.LONG_BREAK}
+          />
+        </View>
+      </View>
+
+      <Divider />
+
+      {/* Goals */}
+      <View style={{ marginTop: 18 }}>
+        <CustomText
+          style={{
+            fontSize: 24,
+            lineHeight: 30,
+
+            marginBottom: 12,
+          }}
+        >
+          Goals
+        </CustomText>
+
+        <View
+          style={{
+            padding: 16,
+          }}
+        >
+          <Row
+            icon={<User color={color.buttonIconColor} size={24} />}
+            label="Weekly Session Goal"
+            state={weekly_goal}
+            setState={(val: number) =>
+              handleAutoSave({
+                ...userData,
+                FOCUS,
+                SHORT_BREAK,
+                LONG_BREAK,
+                vibration,
+                weekly_goal: val,
+                weekly_focus_time_goal,
+                theme: userTheme,
+                name,
+                email,
+              })
+            }
+            options={SETTINGS_OPTIONS.WEEKLY_GOAL}
+          />
+
+          <View
+            style={{
+              height: 1,
+              backgroundColor: "rgba(255,255,255,0.08)",
+            }}
+          />
+
+          <Row
+            icon={<Clock color={color.buttonIconColor} size={24} />}
+            label="Weekly Focus Goal"
+            state={weekly_focus_time_goal}
+            setState={(val: number) =>
+              handleAutoSave({
+                ...userData,
+                FOCUS,
+                SHORT_BREAK,
+                LONG_BREAK,
+                vibration,
+                weekly_goal,
+                weekly_focus_time_goal: val,
+                theme: userTheme,
+                name,
+                email,
+              })
+            }
+            options={SETTINGS_OPTIONS.WEEKLY_FOCUS_TIME_GOAL}
           />
         </View>
       </View>
@@ -227,28 +290,7 @@ export const MainCard = () => {
 
       <Divider />
 
-      {/* Save */}
-      <Pressable
-        onPress={() => handleSaveSettings()}
-        style={{
-          backgroundColor: "#7FD7BE",
-          borderRadius: 999,
-          paddingVertical: 18,
-          marginTop: 18,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <CustomText
-          style={{
-            fontSize: 24,
-            lineHeight: 30,
-          }}
-        >
-          Save Changes
-        </CustomText>
-      </Pressable>
-      <Pressable
+      <SquishyButton
         onPress={resetData}
         style={{
           backgroundColor: "#7FD7BE",
@@ -258,6 +300,7 @@ export const MainCard = () => {
           alignItems: "center",
           justifyContent: "center",
         }}
+        scaleTo={0.97}
       >
         <CustomText
           style={{
@@ -267,9 +310,9 @@ export const MainCard = () => {
         >
           Reset Data (dev)
         </CustomText>
-      </Pressable>
+      </SquishyButton>
 
-      <Pressable
+      <SquishyButton
         onPress={async () => {
           const { success } = await generateMockData();
           if (success) {
@@ -286,6 +329,7 @@ export const MainCard = () => {
           alignItems: "center",
           justifyContent: "center",
         }}
+        scaleTo={0.97}
       >
         <CustomText
           style={{
@@ -295,7 +339,7 @@ export const MainCard = () => {
         >
           Generate Data (dev)
         </CustomText>
-      </Pressable>
+      </SquishyButton>
       {showConfetti && <Confetti />}
     </View>
   );

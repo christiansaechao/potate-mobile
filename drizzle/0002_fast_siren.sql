@@ -1,0 +1,1 @@
+ALTER TABLE `settings` ADD `weekly_focus_time_goal` integer DEFAULT 120;

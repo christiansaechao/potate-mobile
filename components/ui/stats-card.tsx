@@ -5,8 +5,8 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-import { CustomText } from "../custom";
 import { AnimatedNumber } from "./AnimatedNumber";
+import { CustomText } from "../custom";
 
 const StatCard = ({
   label,
@@ -46,7 +46,7 @@ const StatCard = ({
           {typeof stats === "number" ? (
             <AnimatedNumber
               value={stats}
-              style={{ fontSize: 24, lineHeight: 36, fontFamily: "Nunito" }} // Match CustomText style manually for now or import CustomText style
+              style={{ fontSize: 24, lineHeight: 36, fontFamily: "Nunito" }}
               className="text-2xl font-semibold leading-8"
             />
           ) : (

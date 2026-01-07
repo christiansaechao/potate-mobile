@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
-import { useFocusEffect } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+// import { useFocusEffect } from "expo-router";
+import { isSameDay, isSameWeek, isSameMonth } from "date-fns";
 import {
   Image,
   TouchableWithoutFeedback,
@@ -15,13 +16,15 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 // Components
 import Calendar from "@/components/Calendar";
 import { CustomText } from "@/components/custom";
-import ParallaxScrollView from "@/components/ui/parallax-scroll-view";
+import AnimatedScreen from "@/components/ui/AnimatedScreen";
+// import AnimatedDashedBorder from "@/components/ui/AnimatedDashedBoarder"; // Unused in original code? No, it was imported but not used? Let's check original. It was imported. Usage? Not used in JSX.
 import Divider from "@/components/ui/divider";
 import StatCard from "@/components/ui/stats-card";
-import AnimatedScreen from "@/components/ui/AnimatedScreen";
+import { WeeklyBarChart } from "@/components/ui/WeeklyBarChart";
 
 // Constants & Types
 import { THEMES } from "@/constants/constants";
+import { Colors } from "@/constants/theme";
 import { StatsType, TimerMode } from "@/types/types";
 
 // Hooks
@@ -38,7 +41,21 @@ export default function Stats() {
   const { theme, mode } = useTheme();
   const insets = useSafeAreaInsets();
 
+  // --- Constants ---
+
+  const LoadedAnim = require("../../assets/videos/potato.gif");
+  const backgroundColor = THEMES[theme][mode];
+  const themeColor = Colors[theme].buttonColor || "#81C784";
+  const textColor = Colors[theme].text;
+
   // --- State ---
+
+  const [activeFilter, setActiveFilter] = useState<
+    "Daily" | "Weekly" | "Monthly"
+  >("Daily");
+
+  const [rawSessions, setRawSessions] = useState<any[]>([]);
+  const [rawIntervals, setRawIntervals] = useState<any[]>([]);
 
   const [stats, setStats] = useState<StatsType>({
     totalSessions: 0,
@@ -56,10 +73,156 @@ export default function Stats() {
     Record<string, { focus: number; shortBreak: number; longBreak: number }>
   >({});
 
-  // --- Constants ---
+  // --- Handlers ---
 
-  const LoadedAnim = require("../../assets/videos/potato.gif");
-  const backgroundColor = THEMES[theme][mode];
+  const fetchRawData = async () => {
+    try {
+      const totalSessions = await sessionOps.getSessions();
+      const allIntervals = await IntervalOps.getIntervals();
+      setRawSessions(totalSessions);
+      setRawIntervals(allIntervals);
+
+      // Process calendar data (needs all data regardless of filter)
+      processCalendarData(totalSessions, allIntervals);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const processCalendarData = (sessions: any[], intervals: any[]) => {
+    // ... (existing logic for dailyStats map and markedDates) ...
+    // Create a map of sessions for quick lookup
+    const sessionsMap = new Map(sessions.map((s) => [s.id, s]));
+
+    const calculatedDailyStats: Record<
+      string,
+      { focus: number; shortBreak: number; longBreak: number }
+    > = {};
+
+    const dates = sessions.map((session) => {
+      const d = new Date(session.createdAt);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const dateStr = `${year}-${month}-${day}`;
+      return dateStr;
+    });
+
+    // Initialize daily stats
+    dates.forEach((date) => {
+      if (!calculatedDailyStats[date]) {
+        calculatedDailyStats[date] = {
+          focus: 0,
+          shortBreak: 0,
+          longBreak: 0,
+        };
+      }
+    });
+
+    // Aggregate intervals
+    intervals.forEach((interval) => {
+      if (!interval.endTime) return;
+
+      const session = sessionsMap.get(interval.sessionId);
+      if (!session) return;
+
+      const d = new Date(session.createdAt);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const dateStr = `${year}-${month}-${day}`;
+
+      if (!calculatedDailyStats[dateStr]) {
+        calculatedDailyStats[dateStr] = {
+          focus: 0,
+          shortBreak: 0,
+          longBreak: 0,
+        };
+      }
+
+      const duration = Math.floor(
+        (interval.endTime - interval.startTime) / 1000
+      );
+
+      if (session.mode === TimerMode.FOCUS) {
+        calculatedDailyStats[dateStr].focus += duration;
+      } else if (session.mode === TimerMode.SHORT_BREAK) {
+        calculatedDailyStats[dateStr].shortBreak += duration;
+      } else if (session.mode === TimerMode.LONG_BREAK) {
+        calculatedDailyStats[dateStr].longBreak += duration;
+      }
+    });
+
+    setDailyStats(calculatedDailyStats);
+    setMarkedDates([...new Set(dates)]);
+  };
+
+  const calculateStats = useCallback(() => {
+    if (!rawSessions.length) return;
+
+    const now = new Date();
+    let filteredSessions = rawSessions;
+
+    if (activeFilter === "Daily") {
+      filteredSessions = rawSessions.filter((s) =>
+        isSameDay(new Date(s.createdAt), now)
+      );
+    } else if (activeFilter === "Weekly") {
+      filteredSessions = rawSessions.filter((s) =>
+        isSameWeek(new Date(s.createdAt), now, { weekStartsOn: 1 })
+      );
+    } else if (activeFilter === "Monthly") {
+      filteredSessions = rawSessions.filter((s) =>
+        isSameMonth(new Date(s.createdAt), now)
+      );
+    }
+
+    // Filter intervals belonging to filtered sessions
+    const sessionIds = new Set(filteredSessions.map((s) => s.id));
+    const filteredIntervals = rawIntervals.filter((i) =>
+      sessionIds.has(i.sessionId)
+    );
+
+    const completedSesssions = filteredSessions.filter(
+      (session) => session.completed === 1
+    ).length;
+
+    // Helper to get time by mode from filtered intervals
+    const getTimeByMode = (mode: TimerMode) => {
+      const modeIntervals = filteredIntervals.filter((i) => {
+        // We need to look up session mode from rawSessions or filteredSessions
+        // Since we filtered intervals based on sessionIds, we know parent session exists
+        const parentSession = filteredSessions.find(
+          (s) => s.id === i.sessionId
+        );
+        return parentSession?.mode === mode;
+      });
+      return getTimeInSeconds(modeIntervals);
+    };
+
+    const focusedSeconds = getTimeByMode(TimerMode.FOCUS);
+    const shortBreakSeconds = getTimeByMode(TimerMode.SHORT_BREAK);
+    const longBreakSeconds = getTimeByMode(TimerMode.LONG_BREAK);
+
+    setStats({
+      totalSessions: filteredSessions.length,
+      totalCompletedSessions: completedSesssions,
+      timeFocused: formatTime(focusedSeconds),
+      shortBreak: formatTime(shortBreakSeconds),
+      longBreak: formatTime(longBreakSeconds),
+      allBreaks: formatTime(shortBreakSeconds + longBreakSeconds),
+    });
+  }, [rawSessions, rawIntervals, activeFilter]);
+
+  // --- Effects ---
+
+  useEffect(() => {
+    fetchRawData();
+  }, []);
+
+  useEffect(() => {
+    calculateStats();
+  }, [calculateStats]);
 
   const formattedStats = [
     { label: "Sessions Started", value: stats.totalSessions },
@@ -73,126 +236,6 @@ export default function Stats() {
     { label: "Breaks", value: stats.allBreaks },
   ];
 
-  // --- Helpers ---
-
-  const getStats = async () => {
-    try {
-      const totalSessions = await sessionOps.getSessions();
-      const allIntervals = await IntervalOps.getIntervals();
-
-      // Create a map of sessions for quick lookup
-      const sessionsMap = new Map(totalSessions.map((s) => [s.id, s]));
-
-      const calculatedDailyStats: Record<
-        string,
-        { focus: number; shortBreak: number; longBreak: number }
-      > = {};
-
-      const dates = totalSessions.map((session) => {
-        const d = new Date(session.createdAt);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, "0");
-        const day = String(d.getDate()).padStart(2, "0");
-        const dateStr = `${year}-${month}-${day}`;
-        return dateStr;
-      });
-
-      // Initialize daily stats for days with sessions
-      dates.forEach((date) => {
-        if (!calculatedDailyStats[date]) {
-          calculatedDailyStats[date] = {
-            focus: 0,
-            shortBreak: 0,
-            longBreak: 0,
-          };
-        }
-      });
-
-      // Aggregate intervals
-      allIntervals.forEach((interval) => {
-        if (!interval.endTime) return;
-
-        const session = sessionsMap.get(interval.sessionId);
-        if (!session) return;
-
-        const d = new Date(session.createdAt);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, "0");
-        const day = String(d.getDate()).padStart(2, "0");
-        const dateStr = `${year}-${month}-${day}`;
-
-        if (!calculatedDailyStats[dateStr]) {
-          calculatedDailyStats[dateStr] = {
-            focus: 0,
-            shortBreak: 0,
-            longBreak: 0,
-          };
-        }
-
-        const duration = Math.floor(
-          (interval.endTime - interval.startTime) / 1000
-        ); // in seconds
-
-        if (session.mode === TimerMode.FOCUS) {
-          calculatedDailyStats[dateStr].focus += duration;
-        } else if (session.mode === TimerMode.SHORT_BREAK) {
-          calculatedDailyStats[dateStr].shortBreak += duration;
-        } else if (session.mode === TimerMode.LONG_BREAK) {
-          calculatedDailyStats[dateStr].longBreak += duration;
-        }
-      });
-
-      setDailyStats(calculatedDailyStats);
-
-      const completedSesssions = totalSessions.filter(
-        (session) => session.completed === 1
-      ).length;
-
-      const uniqueDates = [...new Set(dates)];
-      setMarkedDates(uniqueDates);
-
-      const focusedTime = await IntervalOps.getIntervalsBySessionMode(
-        TimerMode.FOCUS
-      );
-
-      const longBreak = await IntervalOps.getIntervalsBySessionMode(
-        TimerMode.SHORT_BREAK
-      );
-
-      const shortBreak = await IntervalOps.getIntervalsBySessionMode(
-        TimerMode.SHORT_BREAK
-      );
-
-      const focused = formatTime(getTimeInSeconds(focusedTime));
-      const lBreak = formatTime(getTimeInSeconds(longBreak));
-      const sBreak = formatTime(getTimeInSeconds(shortBreak));
-      const aBreak = formatTime(
-        getTimeInSeconds(shortBreak) + getTimeInSeconds(longBreak)
-      );
-
-      const stats = {
-        totalSessions: totalSessions.length,
-        totalCompletedSessions: completedSesssions,
-        timeFocused: focused,
-        shortBreak: sBreak,
-        longBreak: lBreak,
-        allBreaks: aBreak,
-      };
-
-      setStats(stats);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  // --- Effects ---
-
-  useFocusEffect(
-    useCallback(() => {
-      getStats();
-    }, [])
-  );
-
   // --- Render ---
 
   return (
@@ -204,41 +247,27 @@ export default function Stats() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingHorizontal: 18,
-          paddingBottom: insets.bottom,
+          paddingBottom: insets.bottom + 60,
         }}
       >
         <AnimatedScreen>
-          <View className="py-2">
-            <View className="flex justify-between items-center flex-row">
-              <View>
-                <CustomText
-                  className="text-5xl text-center z-100"
-                  style={{ height: 96, lineHeight: 96 }}
-                >
-                  Spud Report
-                </CustomText>
-              </View>
-              <Animated.View className="w-20 h-20">
-                <Image
-                  key={String(LoadedAnim)}
-                  source={LoadedAnim}
-                  resizeMode="contain"
-                  className="w-full h-full"
-                />
-              </Animated.View>
-            </View>
-            {formattedStats.map((item, index) => (
-              <Animated.View
-                key={item.label}
-                entering={FadeInDown.delay(index * 300).springify()}
+          <View className="flex justify-between items-center flex-row">
+            <View>
+              <CustomText
+                className="text-5xl text-center z-100"
+                style={{ height: 96, lineHeight: 96 }}
               >
-                <StatCard
-                  label={item.label}
-                  stats={item.value}
-                  backgroundColor={backgroundColor}
-                />
-              </Animated.View>
-            ))}
+                Spud Report
+              </CustomText>
+            </View>
+            <Animated.View className="w-20 h-20">
+              <Image
+                key={String(LoadedAnim)}
+                source={LoadedAnim}
+                resizeMode="contain"
+                className="w-full h-full"
+              />
+            </Animated.View>
           </View>
 
           <Divider />
@@ -251,6 +280,67 @@ export default function Stats() {
               onSelectDate={setSelectedDate}
             />
           </TouchableWithoutFeedback>
+
+          <Divider />
+
+          {/* Filter Segmented Control */}
+          <View className="flex-row bg-black/5 p-1 rounded-xl mb-6">
+            {(["Daily", "Weekly", "Monthly"] as const).map((filter) => {
+              const isActive = activeFilter === filter;
+              return (
+                <TouchableWithoutFeedback
+                  key={filter}
+                  onPress={() => setActiveFilter(filter)}
+                >
+                  <View
+                    className="flex-1 py-2 rounded-lg items-center"
+                    style={[
+                      isActive && {
+                        backgroundColor: themeColor,
+                        // instead of shadow-sm:
+                        shadowColor: "#000",
+                        shadowOffset: { width: 0, height: 1 },
+                        shadowOpacity: 0.12,
+                        shadowRadius: 2,
+                        elevation: 2, // Android
+                      },
+                    ]}
+                  >
+                    <CustomText
+                      style={{
+                        color: isActive
+                          ? Colors[theme].buttonIconColor
+                          : textColor,
+                        fontWeight: isActive ? "600" : "400",
+                        opacity: isActive ? 1 : 0.6,
+                      }}
+                    >
+                      {filter}
+                    </CustomText>
+                  </View>
+                </TouchableWithoutFeedback>
+              );
+            })}
+          </View>
+
+          <View className="py-2">
+            {formattedStats.map((item, index) => (
+              <Animated.View
+                key={item.label}
+                entering={FadeInDown.delay(index * 50).springify()}
+              >
+                <StatCard
+                  label={item.label}
+                  stats={item.value}
+                  backgroundColor={backgroundColor}
+                />
+              </Animated.View>
+            ))}
+          </View>
+
+          <Divider />
+
+          <WeeklyBarChart dailyStats={dailyStats} themeColor={themeColor} />
         </AnimatedScreen>
       </ScrollView>
     </SafeAreaView>

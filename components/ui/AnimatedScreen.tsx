@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
+// import { useIsFocused } from "@react-navigation/native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -15,7 +15,7 @@ export default function AnimatedScreen({
 }) {
   // --- Hooks ---
 
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused(); // Removed to prevent context errors
 
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(10);
@@ -23,18 +23,16 @@ export default function AnimatedScreen({
   // --- Effects ---
 
   useEffect(() => {
-    if (isFocused) {
-      opacity.value = withTiming(1, {
-        duration: 1000,
-        easing: Easing.out(Easing.cubic),
-      });
+    opacity.value = withTiming(1, {
+      duration: 1000,
+      easing: Easing.out(Easing.cubic),
+    });
 
-      translateY.value = withTiming(0, {
-        duration: 1000,
-        easing: Easing.out(Easing.cubic),
-      });
-    }
-  }, [isFocused]);
+    translateY.value = withTiming(0, {
+      duration: 1000,
+      easing: Easing.out(Easing.cubic),
+    });
+  }, []);
 
   // --- Styles ---
 

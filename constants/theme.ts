@@ -8,14 +8,14 @@ const tintColorDark = "#fff";
 
 export const Colors = {
   default: {
-    text: "#11181C",
-    background: "#fff",
+    text: "#2D2D2D",
+    background: "#FFFDF5",
     tint: tintColorLight,
     icon: "#687076",
     tabIconDefault: "#687076",
     tabIconSelected: tintColorLight,
     buttonIconColor: "white",
-    buttonColor: "#11181C", // Dark text color for contrast
+    buttonColor: "#8B4513", // Saddle Brown
   },
   dark: {
     text: "#ECEDEE",

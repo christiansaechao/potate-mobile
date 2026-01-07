@@ -1,5 +1,6 @@
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import { SquishyButton } from "../ui/SquishyButton";
 
 import { THEMES } from "../../constants/constants";
 import { AppTheme } from "../../types/types";
@@ -34,13 +35,15 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           const isActive = currentTheme === t;
 
           return (
-            <Pressable
+            <SquishyButton
               key={t}
               onPress={() => onSelect(t)}
-              className={`px-3 py-2 rounded-xl ${
-                isActive ? "bg-white" : "bg-black/20"
-              } active:opacity-80`}
-              hitSlop={6}
+              style={{
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                borderRadius: 12,
+                backgroundColor: isActive ? "white" : "rgba(0,0,0,0.2)",
+              }}
             >
               <Text
                 className={`text-xs font-bold uppercase ${
@@ -49,7 +52,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               >
                 {t}
               </Text>
-            </Pressable>
+            </SquishyButton>
           );
         })}
       </View>

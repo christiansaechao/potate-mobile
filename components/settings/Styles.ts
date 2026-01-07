@@ -127,6 +127,7 @@ export const styles = {
     flexDirection: "row" as const,
     alignItems: "center" as const,
     justifyContent: "space-between" as const,
+    borderWidth: 1,
   },
   dropdownTriggerText: {
     fontSize: 18,

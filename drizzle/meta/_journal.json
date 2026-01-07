@@ -15,6 +15,20 @@
       "when": 1766643520195,
       "tag": "0001_unknown_hex",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1767758614766,
+      "tag": "0002_fast_siren",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1767760952078,
+      "tag": "0003_white_iron_patriot",
+      "breakpoints": true
     }
   ]
 }

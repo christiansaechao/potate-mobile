@@ -35,14 +35,35 @@ export const SETTINGS_OPTIONS = {
     { label: "20 min", value: 20 },
     { label: "30 min", value: 30 },
   ],
+
+  WEEKLY_GOAL: [
+    { label: "3 sessions", value: 3 },
+    { label: "5 sessions", value: 5 },
+    { label: "8 sessions", value: 8 },
+    { label: "10 sessions", value: 10 },
+    { label: "15 sessions", value: 15 },
+    { label: "20 sessions", value: 20 },
+  ],
+
+  WEEKLY_FOCUS_TIME_GOAL: [
+    { label: "1 hr", value: 60 },
+    { label: "2 hrs", value: 120 },
+    { label: "4 hrs", value: 240 },
+    { label: "6 hrs", value: 360 },
+    { label: "8 hrs", value: 480 },
+    { label: "10 hrs", value: 600 },
+    { label: "20 hrs", value: 1200 },
+    { label: "40 hrs", value: 2400 },
+    { label: "60 hrs", value: 3600 },
+  ],
 };
 
 // Theme definitions mapping Modes to Colors
 export const THEMES: Record<AppTheme, Record<TimerMode, string>> = {
   default: {
-    [TimerMode.FOCUS]: "bg-orange-200",
-    [TimerMode.SHORT_BREAK]: "bg-green-200",
-    [TimerMode.LONG_BREAK]: "bg-blue-200",
+    [TimerMode.FOCUS]: "bg-[#FFFDF5]",
+    [TimerMode.SHORT_BREAK]: "bg-[#F0FDF4]",
+    [TimerMode.LONG_BREAK]: "bg-[#EFF6FF]",
   },
   dark: {
     [TimerMode.FOCUS]: "bg-gray-700",
@@ -68,9 +89,9 @@ export const THEMES: Record<AppTheme, Record<TimerMode, string>> = {
  */
 export const HEX_THEMES: Record<AppTheme, Record<TimerMode, string>> = {
   default: {
-    [TimerMode.FOCUS]: "#fed7aa", // orange-200
-    [TimerMode.SHORT_BREAK]: "#bbf7d0", // green-200
-    [TimerMode.LONG_BREAK]: "#bfdbfe", // blue-200
+    [TimerMode.FOCUS]: "#FFFDF5",
+    [TimerMode.SHORT_BREAK]: "#F0FDF4",
+    [TimerMode.LONG_BREAK]: "#EFF6FF",
   },
   dark: {
     [TimerMode.FOCUS]: "#374151", // gray-700

@@ -1,12 +1,12 @@
 import { createContext, useState, useEffect } from "react";
-import { DEFAULT_TIMES } from "@/constants/constants";
+import { DEFAULT_TIMES, THEMES } from "@/constants/constants";
 import { TimerMode } from "@/types/types";
 import UserOps from "@/lib/settings";
 import { IUserContext } from "@/types/settings.types";
 
 export const UserContext = createContext<
   IUserContext & {
-    updateUser: (user: IUserContext) => void;
+    updateUser: (user: IUserContext) => Promise<void>;
   }
 >({
   name: "",
@@ -16,9 +16,11 @@ export const UserContext = createContext<
   LONG_BREAK: DEFAULT_TIMES[TimerMode.LONG_BREAK],
   vibration: 0,
   weekly_goal: 5,
+  weekly_focus_time_goal: 120, // Default 2 hours
+  theme: "default",
   exp: 0,
   level: 0,
-  updateUser: () => {},
+  updateUser: async () => {},
 });
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
@@ -30,12 +32,27 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     LONG_BREAK: DEFAULT_TIMES[TimerMode.LONG_BREAK],
     vibration: 0,
     weekly_goal: 5,
+    weekly_focus_time_goal: 120,
+    theme: "default",
     exp: 0,
     level: 0,
   });
 
-  function updateUser(user: IUserContext) {
-    setUser(user);
+  async function updateUser(newUser: IUserContext) {
+    setUser(newUser);
+    try {
+      await UserOps.updateUserSettings({
+        focus_duration: newUser.FOCUS,
+        short_break_duration: newUser.SHORT_BREAK,
+        long_break_duration: newUser.LONG_BREAK,
+        vibration: newUser.vibration,
+        weekly_goal: newUser.weekly_goal,
+        weekly_focus_time_goal: newUser.weekly_focus_time_goal,
+        theme: newUser.theme,
+      });
+    } catch (error) {
+      console.error("Auto-save failed:", error);
+    }
   }
 
   useEffect(() => {
@@ -51,11 +68,19 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setUser({
           name: userData.name ?? "",
           email: userData.email ?? "",
-          FOCUS: userData.focus_duration,
-          SHORT_BREAK: userData.short_break_duration,
-          LONG_BREAK: userData.long_break_duration,
+          FOCUS: userData.focus_duration ?? DEFAULT_TIMES[TimerMode.FOCUS],
+          SHORT_BREAK:
+            userData.short_break_duration ??
+            DEFAULT_TIMES[TimerMode.SHORT_BREAK],
+          LONG_BREAK:
+            userData.long_break_duration ?? DEFAULT_TIMES[TimerMode.LONG_BREAK],
           vibration: userData.vibration === 1 ? 1 : 0,
           weekly_goal: userData.weekly_goal ?? 5,
+          weekly_focus_time_goal: userData.weekly_focus_time_goal ?? 120,
+          theme:
+            userData.theme && Object.keys(THEMES).includes(userData.theme)
+              ? userData.theme
+              : "default",
           exp: userData.exp ?? 0,
           level: userData.level ?? 0,
         });

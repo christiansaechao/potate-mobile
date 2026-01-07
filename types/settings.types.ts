@@ -8,19 +8,21 @@ export type Option<T> = {
 export type PickerProps<T> = {
   state: T;
   options: Option<T>[];
-  setState: React.Dispatch<React.SetStateAction<T>>;
+  setState: (val: T) => void;
 };
 
 export interface IUserContext {
-  name: string | null;
-  email: string | null;
-  FOCUS: number | null;
-  SHORT_BREAK: number | null;
-  LONG_BREAK: number | null;
+  name: string;
+  email: string;
+  FOCUS: number;
+  SHORT_BREAK: number;
+  LONG_BREAK: number;
   vibration: number;
-  weekly_goal: number | null;
-  exp: number | null;
-  level: number | null;
+  weekly_goal: number;
+  weekly_focus_time_goal: number;
+  theme: string;
+  exp: number;
+  level: number;
 }
 
 export type IUseTimer = (

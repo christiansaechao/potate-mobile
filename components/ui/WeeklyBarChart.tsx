@@ -1,6 +1,11 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withDelay,
+} from "react-native-reanimated";
 import { CustomText } from "../custom";
 
 interface WeeklyBarChartProps {
@@ -55,25 +60,56 @@ export function WeeklyBarChart({
           const heightPercentage = Math.min((item.value / maxValue) * 100, 100);
 
           return (
-            <View key={index} style={styles.column}>
-              <View style={styles.barContainer}>
-                <Animated.View
-                  entering={FadeInDown.delay(index * 100).springify()}
-                  style={[
-                    styles.bar,
-                    {
-                      height: `${heightPercentage}%`,
-                      backgroundColor: themeColor,
-                      opacity: 0.8,
-                    },
-                  ]}
-                />
-              </View>
-              <CustomText style={styles.label}>{item.label}</CustomText>
-            </View>
+            <Bar
+              key={index}
+              heightPercentage={heightPercentage}
+              themeColor={themeColor}
+              label={item.label}
+              delay={index * 100}
+            />
           );
         })}
       </View>
+    </View>
+  );
+}
+
+function Bar({
+  heightPercentage,
+  themeColor,
+  label,
+  delay,
+}: {
+  heightPercentage: number;
+  themeColor: string;
+  label: string;
+  delay: number;
+}) {
+  const height = useSharedValue(0);
+
+  useEffect(() => {
+    // Start animation on mount with delay
+    height.value = withDelay(
+      delay,
+      withSpring(heightPercentage, { damping: 18, stiffness: 80 })
+    );
+  }, [heightPercentage, delay]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      height: `${height.value}%`,
+      opacity: 0.8,
+    };
+  });
+
+  return (
+    <View style={styles.column}>
+      <View style={styles.barContainer}>
+        <Animated.View
+          style={[styles.bar, { backgroundColor: themeColor }, animatedStyle]}
+        />
+      </View>
+      <CustomText style={styles.label}>{label}</CustomText>
     </View>
   );
 }

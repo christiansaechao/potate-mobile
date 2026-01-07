@@ -5,6 +5,7 @@ import { styles } from "@/components/settings/Styles";
 import { THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { CustomText } from "../custom/custom-text";
+import { SquishyButton } from "../ui/SquishyButton";
 
 // --- Types ---
 
@@ -13,7 +14,7 @@ type Option<T> = { label: string; value: T };
 type DropdownProps<T> = {
   state: T;
   options: Option<T>[];
-  setState: React.Dispatch<React.SetStateAction<T>>;
+  setState: (val: T) => void;
   placeholder?: string;
   title?: string;
 };
@@ -45,16 +46,19 @@ export const GenericDropdown = <T,>({
   return (
     <>
       {/* Trigger */}
-      <Pressable
+      <SquishyButton
         style={styles.dropdownTrigger}
         onPress={() => setOpen(true)}
-        className={`${backgroundColor}`}
       >
-        <CustomText numberOfLines={1}>
-          {selected?.label ?? placeholder}
-        </CustomText>
-        <CustomText>▾</CustomText>
-      </Pressable>
+        <View
+          className={`${backgroundColor} flex-row justify-between items-center w-full`}
+        >
+          <CustomText numberOfLines={1}>
+            {selected?.label ?? placeholder}
+          </CustomText>
+          <CustomText>▾</CustomText>
+        </View>
+      </SquishyButton>
 
       {/* Sheet */}
       <Modal
