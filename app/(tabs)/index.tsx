@@ -16,6 +16,7 @@ import AnimatedScreen from "@/components/ui/AnimatedScreen";
 import { Confetti } from "@/components/potato/Confetti";
 
 // Constants & Types
+import { DB_DEFAULT_TIMES } from "@/constants/constants";
 import { THEMES } from "@/constants/theme";
 import { PotatoQuote, TimerState } from "@/types/types";
 import { calculateLevel } from "@/lib/leveling";
@@ -101,10 +102,11 @@ export default function App() {
   // --- Derived State ---
 
   const progress = useMemo(() => {
-    const totalMinutes = user?.[mode];
-    if (totalMinutes == null || totalMinutes <= 0) return 0;
+    const totalSeconds = user?.[
+      DB_DEFAULT_TIMES[mode] as keyof typeof user
+    ] as number;
+    if (totalSeconds == null || totalSeconds <= 0) return 0;
 
-    const totalSeconds = totalMinutes * 60;
     const pct = ((totalSeconds - timeLeft) / totalSeconds) * 100;
     return Math.max(0, Math.min(100, pct));
   }, [mode, timeLeft, user]);
@@ -149,7 +151,7 @@ export default function App() {
           <ModeSwitcher mode={mode} switchMode={switchMode} />
           <View className="w-full flex justify-center items-center gap-4 py-2">
             <HealthBar health={health} />
-            <LevelDisplay total_exp={user.exp} />
+            <LevelDisplay total_exp={user.exp ?? 0} />
           </View>
 
           <PotatoArea
