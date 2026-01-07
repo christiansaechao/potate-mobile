@@ -1,18 +1,26 @@
 import { Redirect, Tabs } from "expo-router";
-import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
-import { FloatingTabBar } from "../../components/ui/floating-tab-bar";
-import { IconSymbol } from "../../components/ui/icon-symbol";
-import { UserProvider } from "@/contexts/user/UserProvider";
-import { ThemeProvider } from "@/contexts/theming/ThemeProviders";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider as NavigationThemeProvider,
 } from "@react-navigation/native";
+
+import { ThemeProvider } from "@/contexts/theming/ThemeProviders";
+import { UserProvider } from "@/contexts/user/UserProvider";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
+
+import { FloatingTabBar } from "../../components/ui/floating-tab-bar";
+import { IconSymbol } from "../../components/ui/icon-symbol";
+
 export default function TabLayout() {
+  // --- Hooks ---
+
   const { completed, isLoading } = useOnboardingStatus();
   const colorScheme = useColorScheme();
+
+  // --- Render ---
+
   if (isLoading) {
     return null;
   }

@@ -1,15 +1,22 @@
-import { Smartphone } from "lucide-react-native";
 import React from "react";
 import { View } from "react-native";
+import { Smartphone } from "lucide-react-native";
+
 import { CustomText } from "../custom";
+
+// --- Types ---
 
 type HealthBarProps = {
   health: number; // 0–100
 };
 
 export const HealthBar: React.FC<HealthBarProps> = ({ health }) => {
+  // --- Derived State ---
+
   const barColor =
     health < 30 ? "bg-red-500" : health < 70 ? "bg-yellow-400" : "bg-green-400";
+
+  // --- Render ---
 
   return (
     <View className="w-full">

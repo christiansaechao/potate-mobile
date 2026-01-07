@@ -1,5 +1,3 @@
-import { THEMES } from "@/constants/constants";
-import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { ScrollView } from "react-native";
@@ -7,17 +5,26 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
-import { SettingsHeader } from "@/components/settings/SettingsHeader";
+import { THEMES } from "@/constants/constants";
+
 import { MainCard } from "@/components/settings/MainCard";
+import { SettingsHeader } from "@/components/settings/SettingsHeader";
 import AnimatedScreen from "@/components/ui/AnimatedScreen";
 
 export default function Settings() {
-  const insets = useSafeAreaInsets();
+  // --- Hooks ---
 
-  // Theme(s)
+  const insets = useSafeAreaInsets();
   const { theme, mode } = useTheme();
+
+  // --- Constants ---
+
   const backgroundColor = THEMES[theme][mode];
+
+  // --- Render ---
 
   return (
     <SafeAreaView

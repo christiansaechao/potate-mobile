@@ -1,27 +1,33 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, Easing, Pressable, View } from "react-native";
+
 import { TimerMode, TimerState } from "../../types/types";
 import { ChatBubble } from "./ChatBubble";
 import PotatoSprite from "./PotatoAnimate";
 
+// --- Types ---
+
 type PotatoAreaProps = {
   quote: { text: string };
-  mood: "happy" | "angry" | "sleepy" | "chaotic" | "cool";
+  mood: "happy" | "angry" | "sleepy" | "chaotic" | "cool"; // currently unused by PotatoSprite but kept for API
   state: TimerState;
-  health: number;
+  health: number; // currently unused by PotatoSprite but kept for API
   fetchWisdom: (mode: TimerMode, state: TimerState, health: number) => void;
   mode: TimerMode;
 };
 
 export const PotatoArea: React.FC<PotatoAreaProps> = ({
   quote,
-  mood,
   state,
   health,
   fetchWisdom,
   mode,
 }) => {
+  // --- Refs ---
+
   const bounce = useRef(new Animated.Value(0)).current;
+
+  // --- Effects ---
 
   useEffect(() => {
     bounce.setValue(0);
@@ -49,10 +55,14 @@ export const PotatoArea: React.FC<PotatoAreaProps> = ({
     return () => loop.stop();
   }, [state, bounce]);
 
+  // --- Interpolations ---
+
   const bounceY = bounce.interpolate({
     inputRange: [0, 1],
     outputRange: [0, -10],
   });
+
+  // --- Render ---
 
   return (
     <View className="relative w-full flex-col items-center justify-end">
@@ -68,19 +78,6 @@ export const PotatoArea: React.FC<PotatoAreaProps> = ({
         hitSlop={10}
       >
         <PotatoSprite />
-        {/* <Animated.View
-          style={
-            state === TimerState.COMPLETED
-              ? { transform: [{ translateY: bounceY }] }
-              : undefined
-          }
-        >
-          <Potato
-            mood={mood}
-            isAnimating={state === TimerState.RUNNING}
-            health={health}
-          />
-        </Animated.View> */}
       </Pressable>
     </View>
   );

@@ -1,9 +1,11 @@
 import { Text, type TextProps } from "react-native";
+
 import { Colors } from "../../constants/theme";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 
 export function CustomText({ style, className, ...rest }: TextProps) {
   const { theme } = useTheme();
+
   const color = Colors[theme];
 
   return (

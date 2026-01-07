@@ -1,17 +1,18 @@
-import { Pause, Play, RotateCcw, SkipForward } from "lucide-react-native";
 import React from "react";
 import { View } from "react-native";
+import { Pause, Play, RotateCcw } from "lucide-react-native";
+
 import { Colors } from "../../constants/theme";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
-import { TimerMode, TimerState } from "../../types/types";
+import { TimerState } from "../../types/types";
 import { ThemedPressable } from "../ui/themed-pressable";
+
+// --- Types ---
 
 type TimerControlsProps = {
   state: TimerState;
-  mode: TimerMode;
   toggleTimer: () => void;
   resetTimer: () => void;
-  switchMode: (m: TimerMode) => void;
 };
 
 export const TimerControls: React.FC<TimerControlsProps> = ({
@@ -19,9 +20,15 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
   toggleTimer,
   resetTimer,
 }) => {
+  // --- Hooks ---
+
   const { theme } = useTheme();
 
+  // --- Constants ---
+
   const color = Colors[theme];
+
+  // --- Render ---
 
   return (
     <View className="flex-row items-center gap-6 py-2">
@@ -63,18 +70,3 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
     </View>
   );
 };
-
-{
-  /* add back in mdoe and switchMode to the props if you want to add thsi back in 
-        <ThemedPressable
-          onPress={() =>
-            switchMode(
-              mode === TimerMode.FOCUS ? TimerMode.SHORT_BREAK : TimerMode.FOCUS
-            )
-          }
-          className="p-3 bg-white/20 rounded-xl active:opacity-80"
-          hitSlop={6}
-        >
-          <SkipForward size={20} color={color.buttonIconColor} />
-        </ThemedPressable> */
-}

@@ -1,6 +1,6 @@
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import * as Haptics from "expo-haptics";
 import { BlurView } from "expo-blur";
+import * as Haptics from "expo-haptics";
 import { Pressable, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -9,7 +9,11 @@ export function FloatingTabBar({
   descriptors,
   navigation,
 }: BottomTabBarProps) {
+  // --- Hooks ---
+
   const insets = useSafeAreaInsets();
+
+  // --- Render ---
 
   return (
     <View
@@ -59,6 +63,8 @@ export function FloatingTabBar({
     </View>
   );
 }
+
+// --- Subcomponents ---
 
 function TabButton({
   isFocused,

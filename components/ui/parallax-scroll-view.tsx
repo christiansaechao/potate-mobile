@@ -10,6 +10,8 @@ import Animated, {
 import { useColorScheme } from "../../hooks/use-color-scheme";
 import { useThemeColor } from "../../hooks/use-theme-color";
 
+// --- Constants & Types ---
+
 const HEADER_HEIGHT = 250;
 
 type Props = PropsWithChildren<{
@@ -22,10 +24,15 @@ export default function ParallaxScrollView({
   headerImage,
   headerBackgroundColor,
 }: Props) {
+  // --- Hooks ---
+
   const backgroundColor = useThemeColor({}, "background");
   const colorScheme = useColorScheme() ?? "light";
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollOffset(scrollRef);
+
+  // --- Animations ---
+
   const headerAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -46,6 +53,8 @@ export default function ParallaxScrollView({
       ],
     };
   });
+
+  // --- Render ---
 
   return (
     <Animated.ScrollView

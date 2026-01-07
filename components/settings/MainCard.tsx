@@ -1,31 +1,32 @@
 import { useEffect, useState } from "react";
-import { View, Pressable, Switch } from "react-native";
-import { Bed, Bell, Clock, Coffee, Target, User } from "lucide-react-native";
+import { View, Pressable } from "react-native";
+import { Bed, Clock, Coffee, User } from "lucide-react-native";
 import * as Haptics from "expo-haptics";
 
 // Components
-import { CustomText } from "../custom";
-import { Row } from "./Row";
 import { ThemeSelector } from "@/components/potato/ThemeSelector";
 import { Confetti } from "../potato/Confetti";
 import Divider from "../ui/divider";
+import { CustomText } from "../custom";
+import { Row } from "./Row";
 
-// constants
+// Constants
 import { SETTINGS_OPTIONS, THEMES } from "@/constants/constants";
 import { Colors } from "@/constants/theme";
 
-// hooks
+// Hooks
 import { useTheme } from "@/hooks/context-hooks/useTheme";
-
-// helper functions
-import { generateMockData, resetData } from "@/lib/dev-utils";
-import { IUserContext } from "@/types/settings.types";
-import UserOps from "@/lib/settings";
-import { useConfetti } from "@/hooks/useConfetti";
 import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
+import { useConfetti } from "@/hooks/useConfetti";
+
+// Helpers & Types
+import { generateMockData, resetData } from "@/lib/dev-utils";
+import UserOps from "@/lib/settings";
+import { IUserContext } from "@/types/settings.types";
 
 export const MainCard = () => {
-  // hooks
+  // --- Hooks ---
+
   const {
     name,
     email,
@@ -39,15 +40,30 @@ export const MainCard = () => {
   const { theme, setTheme, mode } = useTheme();
   const { showConfetti, triggerConfetti } = useConfetti();
 
-  // state variables
+  // --- State ---
+
   const [pomodoro, setPomodoro] = useState(FOCUS);
   const [shortBreak, setShortBreak] = useState(SHORT_BREAK);
   const [longBreak, setLongBreak] = useState(LONG_BREAK);
   const [weeklyGoal, setWeeklyGoal] = useState(weekly_goal);
   const [vibration, setVibration] = useState(userVibration === 1);
 
+  // --- Constants ---
+
   const backgroundColor = THEMES[theme][mode];
   const color = Colors[theme];
+
+  // --- Effects ---
+
+  useEffect(() => {
+    setPomodoro(FOCUS);
+    setShortBreak(SHORT_BREAK);
+    setLongBreak(LONG_BREAK);
+    setWeeklyGoal(weekly_goal);
+    setVibration(Boolean(userVibration));
+  }, [FOCUS, SHORT_BREAK, LONG_BREAK, weekly_goal, userVibration]);
+
+  // --- Handlers ---
 
   async function handleSaveSettings() {
     const { success, data } = await UserOps.updateUserSettings({
@@ -57,7 +73,7 @@ export const MainCard = () => {
       short_break_duration: shortBreak,
       long_break_duration: longBreak,
       weekly_goal: weeklyGoal,
-      vibration: vibration,
+      vibration: vibration ? 1 : 0,
     });
 
     if (!success)
@@ -87,13 +103,7 @@ export const MainCard = () => {
     }
   }
 
-  useEffect(() => {
-    setPomodoro(FOCUS);
-    setShortBreak(SHORT_BREAK);
-    setLongBreak(LONG_BREAK);
-    setWeeklyGoal(weekly_goal);
-    setVibration(Boolean(userVibration));
-  }, [FOCUS, SHORT_BREAK, LONG_BREAK, weekly_goal, userVibration]);
+  // --- Render ---
 
   return (
     <View
@@ -214,100 +224,6 @@ export const MainCard = () => {
       <Divider />
 
       <ThemeSelector currentTheme={theme} onSelect={setTheme} />
-
-      {/* Vibration */}
-      {/* <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderRadius: 22,
-          paddingHorizontal: 16,
-          paddingVertical: 14,
-          marginTop: 14,
-        }}
-        className={`${backgroundColor}`}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 12,
-          }}
-        >
-          <View
-            style={{ backgroundColor: color.text }}
-            className="p-2 rounded-full"
-          >
-            <Bell color={color.buttonIconColor} size={24} />
-          </View>
-          <CustomText
-            style={{
-              fontSize: 18,
-              lineHeight: 22,
-            }}
-          >
-            Vibration
-          </CustomText>
-        </View>
-
-        <Switch
-          value={Boolean(userVibration)}
-          onValueChange={setVibration}
-          trackColor={{
-            false: "rgba(255,255,255,0.18)",
-            true: "#7FD7BE",
-          }}
-          thumbColor="#F2F6FB"
-        />
-      </View> */}
-
-      {/* Weekly Goal */}
-      {/* <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderRadius: 22,
-          paddingHorizontal: 16,
-          paddingVertical: 16,
-          marginTop: 14,
-        }}
-        className={`${backgroundColor}`}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 12,
-          }}
-          className={`${backgroundColor}`}
-        >
-          <View
-            style={{ backgroundColor: color.text }}
-            className="p-2 rounded-full"
-          >
-            <Target color={color.buttonIconColor} size={24} />
-          </View>
-          <CustomText
-            style={{
-              fontSize: 18,
-              lineHeight: 22,
-            }}
-          >
-            Weekly Goal
-          </CustomText>
-        </View>
-
-        <CustomText
-          style={{
-            fontSize: 18,
-            lineHeight: 22,
-          }}
-        >
-          {weeklyGoal}
-        </CustomText>
-      </View> */}
 
       <Divider />
 

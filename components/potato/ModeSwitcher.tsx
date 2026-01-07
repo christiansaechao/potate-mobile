@@ -1,6 +1,9 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
+
 import { TimerMode } from "../../types/types";
+
+// --- Types ---
 
 type ModeSwitcherProps = {
   mode: TimerMode;
@@ -11,7 +14,11 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
   mode,
   switchMode,
 }) => {
+  // --- Constants ---
+
   const modes = Object.values(TimerMode) as TimerMode[];
+
+  // --- Render ---
 
   return (
     <View className="flex-row bg-black/10 p-1.5 rounded-full border border-white/5">

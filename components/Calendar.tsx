@@ -1,10 +1,13 @@
+import React, { useState } from "react";
+import { TouchableOpacity, View } from "react-native";
+import { ChevronLeft, ChevronRight } from "lucide-react-native";
+
 import { COLORS, HEX_THEMES, THEMES } from "@/constants/constants";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { formatTime } from "@/lib/helper";
-import { ChevronLeft, ChevronRight } from "lucide-react-native";
-import { useState } from "react";
-import { TouchableOpacity, View } from "react-native";
 import { CustomText } from "./custom";
+
+// --- Types ---
 
 type CalendarProps = {
   markedDates: string[];
@@ -16,6 +19,8 @@ type CalendarProps = {
   onSelectDate: (date: string | null) => void;
 };
 
+// --- Constants ---
+
 const DAYS_OF_WEEK = ["S", "M", "T", "W", "T", "F", "S"];
 
 export default function Calendar({
@@ -24,8 +29,12 @@ export default function Calendar({
   selectedDate,
   onSelectDate,
 }: CalendarProps) {
+  // --- State & Hooks ---
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const { theme, mode } = useTheme();
+
+  // --- Helpers ---
 
   const getDaysInMonth = (year: number, month: number) => {
     return new Date(year, month + 1, 0).getDate();
@@ -41,6 +50,27 @@ export default function Calendar({
     setCurrentDate(newDate);
     onSelectDate(null); // Close tooltip on month change
   };
+
+  const isMarked = (day: number) => {
+    const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
+    return markedDates.includes(dateString);
+  };
+
+  const handleDayPress = (day: number) => {
+    const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
+
+    if (selectedDate === dateString) {
+      onSelectDate(null);
+    } else if (markedDates.includes(dateString)) {
+      onSelectDate(dateString);
+    }
+  };
+
+  // --- Derived State ---
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -59,13 +89,6 @@ export default function Calendar({
   for (let i = 1; i <= daysInMonth; i++) {
     days.push(i);
   }
-
-  const isMarked = (day: number) => {
-    const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(
-      day
-    ).padStart(2, "0")}`;
-    return markedDates.includes(dateString);
-  };
 
   // Theme colors
   const ThemeColor = THEMES[theme][mode];
@@ -92,17 +115,7 @@ export default function Calendar({
   const canGoPrev = currentMonthIndex > minIndex;
   const canGoNext = currentMonthIndex < maxIndex;
 
-  const handleDayPress = (day: number) => {
-    const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(
-      day
-    ).padStart(2, "0")}`;
-
-    if (selectedDate === dateString) {
-      onSelectDate(null);
-    } else if (markedDates.includes(dateString)) {
-      onSelectDate(dateString);
-    }
-  };
+  // --- Render ---
 
   return (
     <View className="z-50">

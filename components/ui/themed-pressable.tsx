@@ -2,6 +2,8 @@ import { Pressable, type PressableProps } from "react-native";
 
 import { useThemeColor } from "../../hooks/use-theme-color";
 
+// --- Types ---
+
 export type PressableTextProps = PressableProps & {
   lightColor?: string;
   darkColor?: string;

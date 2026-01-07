@@ -1,4 +1,6 @@
+import React from "react";
 import { View } from "react-native";
+
 import { CustomText } from "@/components/custom/custom-text";
 
 export const SettingsHeader = () => {

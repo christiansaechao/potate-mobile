@@ -1,8 +1,3 @@
-import PotatoSprite from "@/components/potato/PotatoAnimate";
-import { DEFAULT_TIMES } from "@/constants/constants";
-import userOps from "@/lib/settings";
-import { TimerMode } from "@/types/types";
-import { router } from "expo-router";
 import { useState } from "react";
 import {
   ScrollView,
@@ -12,10 +7,25 @@ import {
   View,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useConfetti } from "@/hooks/useConfetti";
+import { router } from "expo-router";
+
+// Components
 import { Confetti } from "@/components/potato/Confetti";
+import PotatoSprite from "@/components/potato/PotatoAnimate";
+
+// Constants & Types
+import { DEFAULT_TIMES } from "@/constants/constants";
+import { TimerMode } from "@/types/types";
+
+// Hooks
+import { useConfetti } from "@/hooks/useConfetti";
+
+// Libs
+import userOps from "@/lib/settings";
 
 export default function Onboarding() {
+  // --- State ---
+
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -25,7 +35,11 @@ export default function Onboarding() {
     long_break_duration: DEFAULT_TIMES[TimerMode.LONG_BREAK] / 60,
   });
 
+  // --- Hooks ---
+
   const { showConfetti, triggerConfetti } = useConfetti();
+
+  // --- Handlers ---
 
   const updateUserSettings = async () => {
     try {
@@ -55,6 +69,8 @@ export default function Onboarding() {
   const updateFormData = (key: string, value: string | number) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
+
+  // --- Render ---
 
   return (
     <SafeAreaProvider>

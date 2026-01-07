@@ -1,10 +1,12 @@
-import { THEMES } from "@/constants/constants";
-import { useTheme } from "@/hooks/context-hooks/useTheme";
 import React from "react";
 import { FlatList, Modal, Platform, Pressable, View } from "react-native";
 
 import { styles } from "@/components/settings/Styles";
+import { THEMES } from "@/constants/constants";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { CustomText } from "../custom/custom-text";
+
+// --- Types ---
 
 type Option<T> = { label: string; value: T };
 
@@ -23,14 +25,22 @@ export const GenericDropdown = <T,>({
   placeholder = "Select…",
   title = "Choose",
 }: DropdownProps<T>) => {
+  // --- State & Hooks ---
+
   const [open, setOpen] = React.useState(false);
+
+  const { theme, mode } = useTheme();
+
+  // --- Derived State ---
 
   const selected = React.useMemo(
     () => options.find((o) => Object.is(o.value, state)),
     [options, state]
   );
-  const { theme, mode } = useTheme();
+
   const backgroundColor = THEMES[theme][mode];
+
+  // --- Render ---
 
   return (
     <>

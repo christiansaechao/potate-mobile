@@ -1,15 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Animated, Easing, Platform, Text, View } from "react-native";
 
+// --- Types ---
+
 interface ChatBubbleProps {
   text: string;
   visible: boolean;
 }
 
 export const ChatBubble: React.FC<ChatBubbleProps> = ({ text, visible }) => {
+  // --- State & Refs ---
+
   const bounceAnim = useRef(new Animated.Value(0)).current;
   const [displayed, setDisplayed] = useState("");
   const [showTail, setShowTail] = useState(false);
+
+  // --- Effects ---
 
   useEffect(() => {
     let i = 0;
@@ -53,6 +59,8 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ text, visible }) => {
     loop.start();
     return () => loop.stop();
   }, [visible, text, bounceAnim]);
+
+  // --- Render ---
 
   if (!visible || !text) return null;
 

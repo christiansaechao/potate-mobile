@@ -1,8 +1,11 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
+
 import { THEMES } from "../../constants/constants";
 import { AppTheme } from "../../types/types";
 import { CustomText } from "../custom";
+
+// --- Types ---
 
 interface ThemeSelectorProps {
   currentTheme: AppTheme;
@@ -13,7 +16,11 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   currentTheme,
   onSelect,
 }) => {
+  // --- Constants ---
+
   const themeKeys = Object.keys(THEMES) as AppTheme[];
+
+  // --- Render ---
 
   return (
     <View className="w-full p-4 rounded-2xl">

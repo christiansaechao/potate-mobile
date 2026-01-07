@@ -13,10 +13,14 @@ export default function AnimatedScreen({
 }: {
   children: React.ReactNode;
 }) {
+  // --- Hooks ---
+
   const isFocused = useIsFocused();
 
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(10);
+
+  // --- Effects ---
 
   useEffect(() => {
     if (isFocused) {
@@ -32,10 +36,14 @@ export default function AnimatedScreen({
     }
   }, [isFocused]);
 
+  // --- Styles ---
+
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
     transform: [{ translateY: translateY.value }],
   }));
+
+  // --- Render ---
 
   return (
     <Animated.View style={[styles.container, animatedStyle]}>

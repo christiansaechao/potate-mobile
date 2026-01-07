@@ -1,6 +1,7 @@
 import { View } from "react-native";
-import { useTheme } from "@/hooks/context-hooks/useTheme";
+
 import { COLORS } from "@/constants/constants";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 
 export default function Divider({
   opacity = 0.5,
@@ -8,8 +9,16 @@ export default function Divider({
   marginVertical = 20,
   inset = 0,
 }) {
+  // --- Hooks ---
+
   const { theme } = useTheme();
+
+  // --- Constants ---
+
   const dividerColor = COLORS[theme].text;
+
+  // --- Render ---
+
   return (
     <View
       style={{

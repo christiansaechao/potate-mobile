@@ -1,5 +1,6 @@
-import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 import { Redirect } from "expo-router";
+
+import { useOnboardingStatus } from "@/hooks/useOnboardingStatus";
 
 export const Index = () => {
   const { completed, isLoading } = useOnboardingStatus();

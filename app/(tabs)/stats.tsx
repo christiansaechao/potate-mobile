@@ -1,33 +1,44 @@
-import Calendar from "@/components/Calendar";
-import { CustomText } from "@/components/custom";
-import { THEMES } from "@/constants/constants";
-import { useTheme } from "@/hooks/context-hooks/useTheme";
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "expo-router";
 import {
   Image,
   TouchableWithoutFeedback,
   View,
   ScrollView,
 } from "react-native";
-
-import StatCard from "@/components/ui/stats-card";
-import { formatTime, getTimeInSeconds } from "@/lib/helper";
-import sessionOps from "@/lib/sessions";
-import { StatsType, TimerMode } from "@/types/types";
-import { useEffect, useState } from "react";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import Animated, { FadeInDown } from "react-native-reanimated";
+
+// Components
+import Calendar from "@/components/Calendar";
+import { CustomText } from "@/components/custom";
+import AnimatedScreen from "@/components/ui/AnimatedScreen";
+// import AnimatedDashedBorder from "@/components/ui/AnimatedDashedBoarder"; // Unused in original code? No, it was imported but not used? Let's check original. It was imported. Usage? Not used in JSX.
+import Divider from "@/components/ui/divider";
+import StatCard from "@/components/ui/stats-card";
+
+// Constants & Types
+import { THEMES } from "@/constants/constants";
+import { StatsType, TimerMode } from "@/types/types";
+
+// Hooks
+import { useTheme } from "@/hooks/context-hooks/useTheme";
+
+// Libs
+import { formatTime, getTimeInSeconds } from "@/lib/helper";
+import sessionOps from "@/lib/sessions";
 import IntervalOps from "@/lib/intervals";
 
-import Animated, { FadeInDown } from "react-native-reanimated";
-import AnimatedDashedBorder from "@/components/ui/AnimatedDashedBoarder";
-import AnimatedScreen from "@/components/ui/AnimatedScreen";
-
-import Divider from "@/components/ui/divider";
-
 export default function Stats() {
+  // --- Hooks ---
+
   const { theme, mode } = useTheme();
+  const insets = useSafeAreaInsets();
+
+  // --- State ---
 
   const [stats, setStats] = useState<StatsType>({
     totalSessions: 0,
@@ -38,7 +49,17 @@ export default function Stats() {
     allBreaks: "0",
   });
 
+  const [markedDates, setMarkedDates] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  const [dailyStats, setDailyStats] = useState<
+    Record<string, { focus: number; shortBreak: number; longBreak: number }>
+  >({});
+
+  // --- Constants ---
+
   const LoadedAnim = require("../../assets/videos/potato.gif");
+  const backgroundColor = THEMES[theme][mode];
 
   const formattedStats = [
     { label: "Sessions Started", value: stats.totalSessions },
@@ -52,12 +73,7 @@ export default function Stats() {
     { label: "Breaks", value: stats.allBreaks },
   ];
 
-  const [markedDates, setMarkedDates] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-
-  const [dailyStats, setDailyStats] = useState<
-    Record<string, { focus: number; shortBreak: number; longBreak: number }>
-  >({});
+  // --- Helpers ---
 
   const getStats = async () => {
     try {
@@ -169,12 +185,17 @@ export default function Stats() {
     }
   };
 
-  useEffect(() => {
-    getStats();
-  }, []);
+  // --- Effects ---
 
-  const backgroundColor = THEMES[theme][mode];
-  const insets = useSafeAreaInsets();
+  // --- Effects ---
+
+  useFocusEffect(
+    useCallback(() => {
+      getStats();
+    }, [])
+  );
+
+  // --- Render ---
 
   return (
     <SafeAreaView

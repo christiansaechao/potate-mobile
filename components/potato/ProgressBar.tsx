@@ -1,6 +1,8 @@
 import React from "react";
 import { View } from "react-native";
 
+// --- Types ---
+
 type ProgressBarProps = {
   progress: number; // 0–100
 };

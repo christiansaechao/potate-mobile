@@ -1,40 +1,43 @@
 import { useEffect, useMemo, useState } from "react";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { View } from "react-native";
-
-import { PotatoQuote, TimerState } from "@/types/types";
-
-import { useNotifications } from "@/hooks/useNotifications";
-import { useSessionManager } from "@/hooks/useSessionManager";
-import { useLeaveAppConsequence } from "@/hooks/useLeaveAppConsequence";
-import { useTimer } from "@/hooks/useTimer";
-
+// Components
+import { AppBreakdown } from "@/components/potato/AppBreakdown"; // Wait invalid import in original? No AppBreakdown in imports
 import { Header } from "@/components/potato/Header";
 import { HealthBar } from "@/components/potato/HealthBar";
+import { LevelDisplay } from "@/components/potato/LevelDisplay";
 import { ModeSwitcher } from "@/components/potato/ModeSwitcher";
 import { PotatoArea } from "@/components/potato/PotatoArea";
 import { ProgressBar } from "@/components/potato/ProgressBar";
 import { TimerControls } from "@/components/potato/TimerControls";
 import { TimerDisplay } from "@/components/potato/TimerDisplay";
-import { LevelDisplay } from "@/components/potato/LevelDisplay";
-
-import { THEMES } from "@/constants/constants";
-
-import { useTheme } from "@/hooks/context-hooks/useTheme";
-
-import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
 import AnimatedScreen from "@/components/ui/AnimatedScreen";
 
+// Constants & Types
+import { THEMES } from "@/constants/constants";
+import { PotatoQuote, TimerState } from "@/types/types";
+
+// Hooks
+import { useTheme } from "@/hooks/context-hooks/useTheme";
+import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
+import { useLeaveAppConsequence } from "@/hooks/useLeaveAppConsequence";
+import { useNotifications } from "@/hooks/useNotifications";
+import { useSessionManager } from "@/hooks/useSessionManager";
+import { useTimer } from "@/hooks/useTimer";
+
 export default function App() {
-  // hook calls
+  // --- Hooks ---
+
   const user = useUserDefaults();
   const { theme, mode, setMode } = useTheme();
   const { StartSession, StopSession, StartInterval, StopInterval } =
     useSessionManager();
+
   useNotifications();
 
-  // states
+  // --- State ---
+
   const [health, setHealth] = useState(100);
   const [quote, setQuote] = useState<PotatoQuote>({
     text: "Ready to lock in?",
@@ -43,8 +46,12 @@ export default function App() {
   const [exp, setExp] = useState<number>(user.exp ?? 0);
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
 
+  // --- Constants ---
+
   const timeToCallQuote = 300;
   const backgroundColor = THEMES[theme][mode];
+
+  // --- Custom Hooks ---
 
   const {
     state,
@@ -78,6 +85,8 @@ export default function App() {
     setExp
   );
 
+  // --- Derived State ---
+
   const progress = useMemo(() => {
     const totalMinutes = user?.[mode];
     if (totalMinutes == null || totalMinutes <= 0) return 0;
@@ -95,6 +104,8 @@ export default function App() {
     return `${mm}:${ss}`;
   }, [timeLeft]);
 
+  // --- Effects ---
+
   useEffect(() => {
     let mounted = true;
 
@@ -108,6 +119,8 @@ export default function App() {
       mounted = false;
     };
   }, [mode, state, health, fetchQuote, timeLeft]);
+
+  // --- Render ---
 
   return (
     <SafeAreaView
@@ -138,10 +151,8 @@ export default function App() {
 
           <TimerControls
             state={state}
-            mode={mode}
             toggleTimer={toggleTimer}
             resetTimer={resetTimer}
-            switchMode={switchMode}
           />
 
           <ProgressBar progress={progress} />
