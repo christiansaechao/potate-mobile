@@ -50,4 +50,5 @@ export type IUseTimer = (
     s: TimerState,
     hp: number
   ) => Promise<{ text: string; mood: string }>;
+  achievementToToast: any | null;
 };

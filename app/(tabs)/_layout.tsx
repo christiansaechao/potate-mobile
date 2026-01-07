@@ -52,6 +52,15 @@ export default function TabLayout() {
               }}
             />
             <Tabs.Screen
+              name="trophy-case"
+              options={{
+                title: "Badges",
+                tabBarIcon: ({ color }) => (
+                  <IconSymbol size={24} name="trophy.fill" color={color} />
+                ),
+              }}
+            />
+            <Tabs.Screen
               name="index"
               options={{
                 title: "Potato",

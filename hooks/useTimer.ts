@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
-import { DEFAULT_TIMES, EXP_REWARDS } from "../constants/constants";
+import { DEFAULT_TIMES, XP_PER_MINUTE } from "../constants/constants";
 import { getPotatoWisdom } from "../services/potatoWisdomLocal";
 import userOps from "@/lib/settings";
 import { SessionType, TimerMode, TimerState } from "@/types/types";
 import { IUseTimer } from "@/types/settings.types";
+import { achievementOps, AchievementDef } from "../lib/achievements";
+import { calculateLevel } from "../lib/leveling";
 
 export const useTimer: IUseTimer = (
   mode,
@@ -26,6 +28,8 @@ export const useTimer: IUseTimer = (
   const [state, setState] = useState<TimerState>(TimerState.IDLE);
   const [timeLeft, setTimeLeft] = useState<number>(modeDuration);
   const [session, setSession] = useState<SessionType | null>(null);
+  const [achievementToToast, setAchievementToToast] =
+    useState<AchievementDef | null>(null);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -158,10 +162,31 @@ export const useTimer: IUseTimer = (
 
           // Award XP
           setExp((prev) => {
+            const minutes = modeDuration / 60;
+            const baseReward = XP_PER_MINUTE[mode] * minutes;
             const reward =
-              EXP_REWARDS[mode] + Math.floor(Math.random() * 10) - 5;
-            const newExp = prev + reward;
+              Math.floor(baseReward) + Math.floor(Math.random() * 6) - 3;
+            const newExp = prev + Math.max(1, reward);
             userOps.updateUserSettings({ exp: newExp });
+
+            // Check for achievements
+            const newLevel = calculateLevel(newExp);
+            const context = {
+              level: newLevel,
+              totalSessions: 0, // Not fully tracked yet
+              dailySessions: 0, // Not fully tracked yet
+              sessionDuration: modeDuration / 60,
+              timeOfDay: new Date().getHours(),
+              isPerfectWeek: false,
+            };
+
+            achievementOps.checkUnlocks(context).then((newlyUnlocked) => {
+              if (newlyUnlocked.length > 0) {
+                setAchievementToToast(newlyUnlocked[0]);
+                setTimeout(() => setAchievementToToast(null), 5000);
+              }
+            });
+
             return newExp;
           });
 
@@ -205,5 +230,6 @@ export const useTimer: IUseTimer = (
     toggleTimer,
     resetTimer,
     fetchQuote,
+    achievementToToast,
   };
 };

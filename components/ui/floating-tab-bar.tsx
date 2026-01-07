@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   tabButton: {
-    width: 100,
-    height: 40,
+    flex: 1,
+    height: 45,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",

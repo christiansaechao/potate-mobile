@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 // Components
-import { AppBreakdown } from "@/components/potato/AppBreakdown"; // Wait invalid import in original? No AppBreakdown in imports
+import { AchievementToast } from "@/components/ui/AchievementToast";
 import { Header } from "@/components/potato/Header";
 import { HealthBar } from "@/components/potato/HealthBar";
 import { LevelDisplay } from "@/components/potato/LevelDisplay";
@@ -13,6 +13,7 @@ import { ProgressBar } from "@/components/potato/ProgressBar";
 import { TimerControls } from "@/components/potato/TimerControls";
 import { TimerDisplay } from "@/components/potato/TimerDisplay";
 import AnimatedScreen from "@/components/ui/AnimatedScreen";
+import { Confetti } from "@/components/potato/Confetti";
 
 // Constants & Types
 import { THEMES } from "@/constants/constants";
@@ -45,6 +46,7 @@ export default function App() {
   });
   const [exp, setExp] = useState<number>(user.exp ?? 0);
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   // --- Constants ---
 
@@ -62,6 +64,7 @@ export default function App() {
     toggleTimer,
     resetTimer,
     fetchQuote,
+    achievementToToast,
   } = useTimer(
     mode,
     setMode,
@@ -158,6 +161,10 @@ export default function App() {
           <ProgressBar progress={progress} />
         </View>
       </AnimatedScreen>
+      <Confetti show={showConfetti} />
+      {achievementToToast && (
+        <AchievementToast achievement={achievementToToast} />
+      )}
     </SafeAreaView>
   );
 }

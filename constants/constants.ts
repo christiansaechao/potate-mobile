@@ -6,10 +6,10 @@ export const DEFAULT_TIMES = {
   [TimerMode.LONG_BREAK]: 15 * 60,
 };
 
-export const EXP_REWARDS = {
-  [TimerMode.FOCUS]: 25, // increase for faster progression
-  [TimerMode.SHORT_BREAK]: 1,
-  [TimerMode.LONG_BREAK]: 2,
+export const XP_PER_MINUTE = {
+  [TimerMode.FOCUS]: 4, // 25 min = 100 XP
+  [TimerMode.SHORT_BREAK]: 2, // 5 min = 10 XP
+  [TimerMode.LONG_BREAK]: 2, // 15 min = 30 XP
 };
 
 export const SETTINGS_OPTIONS = {
