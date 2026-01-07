@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 import { CustomText } from "../custom";
 import { AchievementDef } from "@/lib/achievements";
+import { RARITY_COLORS } from "@/constants/constants";
 
 export const AchievementToast = ({
   achievement,
@@ -19,7 +20,11 @@ export const AchievementToast = ({
         <CustomText style={styles.icon}>{achievement.icon}</CustomText>
         <View style={styles.textContainer}>
           <CustomText style={styles.unlocked}>ACHIEVEMENT UNLOCKED!</CustomText>
-          <CustomText style={styles.title}>{achievement.title}</CustomText>
+          <CustomText
+            style={[styles.title, { color: RARITY_COLORS[achievement.rarity] }]}
+          >
+            {achievement.title}
+          </CustomText>
           <CustomText style={styles.description}>
             {achievement.description}
           </CustomText>
@@ -40,37 +45,40 @@ const styles = StyleSheet.create({
   },
   content: {
     backgroundColor: "#FFD700", // Gold
-    padding: 16,
-    borderRadius: 20,
+    padding: 24,
+    borderRadius: 24,
     flexDirection: "row",
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    borderWidth: 2,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+    borderWidth: 3,
     borderColor: "#FFA000",
   },
   icon: {
-    fontSize: 40,
-    marginRight: 16,
+    fontSize: 54,
+    marginRight: 20,
   },
   textContainer: {
     flex: 1,
   },
   unlocked: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: "900",
     color: "#5D4037",
-    letterSpacing: 1,
+    letterSpacing: 2,
+    marginBottom: 2,
   },
   title: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#374151",
+    marginBottom: 4,
   },
   description: {
-    fontSize: 12,
+    fontSize: 16,
     color: "#4B5563",
+    lineHeight: 20,
   },
 });

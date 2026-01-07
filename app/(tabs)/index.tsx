@@ -18,6 +18,7 @@ import { Confetti } from "@/components/potato/Confetti";
 // Constants & Types
 import { THEMES } from "@/constants/constants";
 import { PotatoQuote, TimerState } from "@/types/types";
+import { calculateLevel } from "@/lib/leveling";
 
 // Hooks
 import { useTheme } from "@/hooks/context-hooks/useTheme";
@@ -44,7 +45,6 @@ export default function App() {
     text: "Ready to lock in?",
     mood: "happy",
   });
-  const [exp, setExp] = useState<number>(user.exp ?? 0);
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
@@ -54,6 +54,16 @@ export default function App() {
   const backgroundColor = THEMES[theme][mode];
 
   // --- Custom Hooks ---
+
+  const handleUpdateExp = (updater: number | ((prev: number) => number)) => {
+    const newExp =
+      typeof updater === "function" ? updater(user.exp ?? 0) : updater;
+    user.updateUser({
+      ...user,
+      exp: newExp,
+      level: calculateLevel(newExp),
+    });
+  };
 
   const {
     state,
@@ -74,7 +84,7 @@ export default function App() {
     StopSession,
     StartInterval,
     StopInterval,
-    setExp,
+    handleUpdateExp,
     user
   );
 
@@ -85,7 +95,7 @@ export default function App() {
     setTimeLeft,
     fetchQuote,
     mode,
-    setExp
+    handleUpdateExp
   );
 
   // --- Derived State ---
@@ -139,7 +149,7 @@ export default function App() {
           <ModeSwitcher mode={mode} switchMode={switchMode} />
           <View className="w-full flex justify-center items-center gap-4 py-2">
             <HealthBar health={health} />
-            <LevelDisplay total_exp={exp} />
+            <LevelDisplay total_exp={user.exp} />
           </View>
 
           <PotatoArea

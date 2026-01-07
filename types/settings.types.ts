@@ -34,7 +34,7 @@ export type IUseTimer = (
   StopSession: (h: number, completed?: number) => void,
   StartInterval: (id: number) => void,
   StopInterval: () => void,
-  setExp: React.Dispatch<React.SetStateAction<number>>,
+  setExp: (val: number | ((prev: number) => number)) => void,
   user: IUserContext
 ) => {
   mode: TimerMode;

@@ -9,6 +9,7 @@ export interface AchievementDef {
   description: string;
   icon: string;
   type: "level" | "special";
+  rarity: "bronze" | "silver" | "gold" | "rainbow";
   milestone?: number; // Level or count
   predicate?: (context: AchievementContext) => boolean;
 }
@@ -30,6 +31,7 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     description: "Reached Level 2!",
     icon: "🌱",
     type: "level",
+    rarity: "bronze",
     milestone: 2,
   },
   {
@@ -38,6 +40,7 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     description: "Reached Level 5!",
     icon: "🥔",
     type: "level",
+    rarity: "bronze",
     milestone: 5,
   },
   {
@@ -46,6 +49,7 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     description: "Reached Level 10!",
     icon: "🍟",
     type: "level",
+    rarity: "silver",
     milestone: 10,
   },
   {
@@ -54,6 +58,7 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     description: "Reached Level 25!",
     icon: "🥣",
     type: "level",
+    rarity: "gold",
     milestone: 25,
   },
   {
@@ -62,6 +67,7 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     description: "Reached Level 50!",
     icon: "👑",
     type: "level",
+    rarity: "gold",
     milestone: 50,
   },
   {
@@ -70,6 +76,7 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     description: "Reached Level 100!",
     icon: "✨🥘",
     type: "level",
+    rarity: "rainbow",
     milestone: 100,
   },
 
@@ -80,6 +87,7 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     description: "Finished a session after midnight.",
     icon: "🦉",
     type: "special",
+    rarity: "silver",
     predicate: (ctx) => ctx.timeOfDay >= 0 && ctx.timeOfDay < 5,
   },
   {
@@ -88,6 +96,7 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     description: "Completed a 60-minute focus session.",
     icon: "🌲",
     type: "special",
+    rarity: "gold",
     predicate: (ctx) => ctx.sessionDuration >= 60,
   },
   {
@@ -96,6 +105,7 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     description: "5 focus sessions in one day!",
     icon: "⚡",
     type: "special",
+    rarity: "rainbow",
     predicate: (ctx) => ctx.dailySessions >= 5,
   },
 ];

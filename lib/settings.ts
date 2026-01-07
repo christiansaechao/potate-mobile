@@ -1,6 +1,7 @@
 import { intervals, sessions, userSettings } from "@/db/schema";
 import { db } from "../db/client";
 import { IUserContext } from "@/types/settings.types";
+import { eq } from "drizzle-orm";
 
 const userOps = {
   async getUser() {
@@ -33,6 +34,7 @@ const userOps = {
     const user = await db
       .update(userSettings)
       .set({ ...settings })
+      .where(eq(userSettings.id, 1))
       .returning();
 
     return { success: true, data: user[0] };

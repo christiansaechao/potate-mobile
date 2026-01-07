@@ -49,6 +49,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         weekly_goal: newUser.weekly_goal,
         weekly_focus_time_goal: newUser.weekly_focus_time_goal,
         theme: newUser.theme,
+        exp: newUser.exp,
+        level: newUser.level,
       });
     } catch (error) {
       console.error("Auto-save failed:", error);

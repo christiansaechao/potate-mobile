@@ -24,7 +24,7 @@ export const SettingsHeader = () => {
           textAlign: "center",
         }}
       >
-        Make your focus time cozy ✨
+        Keep growing, little spud ✨
       </CustomText>
     </View>
   );

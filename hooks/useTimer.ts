@@ -46,12 +46,12 @@ export const useTimer: IUseTimer = (
     []
   );
 
-  // ✅ When user settings arrive / change, sync timeLeft *only if not running*
-  // (prevents overwriting countdown mid-session)
+  // ✅ When user settings arrive / change, sync timeLeft *only if not running/paused*
+  // (prevents overwriting countdown mid-session or when paused)
   useEffect(() => {
-    if (state === TimerState.RUNNING) return;
-
-    setTimeLeft(modeDuration);
+    if (state === TimerState.IDLE || state === TimerState.COMPLETED) {
+      setTimeLeft(modeDuration);
+    }
   }, [modeDuration, state]);
 
   const switchMode = useCallback(
@@ -167,7 +167,6 @@ export const useTimer: IUseTimer = (
             const reward =
               Math.floor(baseReward) + Math.floor(Math.random() * 6) - 3;
             const newExp = prev + Math.max(1, reward);
-            userOps.updateUserSettings({ exp: newExp });
 
             // Check for achievements
             const newLevel = calculateLevel(newExp);

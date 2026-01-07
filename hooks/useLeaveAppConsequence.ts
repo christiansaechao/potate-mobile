@@ -12,7 +12,7 @@ export const useLeaveAppConsequence = (
   setTimeLeft: Dispatch<React.SetStateAction<number>>,
   fetchQuote: any,
   mode: TimerMode,
-  setExp: Dispatch<React.SetStateAction<number>>
+  setExp: (val: number) => void
 ) => {
   const healthRef = useRef<number | null>(null);
   const notificationRef = useRef<string | null>(null);

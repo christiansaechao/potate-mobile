@@ -189,3 +189,9 @@ export const COLORS = {
 //     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
 //   },
 // });
+export const RARITY_COLORS = {
+  bronze: "#CD7F32",
+  silver: "#A9A9A9",
+  gold: "#D4AF37",
+  rainbow: "#B322F2", // A vibrant violet that pops
+};
