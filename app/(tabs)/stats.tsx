@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-// import { useFocusEffect } from "expo-router";
 import { isSameDay, isSameWeek, isSameMonth } from "date-fns";
 import {
   Image,
@@ -17,7 +16,6 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import Calendar from "@/components/Calendar";
 import { CustomText } from "@/components/custom";
 import AnimatedScreen from "@/components/ui/AnimatedScreen";
-// import AnimatedDashedBorder from "@/components/ui/AnimatedDashedBoarder"; // Unused in original code? No, it was imported but not used? Let's check original. It was imported. Usage? Not used in JSX.
 import Divider from "@/components/ui/divider";
 import StatCard from "@/components/ui/stats-card";
 import { WeeklyBarChart } from "@/components/ui/WeeklyBarChart";
@@ -190,8 +188,6 @@ export default function Stats() {
     // Helper to get time by mode from filtered intervals
     const getTimeByMode = (mode: TimerMode) => {
       const modeIntervals = filteredIntervals.filter((i) => {
-        // We need to look up session mode from rawSessions or filteredSessions
-        // Since we filtered intervals based on sessionIds, we know parent session exists
         const parentSession = filteredSessions.find(
           (s) => s.id === i.sessionId
         );
