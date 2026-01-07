@@ -16,7 +16,7 @@ import AnimatedScreen from "@/components/ui/AnimatedScreen";
 import { Confetti } from "@/components/potato/Confetti";
 
 // Constants & Types
-import { THEMES } from "@/constants/constants";
+import { THEMES } from "@/constants/theme";
 import { PotatoQuote, TimerState } from "@/types/types";
 import { calculateLevel } from "@/lib/leveling";
 

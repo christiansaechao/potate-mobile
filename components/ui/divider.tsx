@@ -1,6 +1,6 @@
 import { View } from "react-native";
 
-import { COLORS } from "@/constants/constants";
+import { COLORS } from "@/constants/theme";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 
 export default function Divider({

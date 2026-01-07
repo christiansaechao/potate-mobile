@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
-import { Colors } from "../../constants/theme";
+import { COLORS } from "../../constants/theme";
 import { AppTheme, TimerMode } from "../../types/types";
 import { UserContext } from "../user/UserProvider";
 
 interface ThemeContextType {
   theme: AppTheme;
-  colors: (typeof Colors)["default"];
+  colors: (typeof COLORS)["default"];
   setTheme: (theme: AppTheme) => void;
   mode: TimerMode;
   setMode: (mode: TimerMode) => void;
@@ -14,7 +14,7 @@ interface ThemeContextType {
 
 export const ThemeContext = createContext<ThemeContextType>({
   theme: "default",
-  colors: Colors.default,
+  colors: COLORS.default,
   setTheme: () => {},
   mode: TimerMode.FOCUS,
   setMode: () => {},
@@ -51,7 +51,7 @@ export function ThemeProvider({ children }: Props) {
     updateUser({ ...userData, theme: newTheme });
   };
 
-  const colors = Colors[theme];
+  const colors = COLORS[theme];
 
   return (
     <ThemeContext.Provider value={{ theme, colors, setTheme, mode, setMode }}>

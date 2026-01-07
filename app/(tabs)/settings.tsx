@@ -7,8 +7,8 @@ import {
 } from "react-native-safe-area-context";
 
 import { useTheme } from "@/hooks/context-hooks/useTheme";
-import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
-import { THEMES } from "@/constants/constants";
+
+import { THEMES } from "@/constants/theme";
 
 import { MainCard } from "@/components/settings/MainCard";
 import { SettingsHeader } from "@/components/settings/SettingsHeader";

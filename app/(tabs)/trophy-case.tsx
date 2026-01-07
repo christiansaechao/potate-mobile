@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, ScrollView, FlatList, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomText } from "@/components/custom";
-import { THEMES, RARITY_COLORS } from "@/constants/constants";
-import { Colors } from "@/constants/theme";
+
+import { COLORS, THEMES, RARITY_COLORS } from "@/constants/theme";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import AnimatedScreen from "@/components/ui/AnimatedScreen";
 import {
@@ -19,7 +19,7 @@ export default function TrophyCase() {
   const { theme, mode } = useTheme();
   const { exp } = useUserDefaults();
   const level = calculateLevel(exp);
-  const color = Colors[theme];
+  const color = COLORS[theme];
   const backgroundColor = THEMES[theme][mode];
 
   const [unlockedIds, setUnlockedIds] = useState<Set<string>>(new Set());

@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import Animated, { FadeInUp, FadeOutUp } from "react-native-reanimated";
 import { CustomText } from "../custom";
 import { AchievementDef } from "@/lib/achievements";
-import { RARITY_COLORS } from "@/constants/constants";
+import { RARITY_COLORS } from "@/constants/theme";
 
 export const AchievementToast = ({
   achievement,
