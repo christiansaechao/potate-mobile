@@ -67,7 +67,7 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
         marginTop: 18,
         elevation: 6,
       }}
-      className={`${backgroundColor}`}
+      className={`${backgroundColor} transition-colors duration-300`}
     >
       {/* Profile */}
       <View style={{ alignItems: "center" }}>

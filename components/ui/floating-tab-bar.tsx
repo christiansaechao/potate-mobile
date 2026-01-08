@@ -3,6 +3,8 @@ import { BlurView } from "expo-blur";
 import * as Haptics from "expo-haptics";
 import { Pressable, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { COLORS } from "@/constants/theme";
+import { useTheme } from "@/hooks/context-hooks/useTheme";
 
 export function FloatingTabBar({
   state,
@@ -12,16 +14,15 @@ export function FloatingTabBar({
   // --- Hooks ---
 
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
+  const tabBar = COLORS[theme].tabBar;
 
   // --- Render ---
 
   return (
-    <View
-      style={[styles.container, { paddingBottom: insets.bottom }]}
-      className="bg-zinc-800/75 "
-    >
-      <BlurView intensity={60} style={StyleSheet.absoluteFill} />
-      <View style={styles.tabBar}>
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+      <View style={[styles.tabBar, { backgroundColor: tabBar }]}>
+        <BlurView intensity={60} style={StyleSheet.absoluteFill} />
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
@@ -105,19 +106,18 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
   },
   tabBar: {
+    overflow: "hidden",
     flexDirection: "row",
-    borderRadius: 60,
-    paddingVertical: 2,
+    borderRadius: 35,
+    paddingVertical: 6,
     justifyContent: "space-around",
     width: "100%",
+    backgroundColor: "rgba(93,64,55,0.7)",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
