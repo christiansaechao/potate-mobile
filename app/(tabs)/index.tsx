@@ -28,6 +28,7 @@ import { useLeaveAppConsequence } from "@/hooks/useLeaveAppConsequence";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { useTimer } from "@/hooks/useTimer";
+import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 
 export default function App() {
   // --- Hooks ---
@@ -37,6 +38,10 @@ export default function App() {
   const { StartSession, StopSession, StartInterval, StopInterval } =
     useSessionManager();
 
+  const [isSound, setIsSound] = useState(false);
+  const toggleSound = () => setIsSound((prev) => !prev);
+
+  useBackgroundMusic(isSound);
   useNotifications();
 
   // --- State ---
@@ -46,7 +51,6 @@ export default function App() {
     text: "Ready to lock in?",
     mood: "happy",
   });
-  const [isSoundEnabled, setIsSoundEnabled] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
   // --- Constants ---
@@ -143,10 +147,7 @@ export default function App() {
     >
       <AnimatedScreen>
         <View className="flex-1 items-center justify-between py-6 px-4 pb-24">
-          <Header
-            isSound={isSoundEnabled}
-            toggleSound={() => setIsSoundEnabled((p) => !p)}
-          />
+          <Header isSound={isSound} toggleSound={toggleSound} />
 
           <ModeSwitcher mode={mode} switchMode={switchMode} />
           <View className="w-full flex justify-center items-center gap-4 py-2">
