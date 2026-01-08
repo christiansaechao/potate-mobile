@@ -50,7 +50,7 @@ export const COLORS = {
     tabIconSelected: "#5D4037",
     buttonIconColor: "#F5F5DC",
     buttonColor: "#8D6E63", // Cozy brown
-    tabBar: "rgba(93,64,55,0.7)",
+    tabBar: "rgba(93, 64, 55, 0.7)",
   },
 };
 
