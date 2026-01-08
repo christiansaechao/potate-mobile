@@ -30,8 +30,6 @@ import { useSessionManager } from "@/hooks/useSessionManager";
 import { useTimer } from "@/hooks/useTimer";
 
 export default function App() {
-  // --- Hooks ---
-
   const user = useUserDefaults();
   const { theme, mode, setMode } = useTheme();
   const { StartSession, StopSession, StartInterval, StopInterval } =
