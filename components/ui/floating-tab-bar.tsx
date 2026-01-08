@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     justifyContent: "space-around",
     width: "100%",
-    backgroundColor: "rgba(93,64,55,0.7)",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
