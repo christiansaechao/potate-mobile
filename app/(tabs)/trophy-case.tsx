@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, FlatList, Pressable } from "react-native";
+import { FlatList, Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomText } from "@/components/custom";
 
-import { COLORS, THEMES, RARITY_COLORS } from "@/constants/theme";
+import { COLORS, RARITY_COLORS, THEMES } from "@/constants/theme";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import AnimatedScreen from "@/components/ui/AnimatedScreen";
 import {
   ACHIEVEMENT_DEFS,
-  achievementOps,
   AchievementDef,
+  achievementOps,
 } from "@/lib/achievements";
 import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
 import { calculateLevel } from "@/lib/leveling";
@@ -110,7 +110,15 @@ export default function TrophyCase() {
     >
       <AnimatedScreen>
         <FlatList
-          data={ACHIEVEMENT_DEFS}
+          data={[...ACHIEVEMENT_DEFS].sort((a, b) => {
+            const aUnlocked = unlockedIds.has(a.id);
+            const bUnlocked = unlockedIds.has(b.id);
+
+            // unlocked first
+            if (aUnlocked && !bUnlocked) return -1;
+            if (!aUnlocked && bUnlocked) return 1;
+            return 0;
+          })}
           keyExtractor={(item) => item.id}
           renderItem={renderBadge}
           numColumns={2}
