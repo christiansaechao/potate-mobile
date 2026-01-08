@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   ScrollView,
   Text,
@@ -13,19 +13,15 @@ import { router } from "expo-router";
 import { Confetti } from "@/components/potato/Confetti";
 import PotatoSprite from "@/components/potato/PotatoAnimate";
 
+// Constants & Types
+import { DEFAULT_TIMES } from "@/constants/constants";
+import { TimerMode } from "@/types/types";
+
 // Hooks
 import { useConfetti } from "@/hooks/useConfetti";
 
 // Libs
 import userOps from "@/lib/settings";
-
-import { object, string } from "yup";
-import { Formik } from "formik";
-
-const loginSchema = object({
-  name: string().required("Name is required"),
-  email: string().email("Invalid email address").required("Email is required"),
-});
 
 export default function Onboarding() {
   // --- State ---
@@ -34,8 +30,10 @@ export default function Onboarding() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    focus_duration: DEFAULT_TIMES[TimerMode.FOCUS] / 60,
+    short_break_duration: DEFAULT_TIMES[TimerMode.SHORT_BREAK] / 60,
+    long_break_duration: DEFAULT_TIMES[TimerMode.LONG_BREAK] / 60,
   });
-  const formikRef = useRef<any>(null);
 
   // --- Hooks ---
 
@@ -43,9 +41,9 @@ export default function Onboarding() {
 
   // --- Handlers ---
 
-  const updateUserSettings = async (data: typeof formData) => {
+  const updateUserSettings = async () => {
     try {
-      await userOps.createUserSettings(data);
+      await userOps.createUserSettings(formData);
 
       router.replace("/(tabs)");
     } catch (err) {
@@ -55,8 +53,10 @@ export default function Onboarding() {
 
   const nextStep = () => {
     if (step === 3) {
-      formikRef.current?.handleSubmit();
-      return;
+      if (!formData.name || !formData.email) {
+        alert("Please fill in all fields");
+        return;
+      }
     }
 
     if (step === 4) {
@@ -66,9 +66,8 @@ export default function Onboarding() {
     setStep((prev) => prev + 1);
   };
 
-  const handleFormSubmit = (values: typeof formData) => {
-    setFormData(values);
-    setStep((prev) => prev + 1);
+  const updateFormData = (key: string, value: string | number) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
   // --- Render ---
@@ -115,78 +114,86 @@ export default function Onboarding() {
               <Text className="text-2xl font-bold text-orange-900 text-center mb-4">
                 Let&apos;s get to know you
               </Text>
-              <Formik
-                innerRef={formikRef}
-                initialValues={{ name: formData.name, email: formData.email }} // Initialize with current state if user goes back
-                onSubmit={handleFormSubmit}
-                validationSchema={loginSchema}
-                validateOnBlur={true}
-                validateOnChange={true}
-              >
-                {({
-                  handleChange,
-                  handleBlur,
-                  values,
-                  errors,
-                  touched,
-                  setFieldValue,
-                }) => (
-                  <>
-                    <View className="space-y-2">
-                      <Text className="text-orange-800 font-medium ml-1">
-                        Name
-                      </Text>
-                      <TextInput
-                        className={`bg-white p-4 rounded-xl border-2 text-lg text-orange-900 ${
-                          touched.name && errors.name
-                            ? "border-red-500"
-                            : "border-orange-100"
-                        }`}
-                        placeholder="What should Potate call you?"
-                        value={values.name}
-                        onChangeText={(text) => setFieldValue("name", text)}
-                        onBlur={handleBlur("name")}
-                        placeholderTextColor="#fdba74"
-                      />
-                      {touched.name && errors.name && (
-                        <Text className="text-red-500 text-sm ml-1">
-                          {errors.name}
-                        </Text>
-                      )}
-                    </View>
 
-                    <View className="space-y-2">
-                      <Text className="text-orange-800 font-medium ml-1">
-                        Email
-                      </Text>
-                      <TextInput
-                        className={`bg-white p-4 rounded-xl border-2 text-lg text-orange-900 ${
-                          touched.email && errors.email
-                            ? "border-red-500"
-                            : "border-orange-100"
-                        }`}
-                        placeholder="your@email.com"
-                        value={values.email}
-                        onChangeText={(text) => setFieldValue("email", text)}
-                        onBlur={handleBlur("email")}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                        placeholderTextColor="#fdba74"
-                      />
-                      {touched.email && errors.email && (
-                        <Text className="text-red-500 text-sm ml-1">
-                          {errors.email}
-                        </Text>
-                      )}
-                    </View>
-                  </>
-                )}
-              </Formik>
+              <View className="space-y-2">
+                <Text className="text-orange-800 font-medium ml-1">Name</Text>
+                <TextInput
+                  className="bg-white p-4 rounded-xl border-2 border-orange-100 text-lg text-orange-900"
+                  placeholder="What should Potate call you?"
+                  value={formData.name}
+                  onChangeText={(text) => updateFormData("name", text)}
+                  placeholderTextColor="#fdba74"
+                />
+              </View>
+
+              <View className="space-y-2">
+                <Text className="text-orange-800 font-medium ml-1">Email</Text>
+                <TextInput
+                  className="bg-white p-4 rounded-xl border-2 border-orange-100 text-lg text-orange-900"
+                  placeholder="your@email.com"
+                  value={formData.email}
+                  onChangeText={(text) => updateFormData("email", text)}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  placeholderTextColor="#fdba74"
+                />
+              </View>
+            </View>
+          )}
+
+          {/* Step 4: Durations */}
+          {step === 4 && (
+            <View className="space-y-6">
+              <Text className="text-2xl font-bold text-orange-900 text-center mb-4">
+                Customize your flow
+              </Text>
+
+              <View className="space-y-2">
+                <Text className="text-orange-800 font-medium ml-1">
+                  Focus Duration (mins)
+                </Text>
+                <TextInput
+                  className="bg-white p-4 rounded-xl border-2 border-orange-100 text-lg text-orange-900"
+                  value={String(formData.focus_duration)}
+                  onChangeText={(text) =>
+                    updateFormData("focus_duration", Number(text))
+                  }
+                  keyboardType="numeric"
+                />
+              </View>
+
+              <View className="space-y-2">
+                <Text className="text-orange-800 font-medium ml-1">
+                  Short Break (mins)
+                </Text>
+                <TextInput
+                  className="bg-white p-4 rounded-xl border-2 border-orange-100 text-lg text-orange-900"
+                  value={String(formData.short_break_duration)}
+                  onChangeText={(text) =>
+                    updateFormData("short_break_duration", Number(text))
+                  }
+                  keyboardType="numeric"
+                />
+              </View>
+
+              <View className="space-y-2">
+                <Text className="text-orange-800 font-medium ml-1">
+                  Long Break (mins)
+                </Text>
+                <TextInput
+                  className="bg-white p-4 rounded-xl border-2 border-orange-100 text-lg text-orange-900"
+                  value={String(formData.long_break_duration)}
+                  onChangeText={(text) =>
+                    updateFormData("long_break_duration", Number(text))
+                  }
+                  keyboardType="numeric"
+                />
+              </View>
             </View>
           )}
 
           {/* Navigation Button */}
-          {step < 4 && (
+          {step < 5 && (
             <TouchableOpacity
               onPress={nextStep}
               className="mt-12 bg-orange-500 py-4 px-8 rounded-full shadow-lg active:bg-orange-600"
@@ -197,8 +204,8 @@ export default function Onboarding() {
             </TouchableOpacity>
           )}
 
-          {/* Step 4: Completion */}
-          {step === 4 && (
+          {/* Step 5: Completion */}
+          {step === 5 && (
             <View className="items-center space-y-6">
               <Text className="text-6xl">🎉</Text>
               <Text className="text-3xl font-bold text-orange-900 text-center">
@@ -207,11 +214,10 @@ export default function Onboarding() {
               <Text className="text-lg text-orange-700 text-center px-4">
                 You&apos;re all set up. Time to lock in!
               </Text>
-
               <TouchableOpacity
                 className="mt-12 bg-green-500 py-4 px-8 rounded-full shadow-lg active:bg-green-600 w-full"
                 onPress={() => {
-                  updateUserSettings(formData);
+                  updateUserSettings();
                 }}
               >
                 <Text className="text-white text-center font-bold text-lg">
@@ -221,7 +227,7 @@ export default function Onboarding() {
             </View>
           )}
         </ScrollView>
-        {showConfetti && <Confetti show={showConfetti} />}
+        {showConfetti && <Confetti />}
       </SafeAreaView>
     </SafeAreaProvider>
   );

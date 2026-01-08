@@ -10,7 +10,7 @@ import { useTheme } from "@/hooks/context-hooks/useTheme";
 
 import { THEMES } from "@/constants/theme";
 
-import { SettingsPage } from "@/components/settings/SettingsPage";
+import { MainCard } from "@/components/settings/MainCard";
 import { SettingsHeader } from "@/components/settings/SettingsHeader";
 import AnimatedScreen from "@/components/ui/AnimatedScreen";
 
@@ -55,7 +55,7 @@ export default function Settings() {
       >
         <AnimatedScreen>
           <SettingsHeader />
-          <SettingsPage onSave={handleSaveFeedback} />
+          <MainCard onSave={handleSaveFeedback} />
         </AnimatedScreen>
       </ScrollView>
 

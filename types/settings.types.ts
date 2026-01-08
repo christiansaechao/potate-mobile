@@ -12,17 +12,17 @@ export type PickerProps<T> = {
 };
 
 export interface IUserContext {
-  name?: string;
-  email?: string;
-  focus_duration?: number;
-  short_break_duration?: number;
-  long_break_duration?: number;
-  vibration?: number;
-  weekly_goal?: number;
-  weekly_focus_time_goal?: number;
-  theme?: string;
-  exp?: number;
-  level?: number;
+  name: string;
+  email: string;
+  FOCUS: number;
+  SHORT_BREAK: number;
+  LONG_BREAK: number;
+  vibration: number;
+  weekly_goal: number;
+  weekly_focus_time_goal: number;
+  theme: string;
+  exp: number;
+  level: number;
 }
 
 export type IUseTimer = (

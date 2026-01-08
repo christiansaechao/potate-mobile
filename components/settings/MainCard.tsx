@@ -13,7 +13,7 @@ import { CustomText } from "../custom";
 import { Row } from "./Row";
 
 // Constants
-import { DEFAULT_TIMES, SETTINGS_OPTIONS } from "@/constants/constants";
+import { SETTINGS_OPTIONS } from "@/constants/constants";
 import { COLORS, THEMES } from "@/constants/theme";
 
 // Hooks
@@ -26,18 +26,21 @@ import { generateMockData, resetData } from "@/lib/dev-utils";
 import UserOps from "@/lib/settings";
 import { IUserContext } from "@/types/settings.types";
 
-export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
+export const MainCard = ({ onSave }: { onSave?: () => void }) => {
   // --- Hooks ---
 
   const {
     name,
     email,
-    focus_duration,
-    short_break_duration,
-    long_break_duration,
+    FOCUS,
+    SHORT_BREAK,
+    LONG_BREAK,
+    vibration,
     weekly_goal,
     weekly_focus_time_goal,
     updateUser,
+    theme: userTheme,
+    ...userData
   } = useUserDefaults();
   const { theme, setTheme, mode } = useTheme();
   const { showConfetti, triggerConfetti } = useConfetti();
@@ -51,7 +54,7 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
 
   // --- Handlers ---
 
-  const handleAutoSave = async (newUser: Partial<IUserContext>) => {
+  const handleAutoSave = async (newUser: IUserContext) => {
     await updateUser(newUser);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     if (onSave) onSave();
@@ -65,6 +68,10 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
         borderRadius: 28,
         padding: 18,
         marginTop: 18,
+        // shadowColor: "#000",
+        // shadowOpacity: 0.25,
+        // shadowRadius: 18,
+        // shadowOffset: { width: 0, height: 10 },
         elevation: 6,
       }}
       className={`${backgroundColor}`}
@@ -130,10 +137,19 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
           <Row
             icon={<Clock color={color.buttonIconColor} size={24} />}
             label="Pomodoro Length"
-            state={focus_duration || DEFAULT_TIMES.FOCUS}
+            state={FOCUS}
             setState={(val: number) =>
               handleAutoSave({
-                focus_duration: val,
+                ...userData,
+                FOCUS: val,
+                SHORT_BREAK,
+                LONG_BREAK,
+                vibration,
+                weekly_goal,
+                weekly_focus_time_goal,
+                theme: userTheme,
+                name,
+                email,
               })
             }
             options={SETTINGS_OPTIONS.POMODORO}
@@ -149,10 +165,19 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
           <Row
             icon={<Coffee color={color.buttonIconColor} size={24} />}
             label="Short Break"
-            state={short_break_duration || DEFAULT_TIMES.SHORT_BREAK}
+            state={SHORT_BREAK}
             setState={(val: number) =>
               handleAutoSave({
-                short_break_duration: val,
+                ...userData,
+                FOCUS,
+                SHORT_BREAK: val,
+                LONG_BREAK,
+                vibration,
+                weekly_goal,
+                weekly_focus_time_goal,
+                theme: userTheme,
+                name,
+                email,
               })
             }
             options={SETTINGS_OPTIONS.SHORT_BREAK}
@@ -168,10 +193,19 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
           <Row
             icon={<Bed color={color.buttonIconColor} size={24} />}
             label="Long Break"
-            state={long_break_duration || DEFAULT_TIMES.LONG_BREAK}
+            state={LONG_BREAK}
             setState={(val: number) =>
               handleAutoSave({
-                long_break_duration: val,
+                ...userData,
+                FOCUS,
+                SHORT_BREAK,
+                LONG_BREAK: val,
+                vibration,
+                weekly_goal,
+                weekly_focus_time_goal,
+                theme: userTheme,
+                name,
+                email,
               })
             }
             options={SETTINGS_OPTIONS.LONG_BREAK}
@@ -202,10 +236,19 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
           <Row
             icon={<User color={color.buttonIconColor} size={24} />}
             label="Weekly Session Goal"
-            state={weekly_goal || 5} // 5 is default
+            state={weekly_goal}
             setState={(val: number) =>
               handleAutoSave({
+                ...userData,
+                FOCUS,
+                SHORT_BREAK,
+                LONG_BREAK,
+                vibration,
                 weekly_goal: val,
+                weekly_focus_time_goal,
+                theme: userTheme,
+                name,
+                email,
               })
             }
             options={SETTINGS_OPTIONS.WEEKLY_GOAL}
@@ -221,10 +264,19 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
           <Row
             icon={<Clock color={color.buttonIconColor} size={24} />}
             label="Weekly Focus Goal"
-            state={weekly_focus_time_goal || 7200} // 7200 is defualt
+            state={weekly_focus_time_goal}
             setState={(val: number) =>
               handleAutoSave({
+                ...userData,
+                FOCUS,
+                SHORT_BREAK,
+                LONG_BREAK,
+                vibration,
+                weekly_goal,
                 weekly_focus_time_goal: val,
+                theme: userTheme,
+                name,
+                email,
               })
             }
             options={SETTINGS_OPTIONS.WEEKLY_FOCUS_TIME_GOAL}
@@ -288,7 +340,7 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
           Generate Data (dev)
         </CustomText>
       </SquishyButton>
-      {showConfetti && <Confetti show={showConfetti} />}
+      {showConfetti && <Confetti />}
     </View>
   );
 };
