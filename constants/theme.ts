@@ -17,6 +17,7 @@ export const COLORS = {
     tabIconSelected: tintColorLight,
     buttonIconColor: "white",
     buttonColor: "#8B4513", // Saddle Brown
+    tabBar: "rgba(21, 23, 25, 0.75)",
   },
   dark: {
     text: "#ECEDEE",
@@ -27,6 +28,7 @@ export const COLORS = {
     tabIconSelected: tintColorDark,
     buttonIconColor: "black",
     buttonColor: "#ECEDEE", // Light text color for contrast
+    tabBar: "rgba(21, 23, 24, 0.75)",
   },
   vaporwave: {
     text: "#ffffff",
@@ -37,6 +39,7 @@ export const COLORS = {
     tabIconSelected: "#ff00ff",
     buttonIconColor: "#2b003b",
     buttonColor: "#ff00ff", // Hot pink
+    tabBar: "rgba(43, 0, 59, 0.7)",
   },
   cozy: {
     text: "#5D4037",
@@ -47,6 +50,7 @@ export const COLORS = {
     tabIconSelected: "#5D4037",
     buttonIconColor: "#F5F5DC",
     buttonColor: "#8D6E63", // Cozy brown
+    tabBar: "rgba(93, 64, 55, 0.7)",
   },
 };
 

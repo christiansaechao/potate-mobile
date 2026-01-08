@@ -51,7 +51,7 @@ export const GenericDropdown = <T,>({
         onPress={() => setOpen(true)}
       >
         <View
-          className={`${backgroundColor} flex-row justify-between items-center w-full`}
+          className={`${backgroundColor} flex-row justify-between items-center w-full transition-colors duration-300`}
         >
           <CustomText numberOfLines={1}>
             {selected?.label ?? placeholder}
