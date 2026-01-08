@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
-import { DEFAULT_TIMES, XP_PER_MINUTE } from "../constants/constants";
+import {
+  DB_DEFAULT_TIMES,
+  DEFAULT_TIMES,
+  XP_PER_MINUTE,
+} from "../constants/constants";
 import { getPotatoWisdom } from "../services/potatoWisdomLocal";
 import userOps from "@/lib/settings";
 import { SessionType, TimerMode, TimerState } from "@/types/types";
@@ -20,10 +24,11 @@ export const useTimer: IUseTimer = (
   setExp,
   user
 ) => {
+  const currentMode = user[DB_DEFAULT_TIMES[mode] as keyof typeof user];
+
   // ✅ Always compute current mode duration from latest user settings
   // Use ?? (not ||) so 0 doesn't get treated as "missing"
-  const userTimeSeconds =
-    user?.[mode] != null ? Number(user[mode]) * 60 : undefined;
+  const userTimeSeconds = currentMode != null ? Number(currentMode) : undefined;
   const modeDuration = userTimeSeconds ?? DEFAULT_TIMES[mode];
   const [state, setState] = useState<TimerState>(TimerState.IDLE);
   const [timeLeft, setTimeLeft] = useState<number>(modeDuration);
@@ -57,6 +62,7 @@ export const useTimer: IUseTimer = (
   const switchMode = useCallback(
     (newMode: TimerMode) => {
       // stop everything about the current session
+
       StopInterval();
       StopSession(health);
       stopLocalTimer();
@@ -65,7 +71,9 @@ export const useTimer: IUseTimer = (
       setState(TimerState.IDLE);
 
       // ✅ IMPORTANT: compute duration based on newMode (not old mode)
-      const newDuration = user?.[newMode] ?? DEFAULT_TIMES[newMode];
+      const newDuration =
+        (user?.[DB_DEFAULT_TIMES[newMode] as keyof typeof user] as number) ??
+        DEFAULT_TIMES[newMode];
       setTimeLeft(newDuration);
 
       setSession(null);

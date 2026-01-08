@@ -30,14 +30,19 @@ const userOps = {
     return result;
   },
 
-  async updateUserSettings(settings: {}) {
-    const user = await db
+  async updateUserSettings({
+    newSettings,
+  }: {
+    newSettings: Partial<IUserContext>;
+  }) {
+    const user = await this.getUser();
+    await db
       .update(userSettings)
-      .set({ ...settings })
-      .where(eq(userSettings.id, 1))
+      .set(newSettings)
+      .where(eq(userSettings.id, user[0].id))
       .returning();
 
-    return { success: true, data: user[0] };
+    return { success: true };
   },
 
   async resetUserData() {
