@@ -19,7 +19,7 @@
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.45.0",
     "expo": "~54.0.25",
-    "expo-av": "~16.0.8",
+    "expo-audio": "~1.1.1",
     "expo-blur": "^15.0.8",
     "expo-constants": "~18.0.10",
     "expo-drizzle-studio-plugin": "^0.2.1",

@@ -28,7 +28,7 @@ import { useLeaveAppConsequence } from "@/hooks/useLeaveAppConsequence";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useSessionManager } from "@/hooks/useSessionManager";
 import { useTimer } from "@/hooks/useTimer";
-import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
+import { useAmbientMusic } from "@/hooks/useBackgroundMusic";
 
 export default function App() {
   // --- Hooks ---
@@ -41,7 +41,6 @@ export default function App() {
   const [isSound, setIsSound] = useState(false);
   const toggleSound = () => setIsSound((prev) => !prev);
 
-  useBackgroundMusic(isSound);
   useNotifications();
 
   // --- State ---
@@ -102,6 +101,8 @@ export default function App() {
     mode,
     handleUpdateExp
   );
+
+  useAmbientMusic(isSound);
 
   // --- Derived State ---
 

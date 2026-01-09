@@ -1,76 +1,50 @@
-import { useEffect, useRef, useState } from "react";
-import { Audio } from "expo-av";
+import { useEffect, useRef } from "react";
+import { createAudioPlayer } from "expo-audio";
+import type { AudioPlayer } from "expo-audio";
 
-const ambientMusic = require("@/assets/audio/ambient.mp3");
-const lofiJazz1 = require("@/assets/audio/lofi-jazz-1.mp3");
-const lofiJazz2 = require("@/assets/audio/lofi-jazz-2.mp3");
+const playlist: number[] = [
+  require("@/assets/audio/lofi-default.mp3"),
+  require("@/assets/audio/lofi-jazz.mp3"),
+  require("@/assets/audio/lofi-calm.mp3"),
+  require("@/assets/audio/lofi-piano.mp3"),
+];
 
-export const useBackgroundMusic = (isSound: boolean) => {
-  const [currSong, setCurrSong] = useState(0);
-
-  const musicList = {
-    0: lofiJazz1,
-    1: lofiJazz2,
-  };
-
-  const soundRef = useRef<Audio.Sound | null>(null);
+export function useAmbientMusic(isSound: boolean) {
+  const playerRef = useRef<AudioPlayer | null>(null);
+  const trackIndexRef = useRef(0);
 
   useEffect(() => {
-    let isMounted = true;
+    const player = createAudioPlayer(playlist[0]);
+    player.volume = 0.4;
 
-    const loadSound = async () => {
-      try {
-        // Avoid double-loading
-        if (soundRef.current) return;
+    // go next when finished
+    const sub = player.addListener("playbackStatusUpdate", (status) => {
+      if (!status.isLoaded) return;
 
-        const { sound } = await Audio.Sound.createAsync(ambientMusic, {
-          isLooping: true,
-          volume: 0.4,
-          shouldPlay: isSound,
-        });
+      if (status.didJustFinish) {
+        trackIndexRef.current = (trackIndexRef.current + 1) % playlist.length;
 
-        if (!isMounted) return;
-
-        soundRef.current = sound;
-
-        if (isSound) {
-          await sound.playAsync();
-        }
-      } catch (err) {
-        console.log("Error loading ambient music:", err);
+        player.replace(playlist[trackIndexRef.current]);
+        player.play();
       }
-    };
+    });
 
-    loadSound();
+    playerRef.current = player;
+
+    if (isSound) player.play();
 
     return () => {
-      isMounted = false;
+      sub?.remove?.();
+      player.remove();
+      playerRef.current = null;
     };
   }, []);
 
   useEffect(() => {
-    const toggle = async () => {
-      if (!soundRef.current) return;
+    const player = playerRef.current;
+    if (!player) return;
 
-      try {
-        if (isSound) {
-          await soundRef.current.playAsync();
-        } else {
-          await soundRef.current.pauseAsync();
-        }
-      } catch (err) {
-        console.log("Error toggling sound:", err);
-      }
-    };
-
-    toggle();
+    if (isSound) player.play();
+    else player.pause();
   }, [isSound]);
-
-  useEffect(() => {
-    return () => {
-      // cleanup when app exits/unmounts
-      soundRef.current?.unloadAsync();
-      soundRef.current = null;
-    };
-  }, []);
-};
+}
