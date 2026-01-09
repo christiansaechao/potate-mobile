@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 import {
   DB_DEFAULT_TIMES,
@@ -6,7 +6,6 @@ import {
   XP_PER_MINUTE,
 } from "../constants/constants";
 import { getPotatoWisdom } from "../services/potatoWisdomLocal";
-import userOps from "@/lib/settings";
 import { SessionType, TimerMode, TimerState } from "@/types/types";
 import { IUseTimer } from "@/types/settings.types";
 import { achievementOps, AchievementDef } from "../lib/achievements";
