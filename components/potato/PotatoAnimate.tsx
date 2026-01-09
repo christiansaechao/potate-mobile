@@ -7,6 +7,8 @@ const frame1 = require("@/assets/images/idle-1.png");
 const frame2 = require("@/assets/images/idle-2.png");
 const frame3 = require("@/assets/images/idle-3.png");
 
+const bakedPotato = require("../../assets/images/default_stinky_animation-trans.gif");
+
 const frames = [frame1, frame2, frame3];
 
 export default function PotatoSprite() {
@@ -41,7 +43,7 @@ export default function PotatoSprite() {
   return (
     <View>
       <Image
-        source={frames[index]}
+        source={bakedPotato}
         style={{
           width: 200,
           height: 200,
