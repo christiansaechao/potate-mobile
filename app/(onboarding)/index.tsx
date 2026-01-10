@@ -75,11 +75,8 @@ export default function Onboarding() {
       return;
     }
 
-    if (step === 4) {
-      await requestNotificationPermission();
-    }
-
     if (step === TOTAL_STEPS) {
+      await requestNotificationPermission();
       updateUserSettings(formData);
       return;
     }
