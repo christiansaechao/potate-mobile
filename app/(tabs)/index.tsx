@@ -151,7 +151,7 @@ export default function App() {
           <Header isSound={isSound} toggleSound={toggleSound} />
 
           <ModeSwitcher mode={mode} switchMode={switchMode} />
-          <View className="w-full flex justify-center items-center gap-4 py-2">
+          <View className="w-full flex justify-center items-center">
             <HealthBar health={health} />
             <LevelDisplay total_exp={user.exp ?? 0} />
           </View>
