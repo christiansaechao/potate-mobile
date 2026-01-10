@@ -41,14 +41,15 @@ export default function PotatoSprite() {
   // --- Render ---
 
   return (
-    <View>
+    <View className="overflow-clip">
       <Image
         source={bakedPotato}
         style={{
-          width: 200,
+          width: 350,
           height: 200,
           resizeMode: "contain",
         }}
+        className="-z-10"
       />
     </View>
   );
