@@ -109,13 +109,17 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
 
       <Divider />
 
+      <ThemeSelector currentTheme={theme} onSelect={setTheme} />
+
+      <Divider />
+
       {/* Focus Timer */}
       <View style={{ marginTop: 18 }}>
         <CustomText
           style={{
             fontSize: 24,
             lineHeight: 30,
-
+            textAlign: "center",
             marginBottom: 12,
           }}
         >
@@ -187,7 +191,7 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
           style={{
             fontSize: 24,
             lineHeight: 30,
-
+            textAlign: "center",
             marginBottom: 12,
           }}
         >
@@ -231,10 +235,6 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
           />
         </View>
       </View>
-
-      <Divider />
-
-      <ThemeSelector currentTheme={theme} onSelect={setTheme} />
 
       <Divider />
 

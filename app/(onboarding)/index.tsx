@@ -21,7 +21,6 @@ const loginSchema = object({
 
 const TOTAL_STEPS = 5;
 
-// How it works steps
 const STEPS = [
   {
     number: "1",
@@ -40,6 +39,13 @@ const STEPS = [
     title: "Watch Potate thrive",
     description: "The more you focus, the happier Potate gets!",
     icon: "heart-outline" as const,
+  },
+  {
+    number: "4",
+    title: "Level up",
+    description:
+      "Complete sessions to level up. If Potate dies, you reset to level 1!",
+    icon: "trending-up-outline" as const,
   },
 ];
 
@@ -294,8 +300,7 @@ export default function Onboarding() {
                 &quot;Potate&quot; Would Like to Send You Notifications
               </Text>
               <Text className="text-sm text-gray-500 text-center">
-                Notifications help remind you to take breaks and celebrate your
-                focus achievements.
+                Notifications remind you to stay focused if you leave the app.
               </Text>
             </View>
             <View className="items-center mb-4">

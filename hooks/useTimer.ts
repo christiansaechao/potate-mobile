@@ -28,7 +28,8 @@ export const useTimer: IUseTimer = (
   // ✅ Always compute current mode duration from latest user settings
   // Use ?? (not ||) so 0 doesn't get treated as "missing"
   const userTimeSeconds = currentMode != null ? Number(currentMode) : undefined;
-  const modeDuration = userTimeSeconds ?? DEFAULT_TIMES[mode];
+  const modeDuration = userTimeSeconds ?? DEFAULT_TIMES[mode]; // prod
+  // const modeDuration = DEFAULT_TIMES[mode]; // testing
   const [state, setState] = useState<TimerState>(TimerState.IDLE);
   const [timeLeft, setTimeLeft] = useState<number>(modeDuration);
   const [session, setSession] = useState<SessionType | null>(null);
