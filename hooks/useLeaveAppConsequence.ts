@@ -37,7 +37,7 @@ export const useLeaveAppConsequence = (
               setTimeLeft(DEFAULT_TIMES[mode]);
               // Reset exp on death
               setExp(0);
-              userOps.updateUserSettings({ exp: 0 });
+              userOps.updateUserSettings({ newSettings: { exp: 0 } });
             }
           }, 1000); // every 1 second
 
