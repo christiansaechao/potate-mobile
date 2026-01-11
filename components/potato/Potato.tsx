@@ -141,8 +141,8 @@ export const Potato: React.FC<PotatoProps> = ({ health }) => {
           source={imageSource}
           onError={() => setImgError(true)}
           style={{
-            width: "170",
-            height: "170",
+            width: 170,
+            height: 170,
             transform: [{ translateX: -16 }, { translateY: 11 }],
           }}
         />
