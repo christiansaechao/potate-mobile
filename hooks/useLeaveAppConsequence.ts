@@ -58,8 +58,9 @@ export const useLeaveAppConsequence = (
           // start damage
           if (healthRef.current) clearInterval(healthRef.current);
           healthRef.current = setInterval(() => {
-            setHealth((prev: number) => Math.max(0, prev - 5));
-          }, 1000 * 10);
+            // exponential decay
+            setHealth((prev: number) => Math.max(0, prev * 0.903));
+          }, 1000);
         } else if (nextAppState === "active") {
           // stop damage
           if (healthRef.current) clearInterval(healthRef.current);
