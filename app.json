@@ -4,42 +4,39 @@
     "slug": "potatodoro",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./app/assets/images/1.png",
+    "icon": "./assets/images/1.png",
     "scheme": "potate",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.potatodoroorganization.potatodoro",
+      "buildNumber": "1",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
+      "package": "com.potatodoroorganization.potatodoro",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./app/assets/images/1.png",
-        "backgroundImage": "./app/assets/images/1.png",
-        "monochromeImage": "./app/assets/images/1.png"
+        "foregroundImage": "./assets/images/1.png",
+        "backgroundColor": "#E6F4FE"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS"
-      ],
-      "package": "com.potatodoroorganization.potatodoro"
+      ]
     },
     "web": {
       "output": "static",
-      "favicon": "./app/assets/images/1.png"
+      "favicon": "./assets/images/1.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./app/assets/images/1.png",
+          "image": "./assets/images/1.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
@@ -63,5 +60,12 @@
       }
     },
     "owner": "potatodoro-organization"
-  }
+  },
+  "extra": {
+    "router": {},
+    "eas": {
+      "projectId": "55346f1f-d294-4bd0-9cd9-a51cb0d4e329"
+    }
+  },
+  "owner": "potatodoro-organization"
 }

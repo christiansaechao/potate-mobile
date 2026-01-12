@@ -7,7 +7,6 @@ import { SquishyButton } from "../ui/SquishyButton";
 
 // Components
 import { ThemeSelector } from "@/components/potato/ThemeSelector";
-import { Confetti } from "../potato/Confetti";
 import Divider from "../ui/divider";
 import { CustomText } from "../custom";
 import { Row } from "./Row";
@@ -19,12 +18,12 @@ import { COLORS, THEMES } from "@/constants/theme";
 // Hooks
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { useUserDefaults } from "@/hooks/context-hooks/useUserDefaults";
-import { useConfetti } from "@/hooks/useConfetti";
 
 // Helpers & Types
 import { generateMockData, resetData } from "@/lib/dev-utils";
-import UserOps from "@/lib/settings";
 import { IUserContext } from "@/types/settings.types";
+
+const DEV = false;
 
 export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
   // --- Hooks ---
@@ -40,9 +39,6 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
     updateUser,
   } = useUserDefaults();
   const { theme, setTheme, mode } = useTheme();
-  const { showConfetti, triggerConfetti } = useConfetti();
-
-  // --- State ---
 
   // --- Constants ---
 
@@ -236,59 +232,61 @@ export const SettingsPage = ({ onSave }: { onSave?: () => void }) => {
         </View>
       </View>
 
-      <Divider />
+      {DEV && (
+        <>
+          <Divider />
+          <SquishyButton
+            onPress={resetData}
+            style={{
+              backgroundColor: "#7FD7BE",
+              borderRadius: 999,
+              paddingVertical: 18,
+              marginTop: 18,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            scaleTo={0.97}
+          >
+            <CustomText
+              style={{
+                fontSize: 24,
+                lineHeight: 30,
+              }}
+            >
+              Reset Data (dev)
+            </CustomText>
+          </SquishyButton>
 
-      <SquishyButton
-        onPress={resetData}
-        style={{
-          backgroundColor: "#7FD7BE",
-          borderRadius: 999,
-          paddingVertical: 18,
-          marginTop: 18,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        scaleTo={0.97}
-      >
-        <CustomText
-          style={{
-            fontSize: 24,
-            lineHeight: 30,
-          }}
-        >
-          Reset Data (dev)
-        </CustomText>
-      </SquishyButton>
-
-      <SquishyButton
-        onPress={async () => {
-          const { success } = await generateMockData();
-          if (success) {
-            alert("Mock data generated!");
-          } else {
-            alert("Failed to generate data");
-          }
-        }}
-        style={{
-          backgroundColor: "#7FD7BE",
-          borderRadius: 999,
-          paddingVertical: 18,
-          marginTop: 18,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        scaleTo={0.97}
-      >
-        <CustomText
-          style={{
-            fontSize: 24,
-            lineHeight: 30,
-          }}
-        >
-          Generate Data (dev)
-        </CustomText>
-      </SquishyButton>
-      {showConfetti && <Confetti show={showConfetti} />}
+          <SquishyButton
+            onPress={async () => {
+              const { success } = await generateMockData();
+              if (success) {
+                alert("Mock data generated!");
+              } else {
+                alert("Failed to generate data");
+              }
+            }}
+            style={{
+              backgroundColor: "#7FD7BE",
+              borderRadius: 999,
+              paddingVertical: 18,
+              marginTop: 18,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            scaleTo={0.97}
+          >
+            <CustomText
+              style={{
+                fontSize: 24,
+                lineHeight: 30,
+              }}
+            >
+              Generate Data (dev)
+            </CustomText>
+          </SquishyButton>
+        </>
+      )}
     </View>
   );
 };
