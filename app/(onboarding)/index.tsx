@@ -36,8 +36,8 @@ const STEPS = [
   },
   {
     number: "3",
-    title: "Watch Potate thrive",
-    description: "The more you focus, the happier Potate gets!",
+    title: "Keep Potate alive",
+    description: "If you leave the app, Potate will take damage",
     icon: "heart-outline" as const,
   },
   {
@@ -155,7 +155,7 @@ export default function Onboarding() {
               Welcome to Potate
             </Text>
             <Text className="text-base text-gray-500 text-center px-4">
-              It&apos;s time to regain control of your screen time
+              It&apos;s time to lock in and change your life
             </Text>
           </View>
         )}
@@ -170,7 +170,7 @@ export default function Onboarding() {
               Meet Potate
             </Text>
             <Text className="text-base text-gray-500 text-center px-4">
-              The more you focus, the happier your potato gets!
+              Stay focused and make sure Potate stays alive
             </Text>
           </View>
         )}
