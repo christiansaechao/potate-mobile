@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
 import { useFonts } from "expo-font";
 
 import "../global.css";
@@ -36,9 +35,11 @@ export default function RootLayout() {
     }
   }, [appReady]);
 
-  // --- Debugging ---
+  // --- Debugging (dev only) ---
 
-  useDrizzleStudio(expo_db);
+  if (__DEV__) {
+    require("expo-drizzle-studio-plugin").useDrizzleStudio(expo_db);
+  }
 
   // --- Render ---
 
