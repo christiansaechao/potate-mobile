@@ -107,17 +107,21 @@ export default function Onboarding() {
     const progress = step / TOTAL_STEPS;
     return (
       <View className="flex-row items-center px-4 pt-2 pb-4">
-        {step > 1 && (
-          <TouchableOpacity onPress={prevStep} className="mr-3">
-            <Ionicons name="chevron-back" size={24} color="#3B82F6" />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          onPress={prevStep}
+          className={`mr-3 ${step === 1 && "opacity-0"}`}
+        >
+          <Ionicons name="chevron-back" size={24} color="#3B82F6" />
+        </TouchableOpacity>
         <View className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
           <View
             className="h-full bg-blue-500 rounded-full"
             style={{ width: `${progress * 100}%` }}
           />
         </View>
+        <TouchableOpacity onPress={nextStep} className="ml-3 opacity-0">
+          <Ionicons name="chevron-forward" size={24} color="#3B82F6" />
+        </TouchableOpacity>
       </View>
     );
   };
