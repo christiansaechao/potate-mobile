@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "potate",
-    "slug": "potate",
+    "slug": "potatodoro",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/images/1.png",
@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.potatodoroorganization.potatodoro",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +23,12 @@
         "monochromeImage": "./app/assets/images/1.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.potatodoroorganization.potatodoro"
     },
     "web": {
       "output": "static",
@@ -46,6 +55,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "55346f1f-d294-4bd0-9cd9-a51cb0d4e329"
+      }
+    },
+    "owner": "potatodoro-organization"
   }
 }
