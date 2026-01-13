@@ -12,7 +12,7 @@
     "prepare": "husky",
     "ios-build": "npx eas build -p ios --profile production",
     "android-build": "npx eas build -p android --profile production",
-    "all-build": "npx eas build -p all -- profile production",
+    "all-build": "npx eas build -p all --profile production",
     "prebuild": "npx expo prebuild -p ios --clean",
     "preview": "npx eas build -p ios --profile preview"
   },
