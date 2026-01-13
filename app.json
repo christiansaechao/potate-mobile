@@ -60,12 +60,5 @@
       }
     },
     "owner": "potatodoro-organization"
-  },
-  "extra": {
-    "router": {},
-    "eas": {
-      "projectId": "55346f1f-d294-4bd0-9cd9-a51cb0d4e329"
-    }
-  },
-  "owner": "potatodoro-organization"
+  }
 }
