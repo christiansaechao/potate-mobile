@@ -14,7 +14,7 @@
     "android-build": "npx eas build -p android --profile production",
     "all-build": "npx eas build -p all -- profile production",
     "prebuild": "npx expo prebuild -p ios --clean",
-    "release": "npx expo run:ios --configuration Release"
+    "preview": "npx eas build -p ios --profile preview"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
