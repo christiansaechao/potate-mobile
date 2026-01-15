@@ -3,7 +3,7 @@ import { Animated, Easing, Pressable, View } from "react-native";
 
 import { TimerMode, TimerState } from "../../types/types";
 import { ChatBubble } from "./ChatBubble";
-import PotatoSprite from "./PotatoAnimate";
+import { Potato } from "./Potato";
 
 // --- Types ---
 
@@ -77,7 +77,7 @@ export const PotatoArea: React.FC<PotatoAreaProps> = ({
         className="z-10 active:scale-105"
         hitSlop={10}
       >
-        <PotatoSprite />
+        <Potato health={health} />
       </Pressable>
     </View>
   );

@@ -10,8 +10,7 @@
     "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.potatodoroorganization.potatodoro",
-      "buildNumber": "1",
+      "bundleIdentifier": "com.akhilanj.potate",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -56,9 +55,8 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "55346f1f-d294-4bd0-9cd9-a51cb0d4e329"
+        "projectId": "1f952706-bb43-4ddf-99c2-9c74b723a81e"
       }
-    },
-    "owner": "potatodoro-organization"
+    }
   }
 }
