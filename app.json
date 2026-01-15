@@ -10,7 +10,7 @@
     "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.akhilanj.potate",
+      "bundleIdentifier": "com.potatodoroorganization.potatodoro",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
