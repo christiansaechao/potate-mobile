@@ -7,7 +7,7 @@
     "icon": "./assets/images/1.png",
     "scheme": "potate",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.potatodoroorganization.potatodoro",
@@ -51,8 +51,7 @@
       "expo-notifications"
     ],
     "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
+      "typedRoutes": true
     },
     "extra": {
       "router": {},
