@@ -1,5 +1,6 @@
 import React from "react";
 import { View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import {
   calculateCurrentExp,
@@ -25,16 +26,26 @@ export const LevelDisplay = ({ total_exp }: LevelDisplayProps) => {
   // --- Render ---
 
   return (
-    <View className="w-full">
-      <View className="flex-row justify-between items-center mb-1">
-        <CustomText className="text-md font-bold">LVL {level}</CustomText>
-        <CustomText className="text-md">
-          {current_exp} / {needed_exp} XP
-        </CustomText>
+    <View className="w-full mb-3">
+      <View className="flex-row items-center justify-between mb-2">
+        <View className="flex-row items-center gap-2">
+          <View className="w-8 h-8 bg-black/10 rounded-xl items-center justify-center">
+            <Ionicons name="star" size={18} color="#F59E0B" />
+          </View>
+          <CustomText className="text-base font-semibold">
+            Level {level}
+          </CustomText>
+        </View>
+        <View className="bg-black/10 px-3 py-1 rounded-full">
+          <CustomText className="text-sm font-bold">
+            {current_exp} / {needed_exp} XP
+          </CustomText>
+        </View>
       </View>
-      <View className="h-2 bg-black/20 rounded-full overflow-hidden">
+
+      <View className="h-3 bg-black/10 rounded-full overflow-hidden">
         <View
-          className="h-full bg-yellow-500"
+          className="h-full bg-amber-400 rounded-full"
           style={{ width: `${progress}%` }}
         />
       </View>

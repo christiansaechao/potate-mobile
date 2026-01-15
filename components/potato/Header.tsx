@@ -5,6 +5,7 @@ import { Volume2, VolumeX } from "lucide-react-native";
 import { useTheme } from "@/hooks/context-hooks/useTheme";
 import { CustomText } from "../custom";
 import { ThemedPressable } from "../ui/themed-pressable";
+import { TimerState } from "@/types/types";
 
 // --- Types ---
 
