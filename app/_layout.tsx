@@ -38,6 +38,7 @@ export default function RootLayout() {
   // --- Debugging (dev only) ---
 
   if (__DEV__) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     require("expo-drizzle-studio-plugin").useDrizzleStudio(expo_db);
   }
 
