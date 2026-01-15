@@ -10,11 +10,7 @@ interface PotatoProps {
   health: number; // 0-100
 }
 
-export const Potato: React.FC<PotatoProps> = ({
-  mood,
-  isAnimating,
-  health,
-}) => {
+export const Potato: React.FC<PotatoProps> = ({ health }) => {
   // --- State & Hooks ---
 
   const [imgError, setImgError] = useState(false);
@@ -22,10 +18,10 @@ export const Potato: React.FC<PotatoProps> = ({
   // --- Constants & Assets ---
 
   // Base Images
-  const Loaded = require("../../app/assets/images/1.png");
-  const Regular = require("../../app/assets/images/2.png");
-  const Rotting = require("../../app/assets/images/3.png");
-  const Bad = require("../../app/assets/images/4.png");
+  const Loaded = require("../../assets/images/Baked_Potate.gif");
+  const Regular = require("../../assets/images/basic1.gif");
+  const Rotting = require("../../assets/images/default_stinky_animation-trans.gif");
+  const Bad = require("../../assets/images/4.png");
 
   // Animated Videos/GIFS
   // const LoadedAnim = require("../../app/assets/videos/potato.gif"); // Unused currently?
@@ -40,7 +36,7 @@ export const Potato: React.FC<PotatoProps> = ({
 
   // Determine image based on health
   const imageSource = useMemo(() => {
-    if (health >= 90) return Loaded;
+    if (health >= 99) return Loaded;
     if (health >= 80) return Regular;
     if (health >= 40) return Rotting;
     return Bad;
@@ -137,29 +133,17 @@ export const Potato: React.FC<PotatoProps> = ({
     outputRange: [-4, 4],
   });
 
-  // Just pick which running animation to show
-  const animatedStyle =
-    mood === "chaotic" || mood === "angry"
-      ? { transform: [{ translateX: shakeX }] }
-      : mood === "happy" || mood === "cool"
-        ? { transform: [{ translateY: floatY }] }
-        : { transform: [{ scale: breatheScale }] };
-
-  // --- Render ---
-
   return (
-    <Animated.View className="w-40 h-40" style={animatedStyle}>
-      {imgError ? (
-        <FallBackPotato mood={mood} health={health} />
-      ) : (
+    <Animated.View className="w-40 h-40">
+      {!imgError && (
         <Image
           key={String(imageSource)}
           source={imageSource}
-          resizeMode="contain"
-          className="w-full h-full"
           onError={() => setImgError(true)}
           style={{
-            opacity: health < 40 ? 0.85 : 1,
+            width: 170,
+            height: 170,
+            transform: [{ translateX: -16 }, { translateY: 11 }],
           }}
         />
       )}

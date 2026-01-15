@@ -7,6 +7,8 @@ const frame1 = require("@/assets/images/idle-1.png");
 const frame2 = require("@/assets/images/idle-2.png");
 const frame3 = require("@/assets/images/idle-3.png");
 
+const bakedPotato = require("../../assets/images/default_stinky_animation-trans.gif");
+
 const frames = [frame1, frame2, frame3];
 
 export default function PotatoSprite() {
@@ -39,14 +41,15 @@ export default function PotatoSprite() {
   // --- Render ---
 
   return (
-    <View>
+    <View className="overflow-clip">
       <Image
-        source={frames[index]}
+        source={bakedPotato}
         style={{
-          width: 200,
+          width: 350,
           height: 200,
           resizeMode: "contain",
         }}
+        className="-z-10"
       />
     </View>
   );
